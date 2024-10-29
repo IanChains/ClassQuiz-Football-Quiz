@@ -15,17 +15,17 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <svelte:head>
-	<title>{$t('words.error')} - {status}</title>
+	<title>Error - {status}</title>
 </svelte:head>
 <h1 class="text-6xl text-center">{status}</h1>
 
 {#if status === 404}
 	<p class="text-center">
-		{$t('error_page.404_text')}
+		De pagina die je zocht is verdwenen of heeft zelfs nooit bestaan. Wie zal het zeggen?
 	</p>
 {:else}
 	<p class="text-center">
-		{$t('error_page.unknown_error_text')}
+		Oei, er is iets misgegaan. Deze pagina is opgegaan in de mist!
 	</p>
 {/if}
 

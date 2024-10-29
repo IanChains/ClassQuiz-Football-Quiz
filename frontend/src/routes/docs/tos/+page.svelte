@@ -15,10 +15,10 @@ SPDX-License-Identifier: MPL-2.0
 </script>-->
 
 <svelte:head>
-	<title>ClassQuiz/docs - Terms of Service</title>
+	<title>Terms of Service - Quiz Football Is Life</title>
 	<meta
 		name="description"
-		content="The terms of service of ClassQuiz, the open-source quiz-application"
+		content="The terms of service of Football Is Life Quiz!"
 	/>
 </svelte:head>
 
@@ -36,12 +36,12 @@ SPDX-License-Identifier: MPL-2.0
 		<li>
 			<b
 				>You don't upload, write, create any harmful content or anything that is against any
-				German law.</b
+				European or Belgium law.</b
 			>
 		</li>
 	</ul>
 
-	<h2>What doesn't belong on ClassQuiz</h2>
+	<h2>What doesn't belong on Football Is Life Quiz</h2>
 	<p>
 		The owner may delete, change and modify any quiz. Quizzes with any pornography, illegal
 		content or propaganda <b>have to be reported</b> and will be reviewed and deleted, if it's
@@ -50,21 +50,21 @@ SPDX-License-Identifier: MPL-2.0
 		<i>I hope you understand what I mean.</i> 😇
 	</p>
 	<h2>How to report illegal content</h2>
-	<p>You have to report illegal content by writing an email to report@mawoka.eu</p>
+	<p>You have to report illegal content by writing an email to <a href="mailto:info@ian-chains.it">info@ian-chains.it</a></p>
 	<h2>The rights of the admin</h2>
 	<p>
 		The admin is allowed to publish <b>ANY</b> data provided by the user, although the admin
 		doesn't want to do it. The admin can also delete <b>ANY</b> content, whether it's against any
-		rule or not. ClassQuiz also doesn't provide any (uptime)-guarantee, so ClassQuiz could be shut
+		rule or not. Football Is Life Quiz also doesn't provide any (uptime)-guarantee, so Football Is Life Quiz could be shut
 		down without any warning and without any ability for the user to get their data. The admin may
 		publish any data provided by the user anywhere and share it with anyone.
 	</p>
 	<h2>The rights of the user</h2>
 	<p>
 		You can request the deletion of your data at any time by writing an email to
-		deleteme@mawoka.eu. Please include the email you registered with on ClassQuiz, and, if
+		<a href="mailto:info@ian-chains.it">info@ian-chains.it</a>. Please include the email you registered with on Football Is Life Quiz, and, if
 		possible, a prove that you are the owner of the account, by, eg., writing the email with the
-		email-address which is associated with your ClassQuiz-account.
+		email-address which is associated with your Football Is Life Quiz-account.
 	</p>
 
 	<h2>Final Words</h2>
@@ -73,8 +73,6 @@ SPDX-License-Identifier: MPL-2.0
 		happens if data should be stolen and published? i don't run this platform to get insulted
 		for publishing (personal) data, so I just make sure you're fine with that! Of course, I'll
 		try to not publish any data, delete any content without a reason, etc, but I could. If you
-		still got any questions, please contact me at <a href="https://mawoka.eu/contact"
-			>mawoka.eu/contact</a
-		>
+		still got any questions, please contact me at <a href="mailto:info@ian-chains.it">info@ian-chains.it</a>
 	</p>
 </article>
