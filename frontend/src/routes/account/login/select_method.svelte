@@ -22,7 +22,7 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">ClassQuiz</h2>
+	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
 
 	<div class="w-full mt-4">
 		<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
@@ -53,8 +53,8 @@ SPDX-License-Identifier: MPL-2.0
 							/>
 						</svg>
 						<div class="ml-2">
-							<p>Key</p>
-							<p class="text-sm">Authenticate using a security key</p>
+							<p>Beveiligingssleutel</p>
+							<p class="text-sm">Inloggen met een beveiligingssleutel</p>
 						</div>
 					</div>
 				{/if}
@@ -99,8 +99,8 @@ SPDX-License-Identifier: MPL-2.0
 							/>
 						</svg>
 						<div class="ml-2">
-							<p>Password</p>
-							<p class="text-sm">Authenticate using a Password</p>
+							<p>Wachtwoord</p>
+							<p class="text-sm">Inloggen met een wachtwoord</p>
 						</div>
 					</div>
 				{/if}
@@ -130,8 +130,8 @@ SPDX-License-Identifier: MPL-2.0
 							/>
 						</svg>
 						<div class="ml-2">
-							<p>Totp</p>
-							<p class="text-sm">Authenticate using a one-time password</p>
+							<p>2FA Code</p>
+							<p class="text-sm">Inloggen met 2FA code van de authenticator app op uw telefoon.</p>
 						</div>
 					</div>
 				{/if}

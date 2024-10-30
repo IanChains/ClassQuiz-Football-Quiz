@@ -48,7 +48,7 @@ SPDX-License-Identifier: MPL-2.0
 	};
 
 	const require_password = (): string => {
-		return prompt('Please enter your password to continue');
+		return prompt('Voer uw wachtwoord in om verder te gaan.');
 	};
 
 	const add_security_key = async () => {
@@ -59,7 +59,7 @@ SPDX-License-Identifier: MPL-2.0
 			headers: { 'Content-Type': 'application/json' }
 		});
 		if (res1.status === 401) {
-			alert('Password probably wrong');
+			alert('Wachtwoord is onjuist.');
 			return;
 		}
 		if (!res1.ok) {
@@ -95,7 +95,7 @@ SPDX-License-Identifier: MPL-2.0
 			headers: { 'Content-Type': 'application/json' }
 		});
 		if (res.status === 401) {
-			alert('Password probably wrong');
+			alert('Wachtwoord is onjuist.');
 			return;
 		}
 		data = get_data();
@@ -109,7 +109,7 @@ SPDX-License-Identifier: MPL-2.0
 			headers: { 'Content-Type': 'application/json' }
 		});
 		if (res.status === 401) {
-			alert('Password probably wrong');
+			alert('Wachtwoord is onjuist.');
 			return;
 		}
 		data = get_data();
@@ -123,7 +123,7 @@ SPDX-License-Identifier: MPL-2.0
 			headers: { 'Content-Type': 'application/json' }
 		});
 		if (res.status === 401) {
-			alert('Password probably wrong');
+			alert('Wachtwoord is onjuist.');
 			return;
 		}
 		data = get_data();
@@ -132,7 +132,7 @@ SPDX-License-Identifier: MPL-2.0
 
 	const get_backup_code = async () => {
 		const pw = require_password();
-		if (!confirm('If you continue, your old backup-code will be removed.')) {
+		if (!confirm('Als u doorgaat, wordt uw oude back-upcode verwijderd.')) {
 			return;
 		}
 		const res = await fetch('/api/v1/users/2fa/backup_code', {
@@ -141,7 +141,7 @@ SPDX-License-Identifier: MPL-2.0
 			headers: { 'Content-Type': 'application/json' }
 		});
 		if (res.status === 401) {
-			alert('Password probably wrong');
+			alert('Wachtwoord is onjuist.');
 			return;
 		}
 		backup_code = (await res.json()).code;
@@ -154,17 +154,17 @@ SPDX-License-Identifier: MPL-2.0
 	<div class="grid grid-rows-2 h-screen">
 		<div class="grid grid-cols-2 h-full border-b-2 border-black">
 			<div class="h-full w-full border-r-2 border-black">
-				<h2 class="text-center text-2xl">{$t('security_settings.backup_code')}</h2>
+				<h2 class="text-center text-2xl">Backup Code</h2>
 				<div class="flex h-full w-full justify-center">
 					<div class="m-auto">
 						<BrownButton on:click={get_backup_code}
-							>{$t('security_settings.get_backup_code')}</BrownButton
+							>Backup Code Maken</BrownButton
 						>
 					</div>
 				</div>
 			</div>
 			<div class="h-full w-full">
-				<h2 class="text-center text-2xl">{$t('security_settings.activate_2fa')}</h2>
+				<h2 class="text-center text-2xl">Activeer Tweestapsauthenticatie (2FA)</h2>
 				<div
 					class="flex h-full w-full justify-center flex-col"
 					class:pointer-events-none={!totp_activated}
@@ -191,7 +191,7 @@ SPDX-License-Identifier: MPL-2.0
 									/>
 								</button>
 								<span class="text-sm font-medium text-gray-700 dark:text-white"
-									>{$t('security_settings.2fa_activated')}</span
+									>Tweestapsauthenticatie (2FA) is geactiveerd!</span
 								>
 							</div>
 						{:else}
@@ -213,7 +213,7 @@ SPDX-License-Identifier: MPL-2.0
 									/>
 								</button>
 								<span class="text-sm font-medium text-gray-700 dark:text-white"
-									>{$t('security_settings.2fa_deactivated')}</span
+									>Tweestapsauthenticatie (2FA) is gedeactiveerd!</span
 								>
 							</div>
 						{/if}
@@ -225,19 +225,9 @@ SPDX-License-Identifier: MPL-2.0
 			<div class="h-full w-full flex flex-col border-r-2 border-black">
 				<h2 class="text-center text-2xl">{$t('security_settings.webauthn')}</h2>
 				<div class="flex justify-center">
-					{#if security_keys.length > 0}
-						<p>{$t('security_settings.webauthn_available')}</p>
-					{:else}
-						<p>{$t('security_settings.webauthn_unavailable')}</p>
-					{/if}
+						<p>Webauthn is momenteel niet beschikbaar!</p>
 				</div>
-				<div class="flex justify-center">
-					<div class="m-auto">
-						<BrownButton on:click={add_security_key}
-							>{$t('security_settings.add_security_key')}</BrownButton
-						>
-					</div>
-				</div>
+
 				<div class="flex justify-center">
 					<ul class="list-disc block">
 						{#each security_keys as key, i}
@@ -254,12 +244,12 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 			</div>
 			<div class="h-full w-full flex flex-col">
-				<h2 class="text-center text-2xl">{$t('security_settings.totp')}</h2>
+				<h2 class="text-center text-2xl">2FA Via Telefoon, Authenticator App</h2>
 				<div class="flex justify-center">
 					{#if totp_activated}
-						<p>{$t('security_settings.totp_available')}</p>
+						<p>2FA is ingesteld!</p>
 					{:else}
-						<p>{$t('security_settings.totp_unavailable')}</p>
+						<p>2FA is momenteel niet ingesteld.</p>
 					{/if}
 				</div>
 
@@ -267,11 +257,11 @@ SPDX-License-Identifier: MPL-2.0
 					<div class="m-auto">
 						{#if totp_activated}
 							<BrownButton on:click={disable_totp}
-								>{$t('security_settings.disable_totp')}</BrownButton
+								>2FA Uitschakelen</BrownButton
 							>
 						{:else}
 							<BrownButton on:click={enable_totp}
-								>{$t('security_settings.enable_totp')}</BrownButton
+								>2FA Inschakkelen</BrownButton
 							>
 						{/if}
 					</div>

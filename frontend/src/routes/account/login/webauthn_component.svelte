@@ -75,9 +75,9 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">ClassQuiz</h2>
+	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
 	<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
-		Start the Security-Key verification
+		De verificatie van de beveiligingssleutel starten.
 	</p>
 
 	<div class="w-full mt-4">
@@ -87,7 +87,7 @@ SPDX-License-Identifier: MPL-2.0
 					selected_method = 'BACKUP';
 				}}
 				class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-				>{$t('login_page.use_backup_code')}</button
+				>Gebruik Backup Code</button
 			>
 			<button
 				class="px-4 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -106,7 +106,7 @@ SPDX-License-Identifier: MPL-2.0
 						/>
 					</svg>
 				{:else}
-					{$t('words.start')}
+					Start
 				{/if}
 			</button>
 		</div>

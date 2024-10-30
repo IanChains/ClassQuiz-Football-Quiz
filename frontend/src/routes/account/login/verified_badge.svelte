@@ -28,5 +28,5 @@ SPDX-License-Identifier: MPL-2.0
 		/>
 	</svg>
 
-	<h3 class="ml-3 text-sm font-medium">You've successfully confirmed your email address.</h3>
+	<h3 class="ml-3 text-sm font-medium">Je hebt je e-mailadres met succes bevestigd.</h3>
 </div>

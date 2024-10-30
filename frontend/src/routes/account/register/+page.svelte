@@ -18,28 +18,28 @@ SPDX-License-Identifier: MPL-2.0
 	import * as yup from 'yup';
 
 	const registerSchema = yup.object({
-		email: yup.string().email('Email must be valid!').required(),
+		email: yup.string().email('Geef een geldig e-mailadres.').required(),
 		password1: yup
 			.string()
 			.required()
-			.min(8, 'Password must be at least 8 characters long!')
-			.max(100, 'Password must be at most 100 characters long!'),
+			.min(8, 'Wachtwoord moet minstens 8 tekens lang zijn.')
+			.max(100, 'Wachtwoord mag maximaal 100 tekens lang zijn.'),
 		password2: yup
 			.string()
 			.required()
-			.test('equal', 'Passwords do not match!', function (v) {
+			.test('equal', 'Het wachtwoorden komen niet overeen.', function (v) {
 				const ref = yup.ref('password1');
 				return v === this.resolve(ref);
 			}),
 		username: yup
 			.string()
 			.required()
-			.min(3, 'Username must be at least 3 characters long')
-			.max(20, 'Username must be at most 20 characters long'),
+			.min(3, 'De gebruikersnaam moet minstens 3 tekens lang zijn.')
+			.max(20, ' De gebruikersnaam mag maximaal 20 tekens lang zijn.'),
 		privacy_accept: yup
 			.boolean()
-			.oneOf([true], 'You must accept the privacy policy to register!'),
-		tos_accept: yup.boolean().oneOf([true], 'You must accept the terms of service to register!')
+			.oneOf([true], 'Je moet akkoord gaan met ons privacybeleid om je te kunnen registreren.'),
+		tos_accept: yup.boolean().oneOf([true], 'Je moet akkoord gaan met onze algemene voorwaarden om je te kunnen registreren.')
 	});
 
 	const { form, errors, touched, isValid, isSubmitting } = createForm<
@@ -87,15 +87,15 @@ SPDX-License-Identifier: MPL-2.0
 		>
 			<div class="px-6 py-4">
 				<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">
-					ClassQuiz
+					Football Is Life Quiz
 				</h2>
 
 				<h3 class="mt-1 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
-					{$t('register_page.greeting')}
+					Welkom, leuk je te ontmoeten!
 				</h3>
 
 				<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
-					{$t('register_page.create_account')}
+					Maak hier je account aan!
 				</p>
 
 				<form use:form>
@@ -107,7 +107,7 @@ SPDX-License-Identifier: MPL-2.0
 									name="email"
 									type="email"
 									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-									placeholder={$t('words.email')}
+									placeholder="E-mailadres"
 									class:ring-red-700={$errors.email !== null}
 									class:ring-green-600={$touched.email === true &&
 										$errors.email === null}
@@ -116,7 +116,7 @@ SPDX-License-Identifier: MPL-2.0
 									for="email"
 									class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
-									{$t('words.email')}
+									E-mailadres
 								</label>
 							</div>
 						</div>
@@ -127,7 +127,7 @@ SPDX-License-Identifier: MPL-2.0
 									name="username"
 									type="text"
 									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-									placeholder={$t('words.username')}
+									placeholder="Gebruikersnaam"
 									class:ring-red-700={$errors.username !== null}
 									class:ring-green-600={$touched.username === true &&
 										$errors.username === null}
@@ -136,7 +136,7 @@ SPDX-License-Identifier: MPL-2.0
 									for="username"
 									class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
-									{$t('words.username')}
+									Gebruikersnaam
 								</label>
 							</div>
 						</div>
@@ -150,13 +150,13 @@ SPDX-License-Identifier: MPL-2.0
 									class:ring-green-600={$touched.password1 === true &&
 										$errors.password1 === null}
 									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-									placeholder={$t('words.password')}
+									placeholder="Wachtwoord"
 								/>
 								<label
 									for="password1"
 									class="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
-									{$t('words.password')}
+									Wachtwoord
 								</label>
 							</div>
 						</div>
@@ -167,7 +167,7 @@ SPDX-License-Identifier: MPL-2.0
 									name="password2"
 									type="password"
 									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-									placeholder={$t('words.password')}
+									placeholder="Herhaal Wachtwoord"
 									class:ring-red-700={$errors.password2 !== null}
 									class:ring-green-600={$touched.password2 === true &&
 										$errors.password2 === null}
@@ -176,7 +176,7 @@ SPDX-License-Identifier: MPL-2.0
 									for="password2"
 									class="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
-									{$t('words.password')}
+									Herhaal Wachtwoord
 								</label>
 							</div>
 						</div>
@@ -189,9 +189,9 @@ SPDX-License-Identifier: MPL-2.0
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="privacy_accept" class="ml-3" />
 							<label class="text-sm text-gray-600 dark:text-gray-200">
-								I've read the <a href="/docs/privacy-policy" class="underline"
-									>Privacy policy</a
-								>.
+								Ik heb het <a href="/docs/privacy-policy" class="underline"
+									>privacybeleid</a
+								> gelezen.
 							</label>
 						</div>
 						<div
@@ -203,9 +203,9 @@ SPDX-License-Identifier: MPL-2.0
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="tos_accept" class="ml-3" />
 							<label class="text-sm text-gray-600 dark:text-gray-200">
-								I agree to the <a href="/docs/tos" class="underline"
-									>Terms of Service</a
-								>.
+								Ik heb de <a href="/docs/tos" class="underline"
+									>algemene voorwaarden</a
+								> gelezen.
 							</label>
 						</div>
 
@@ -213,7 +213,7 @@ SPDX-License-Identifier: MPL-2.0
 							<a
 								href="/account/reset-password"
 								class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-								>{$t('register_page.forgot_password?')}</a
+								>Wachtwoord vergeten?</a
 							>
 
 							<button
@@ -235,7 +235,7 @@ SPDX-License-Identifier: MPL-2.0
 										/>
 									</svg>
 								{:else}
-									{$t('words.register')}
+									Registreren
 								{/if}
 							</button>
 						</div>
@@ -247,13 +247,13 @@ SPDX-License-Identifier: MPL-2.0
 				class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700"
 			>
 				<span class="text-sm text-gray-600 dark:text-gray-200"
-					>{$t('register_page.already_have_account?')}
+					>Heb je al een account?
 				</span>
 
 				<a
 					href="/account/login"
 					class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
-					>{$t('words.login')}</a
+					>Inloggen</a
 				>
 			</div>
 		</div>
@@ -324,31 +324,31 @@ SPDX-License-Identifier: MPL-2.0
 					<div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
 						<h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
 							{#if responseData.data === '409'}
-								Account already exists!
+								Het account bestaat al!
 							{:else if responseData.data === 'error'}
-								Unexpected error!
+								Onverwachte fout! Probeer opnieuw.
 							{:else if responseData.data === '200'}
-								Sign up successfully!
+								Registreren is gelukt!
 							{:else if responseData.data === '400'}
-								Wrong email!
+								Fout e-mailadres.
 							{:else}
-								You stupid Mawoka!
+								Er is iets fout gegaan. Neem contact op met info@ian-chains.it
 							{/if}
 						</h3>
 						<div class="mt-2">
 							<p class="text-sm text-gray-500">
 								{#if responseData.data === '200'}
 									<!-- TODO: Add translation -->
-									You signed up successfully! Please check your mailbox to confirm
-									your email address!
+									Je hebt je succesvol geregistreerd!
+									Nu alleen nog even inloggen!
 								{:else if responseData.data === '409'}
-									An account with that email-address already exists!
+									Er bestaat al een account met dat e-mailadres.
 								{:else if responseData.data === '400'}
-									This email-address doesn't exist!
+									Dit e-mailadres bestaat niet.
 								{:else if responseData.data === 'error'}
-									There was the good old unexpected error!
+									Er is een onverwachte fout opgetreden.
 								{:else}
-									You stupid Mawoka!
+									Er is iets fout gegaan. Neem contact op met info@ian-chains.it
 								{/if}
 							</p>
 						</div>
@@ -363,7 +363,7 @@ SPDX-License-Identifier: MPL-2.0
 						window.location.assign('/');
 					}}
 					class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-					>{$t('words.close')}
+					>Sluiten
 				</button>
 			</div>
 		</div>

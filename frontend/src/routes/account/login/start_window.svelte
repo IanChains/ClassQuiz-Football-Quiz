@@ -39,14 +39,14 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">ClassQuiz</h2>
+	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
 
 	<h3 class="mt-1 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
-		{$t('login_page.welcome_back')}
+		Welkom terug, quizmaster!
 	</h3>
 
 	<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
-		{$t('login_page.login_or_create_account')}
+		Klaar voor een nieuwe quiz? Inloggen maar!
 	</p>
 
 	<form on:submit|preventDefault={start_login}>
@@ -59,14 +59,14 @@ SPDX-License-Identifier: MPL-2.0
 						name="email"
 						type="text"
 						class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-						placeholder={$t('login_page.email_or_username')}
+						placeholder="E-mailadres of Gebruikersnaam"
 						autocomplete="email"
 					/>
 					<label
 						for="email"
 						class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 					>
-						{$t('login_page.email_or_username')}
+						E-mailadres of Gebruikersnaam
 					</label>
 				</div>
 			</div>
@@ -74,7 +74,7 @@ SPDX-License-Identifier: MPL-2.0
 				<a
 					href="/account/reset-password"
 					class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-					>{$t('register_page.forgot_password?')}</a
+					>Wachtwoord vergeten?</a
 				>
 
 				<button
@@ -94,7 +94,7 @@ SPDX-License-Identifier: MPL-2.0
 							/>
 						</svg>
 					{:else}
-						{$t('words.continue')}
+						Verder
 					{/if}
 				</button>
 			</div>
@@ -105,12 +105,12 @@ SPDX-License-Identifier: MPL-2.0
 
 <div class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
 	<span class="text-sm text-gray-600 dark:text-gray-200"
-		>{$t('login_page.already_have_account')}
+		>Heb je nog geen account?
 	</span>
 
 	<a
 		href="/account/register"
 		class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
-		>{$t('words.register')}</a
+		>Registreren</a
 	>
 </div>

@@ -26,10 +26,13 @@ SPDX-License-Identifier: MPL-2.0
 			})
 		});
 		if (res.status === 200) {
-			alert('Email was sent! Please check your inbox.');
+			alert('E-mail is verzonden! Controleer je mailbox. Heb je geen mail ontvangen? Neem dan contact op met info@ian-chains.it');
 			return;
 		} else if (res.status === 404) {
-			alert('user not found!');
+			alert('We hebben de gebruiker niet gevonden.');
+		}
+		else {
+			alert('Er is een fout opgetreden. Neem contact op met info@ian-chains.it');
 		}
 		isSubmitting = false;
 	};
@@ -38,7 +41,7 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <svelte:head>
-	<title>ClassQuiz - Reset your Password</title>
+	<title>Wachtwoord Resetten</title>
 </svelte:head>
 
 <div class="flex items-center justify-center h-full px-4">
@@ -48,7 +51,7 @@ SPDX-License-Identifier: MPL-2.0
 		>
 			<div class="px-6 py-4">
 				<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">
-					ClassQuiz
+					Football Is Life Quiz
 				</h2>
 
 				<!--
@@ -57,7 +60,7 @@ SPDX-License-Identifier: MPL-2.0
 				-->
 
 				<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
-					{$t('password_reset_page.reset_password')}
+					Wachtwoord Resetten
 				</p>
 
 				<form on:submit|preventDefault={submit}>
@@ -70,13 +73,13 @@ SPDX-License-Identifier: MPL-2.0
 									name="email"
 									type="email"
 									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
-									placeholder={$t('words.email')}
+									placeholder="E-mailadres"
 								/>
 								<label
 									for="email"
 									class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
-									{$t('words.email')}
+									E-mailadres
 								</label>
 							</div>
 						</div>
@@ -85,7 +88,7 @@ SPDX-License-Identifier: MPL-2.0
 							<a
 								href="/account/login"
 								class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-								>{$t('register_page.already_have_account?')}</a
+								>Heb je al een account?</a
 							>
 
 							<button
@@ -105,7 +108,7 @@ SPDX-License-Identifier: MPL-2.0
 										/>
 									</svg>
 								{:else}
-									{$t('words.submit')}
+									Verstuur!
 								{/if}
 							</button>
 						</div>
@@ -117,13 +120,13 @@ SPDX-License-Identifier: MPL-2.0
 				class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700"
 			>
 				<span class="text-sm text-gray-600 dark:text-gray-200"
-					>{$t('login_page.already_have_account')}
+					>Heb je nog geen account?
 				</span>
 
 				<a
 					href="/account/register"
 					class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
-					>{$t('words.register')}</a
+					>Registreren</a
 				>
 			</div>
 		</div>

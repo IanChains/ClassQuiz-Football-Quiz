@@ -13,6 +13,8 @@ SPDX-License-Identifier: MPL-2.0
 	import { beforeNavigate } from '$app/navigation';
 	import { draw, slide } from 'svelte/transition';
 
+	import logo from '$lib/logo.png';
+
 	const tippy = createTippy({
 		arrow: true,
 		animation: 'perspective-subtle',
@@ -47,7 +49,9 @@ SPDX-License-Identifier: MPL-2.0
 <nav class="w-screen px-4 lg:px-10 py-2 fixed backdrop-blur-2xl bg-white/70 shadow-md z-30 top-0">
 	<!-- Desktop navbar -->
 	<div class="hidden lg:flex lg:items-center lg:flex-row lg:justify-between">
+
 		<div class="lg:flex lg:items-center lg:flex-row gap-1">
+			<img style="max-height: 50px" src={logo}/>
 			<a
 				href="/"
 				class="font-black tracking-tight text-xl lg:text-2xl text-black link-hover px-3 lg:px-5"
@@ -76,8 +80,8 @@ SPDX-License-Identifier: MPL-2.0
 	<div class="lg:hidden">
 		<!-- Navbar header -->
 		<div class="flex items-center justify-between">
-			<a
-				href="/"
+			<img style="max-height: 50px" src={logo}/>
+			<a href="/"
 				class="font-black tracking-tight text-xl lg:text-2xl text-black link-hover px-3 lg:px-5"
 				>Football Is Life Quiz</a
 			>
@@ -163,4 +167,5 @@ SPDX-License-Identifier: MPL-2.0
 	.btn-nav {
 		@apply text-lg font-medium px-3 text-gray-600 hover:text-green-600 py-1.5 transition-all duration-300;
 	}
+
 </style>

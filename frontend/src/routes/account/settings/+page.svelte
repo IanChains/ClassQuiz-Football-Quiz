@@ -63,10 +63,10 @@ SPDX-License-Identifier: MPL-2.0
 			})
 		});
 		if (res.status === 200) {
-			alert('Password changed');
+			alert('Wachtwoord gewijzigd!');
 			window.location.assign('/account/login');
 		} else {
-			alert('Password change failed');
+			alert('Wachtwoord wijzigen mislukt. Probeer opnieuw.');
 		}
 	};
 
@@ -157,61 +157,47 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <svelte:head>
-	<title>ClassQuiz - Settings</title>
+	<title>Account Instellingen</title>
 </svelte:head>
 
 {#await getUser()}
 	<Spinner />
 {:then user}
 	<div class="w-full grid grid-cols-6">
-		<div>
-			<img
-				class="rounded-md md:w-80"
-				src="/api/v1/users/avatar"
-				alt="Profile image of {user.username}"
-			/>
-			<div class="m-2 flex justify-center">
-				<BrownButton href="/account/settings/avatar"
-					>{$t('settings_page.change_avatar')}</BrownButton
-				>
-			</div>
-		</div>
 		<div class="grid grid-rows-2 col-start-2 col-end-7">
 			<div class="grid grid-cols-2">
 				<div>
 					<h1 class="text-4xl font-bold my-2">{user.username}</h1>
 					<p class="text-lg mb-6 md:max-w-lg">
-						{$t('words.email')}: {user.email}
+						E-mailadres: {user.email}
 					</p>
 				</div>
 				<div class="p-4 flex justify-center">
 					<div class="m-auto">
 						<BrownButton href="/account/settings/security"
-							>{$t('settings_page.security_settings')}
+							>Beveiligingsinstellingen
 						</BrownButton>
-						<BrownButton href="/account/controllers">ClassQuizController</BrownButton>
-						<BrownButton href="/user/{user.id}">Public profile page</BrownButton>
 					</div>
 				</div>
 			</div>
 			<div>
 				<form class="flex flex-col md:flex-row" on:submit|preventDefault={changePassword}>
 					<label
-						>{$t('settings_page.old_password')}:<input
+						>Oud Wachtwoord:<input
 							type="password"
 							class="m-2 text-black rounded p-1 dark:bg-gray-700 dark:text-white"
 							bind:value={changePasswordData.oldPassword}
 						/></label
 					>
 					<label
-						>{$t('settings_page.new_password')}:<input
+						>Nieuw Wachtwoord:<input
 							type="password"
 							class="m-2 text-black rounded p-1 dark:bg-gray-700 dark:text-white"
 							bind:value={changePasswordData.newPassword}
 						/></label
 					>
 					<label
-						>{$t('settings_page.repeat_password')}:<input
+						>Herhaal Wachtwoord:<input
 							type="password"
 							class="m-2 text-black rounded p-1 dark:bg-gray-700 dark:text-white"
 							bind:value={changePasswordData.newPasswordConfirm}
@@ -219,34 +205,10 @@ SPDX-License-Identifier: MPL-2.0
 					>
 					<div class="my-auto">
 						<BrownButton disabled={!passwordChangeDataValid} type="submit">
-							{$t('settings_page.change_password_submit')}
+							Wachtwoord Aanpassen
 						</BrownButton>
 					</div>
 				</form>
-				<div>
-					<div class="w-fit">
-						<BrownButton on:click={add_api_key}
-							>{$t('settings_page.add_api_key')}</BrownButton
-						>
-					</div>
-					{#await api_keys}
-						<Spinner />
-					{:then keys}
-						{#each keys as key}
-							<div>
-								{key.key}
-								<div class="inline-block">
-									<BrownButton
-										on:click={() => {
-											delete_api_key(key.key);
-										}}
-										>{$t('words.delete')}
-									</BrownButton>
-								</div>
-							</div>
-						{/each}
-					{/await}
-				</div>
 			</div>
 		</div>
 	</div>
@@ -261,37 +223,31 @@ SPDX-License-Identifier: MPL-2.0
 					scope="col"
 					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
 				>
-					{$t('overview_page.created_at')}
+					Ingelogd Op:
 				</th>
 				<th
 					scope="col"
 					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
 				>
-					{$t('settings_page.last_seen')}
+					Laatst Gezien:
 				</th>
 				<th
 					scope="col"
 					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
 				>
-					{$t('words.browser')}
+					Browser:
 				</th>
 				<th
 					scope="col"
 					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
 				>
-					{$t('settings_page.check_location')}
+					Login Sessie Verwijderen?
 				</th>
 				<th
 					scope="col"
 					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
 				>
-					{$t('settings_page.delete_this_session')}
-				</th>
-				<th
-					scope="col"
-					class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
-				>
-					{$t('settings_page.this_session?')}
+					Deze Login Sessie?
 				</th>
 			</tr>
 		</thead>
@@ -318,17 +274,8 @@ SPDX-License-Identifier: MPL-2.0
 					>
 						<button
 							on:click={() => {
-								checkLocation(session.ip_address);
-							}}>{$t('words.view')}</button
-						>
-					</td>
-					<td
-						class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400"
-					>
-						<button
-							on:click={() => {
 								deleteSession(session.id);
-							}}>{$t('words.delete')}</button
+							}}>Verwijderen!</button
 						>
 					</td>
 					<td
