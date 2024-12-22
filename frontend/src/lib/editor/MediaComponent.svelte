@@ -93,7 +93,7 @@ SPDX-License-Identifier: MPL-2.0
 
 {#if fullscreen_open}
 	<div
-		class="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 fle p-2"
+		class="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 fle p-2 flex"
 		transition:fade={{ duration: 80 }}
 		on:click={() => (fullscreen_open = false)}
 	>

@@ -89,7 +89,7 @@ SPDX-License-Identifier: MPL-2.0
                 body: 'The game pin you entered seems invalid.'
             });*/
 			if (browser) {
-				alert('Game not found');
+				alert('Quiz niet gevonden.');
 			}
 			game_pin = '';
 			return;
@@ -100,7 +100,7 @@ SPDX-License-Identifier: MPL-2.0
                 body: `Unknown error with response-code ${res.status}`,
                 title: 'Unknown Error'
             });*/
-			alert('Unknown error');
+			alert('Onbekkende Error. Probeer Opnieuw!');
 			return;
 		}
 	};
@@ -173,7 +173,7 @@ SPDX-License-Identifier: MPL-2.0
 	socket.on('game_not_found', () => {
 		game_pin = '';
 		if (browser) {
-			alert('Game not found');
+			alert('Quiz niet gevonden!');
 		}
 	});
 
@@ -195,7 +195,7 @@ SPDX-License-Identifier: MPL-2.0
 {#if game_pin === '' || game_pin.length < 6}
 	<div class="flex flex-col justify-center align-center w-screen h-screen">
 		<form on:submit|preventDefault class="flex-col flex justify-center align-center mx-auto">
-			<h1 class="text-lg text-center">{$t('words.game_pin')}</h1>
+			<h1 class="text-lg text-center">Quiz Code:</h1>
 			<input
 				class="border border-gray-400 self-center text-center text-black ring-0 outline-none p-2 rounded-lg focus:shadow-2xl transition-all"
 				bind:value={game_pin}
@@ -206,7 +206,7 @@ SPDX-License-Identifier: MPL-2.0
 
 			<br />
 			<div class="mt-2">
-				<BrownButton disabled={game_pin.length < 6}>{$t('words.submit')}</BrownButton>
+				<BrownButton disabled={game_pin.length < 6}>Deelnemen</BrownButton>
 			</div>
 		</form>
 	</div>
@@ -216,7 +216,7 @@ SPDX-License-Identifier: MPL-2.0
 			on:submit|preventDefault={setUsername}
 			class="flex-col flex justify-center align-center mx-auto"
 		>
-			<h1 class="text-lg text-center">{$t('words.username')}</h1>
+			<h1 class="text-lg text-center">Gebruikersnaam:</h1>
 			<input
 				class="border border-gray-400 self-center text-center text-black ring-0 outline-none p-2 rounded-lg focus:shadow-2xl transition-all"
 				bind:value={username}
@@ -232,7 +232,7 @@ SPDX-License-Identifier: MPL-2.0
 
 			<div class="mt-2">
 				<BrownButton disabled={username.length <= 3} on:click={setUsername}
-					>{$t('words.submit')}</BrownButton
+					>Deelnemen</BrownButton
 				>
 			</div>
 		</form>

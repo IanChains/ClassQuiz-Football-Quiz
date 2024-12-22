@@ -23,7 +23,7 @@ SPDX-License-Identifier: MPL-2.0
 	$: control_audio(play);
 </script>
 
-<div class="fixed top-0 left-0">
+<div class="fixed top-0 left-0 audio-player-css">
 	{#if play}
 		<button
 			on:click={() => {
@@ -78,3 +78,10 @@ SPDX-License-Identifier: MPL-2.0
 	{/if}
 	<input type="range" class="vertical_input" bind:value={volume} min="0" max="100" />
 </div>
+
+<style>
+.audio-player-css{
+	margin-top: 1rem;
+	margin-left: 1.5rem;
+}
+</style>

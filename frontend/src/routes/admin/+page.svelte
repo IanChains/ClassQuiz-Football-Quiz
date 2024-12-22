@@ -143,7 +143,7 @@ SPDX-License-Identifier: MPL-2.0
 
 <svelte:window on:beforeunload={confirmUnload} />
 <svelte:head>
-	<title>ClassQuiz - Host</title>
+	<title>Quiz Football Is Life</title>
 </svelte:head>
 <div
 	class="min-h-screen min-w-full"
@@ -158,13 +158,13 @@ SPDX-License-Identifier: MPL-2.0
 				<div class="w-fit">
 					{#if export_token === undefined}
 						<GrayButton on:click={request_answer_export}
-							>{$t('admin_page.request_export_results')}</GrayButton
+							>Quiz Resultaten Opvragen</GrayButton
 						>
 					{:else}
 						<GrayButton
 							target="_blank"
 							href="/api/v1/quiz/export_data/{export_token}?ts={new Date().getTime()}&game_pin={game_pin}"
-							>{$t('admin_page.download_export_results')}</GrayButton
+							>Quiz Resultaten Downloaden</GrayButton
 						>
 					{/if}
 				</div>
@@ -188,7 +188,7 @@ SPDX-License-Identifier: MPL-2.0
 									stroke-linejoin="round"
 								/>
 							</svg>
-						{:else}{$t('admin_page.save_results')}{/if}
+						{:else}Resultaten Opslaan in Dashboard{/if}
 					</GrayButton>
 				</div>
 			</div>

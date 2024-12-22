@@ -41,14 +41,10 @@ SPDX-License-Identifier: MPL-2.0
 	<AudioPlayer bind:play={play_music} />
 	<div class="grid grid-cols-3 mt-12">
 		<div class="flex justify-center">
-			<p class="m-auto text-2xl">
-				{$t('play_page.join_description', {
-					url:
-						window.location.host === 'classquiz.de'
-							? 'cquiz.de'
-							: `${window.location.host}/play`,
-					pin: game_pin
-				})}
+			<p class="m-auto text-2xl join-info">
+				Neem Deel Via: <strong><u>footballislife.be/play</u></strong>
+				<br>
+				Met Deze Quiz Code: <stong><u>{game_pin}</u></stong>
 			</p>
 		</div>
 		<img
@@ -61,28 +57,32 @@ SPDX-License-Identifier: MPL-2.0
 			<div class="m-auto">
 				<div class="flex justify-center my-4">
 					<p class="m-auto text-2xl">
-						{$t('play_page.players_waiting', {
-							count: players.length ?? 0
-						})}
+						{#if players.length == 1}
+							<strong>{players.length ?? 0}</strong> Speler Aan Het Wachten!
+						{:else}
+							<strong>{players.length ?? 0}</strong> Spelers Aan Het Wachten!
+						{/if}
 					</p>
 				</div>
 				<div class="flex-col flex justify-center">
-					<p class="mx-auto">{$t('play_page.join_by_entering_code')}</p>
+					<p class="mx-auto">Neem deel met deze Quiz Code:</p>
 					<ControllerCodeDisplay code={cqc_code} />
 				</div>
 			</div>
 		{:else}
 			<div class="flex justify-center">
 				<p class="m-auto text-2xl">
-					{$t('play_page.players_waiting', {
-						count: players.length ?? 0
-					})}
+					{#if players.length == 1}
+						<strong>{players.length ?? 0}</strong> Speler Aan Het Wachten!
+					{:else}
+						<strong>{players.length ?? 0}</strong> Spelers Aan Het Wachten!
+					{/if}
 				</p>
 			</div>
 		{/if}
 	</div>
-	<p class="text-3xl text-center">
-		{$t('words.pin')}: <span class="select-all">{game_pin}</span>
+	<p class="text-3xl text-center quiz-pin">
+		Quiz Code: <span class="select-all">{game_pin}</span>
 	</p>
 	<div class="flex justify-center w-full mt-4">
 		<div>
@@ -91,7 +91,7 @@ SPDX-License-Identifier: MPL-2.0
 				on:click={() => {
 					socket.emit('start_game', '');
 				}}
-				>{$t('admin_page.start_game')}
+				>Quiz Starten
 			</GrayButton>
 		</div>
 	</div>
@@ -114,14 +114,30 @@ SPDX-License-Identifier: MPL-2.0
 
 {#if fullscreen_open}
 	<div
-		class="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 fle p-2"
+		class="fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 fle p-2 bg-qr-fullscreen"
 		transition:fade={{ duration: 80 }}
 		on:click={() => (fullscreen_open = false)}
 	>
 		<img
 			alt="QR code to join the game"
 			src="/api/v1/utils/qr/{game_pin}"
-			class="object-contain rounded m-auto h-full bg-white"
+			class="object-contain rounded m-auto bg-white img-qrcd"
 		/>
 	</div>
 {/if}
+
+<style>
+	.quiz-pin{
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+	}
+	.join-info{
+		margin-left: 5rem;
+	}
+	.bg-qr-fullscreen{
+		background-color: transparent;
+	}
+	.img-qrcd{
+		height: 95%;
+	}
+</style>

@@ -137,11 +137,11 @@ SPDX-License-Identifier: MPL-2.0
 	});
 
 	socket.on('username_already_exists', () => {
-		window.alert('Username already exists!');
+		window.alert('Deze gebruikersnaam is al in gebruik.');
 	});
 
 	socket.on('kick', () => {
-		window.alert('You got kicked');
+		window.alert('Je bent verwijderd door de quizmaster.');
 		preventReload = false;
 		game_pin = '';
 		username = '';
@@ -164,7 +164,7 @@ SPDX-License-Identifier: MPL-2.0
 
 <svelte:window on:beforeunload={confirmUnload} />
 <svelte:head>
-	<title>ClassQuiz - Play</title>
+	<title>Play - Quiz Football Is Life</title>
 	<!--	{#if gameData !== undefined && game_mode !== 'kahoot'}
 		{#each gameData.questions as question}
 			{#if question.image !== undefined}

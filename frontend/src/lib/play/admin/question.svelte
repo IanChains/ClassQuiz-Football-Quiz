@@ -13,7 +13,7 @@ SPDX-License-Identifier: MPL-2.0
 	import MediaComponent from '$lib/editor/MediaComponent.svelte';
 	import { getLocalization } from '$lib/i18n';
 
-	export let quiz_data: QuizData;
+	export let quiz_data: QuizData;bigger-image
 	export let selected_question: number;
 	export let timer_res: string;
 
@@ -41,7 +41,7 @@ SPDX-License-Identifier: MPL-2.0
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
-	<div class="grid grid-cols-3 my-2">
+	<div class="grid grid-cols-3 my-2 more-space-margin">
 		<span />
 		<div class="m-auto">
 			<CircularTimer
@@ -51,7 +51,11 @@ SPDX-License-Identifier: MPL-2.0
 			/>
 		</div>
 		<p class="m-auto text-3xl">
-			{$t('admin_page.answers_submitted', { answer_count: answer_count })}
+			{#if answer_count == 1}
+				<strong>{answer_count}</strong> Antwoord Verstuurd!
+			{:else}
+				<strong>{answer_count}</strong> Antwoorden Verstuurd!
+			{/if}
 		</p>
 	</div>
 </div>
@@ -60,12 +64,12 @@ SPDX-License-Identifier: MPL-2.0
 		<MediaComponent
 			src={quiz_data.questions[selected_question].image}
 			muted={false}
-			css_classes="max-h-[20vh] object-cover mx-auto mb-8 w-auto"
+			css_classes="bigger-image rounded object-cover mx-auto mb-8 w-auto"
 		/>
 	</div>
 {/if}
 {#if quiz_data.questions[selected_question].type === QuizQuestionType.ABCD || quiz_data.questions[selected_question].type === QuizQuestionType.VOTING || quiz_data.questions[selected_question].type === QuizQuestionType.CHECK}
-	<div class="grid grid-rows-2 grid-flow-col auto-cols-auto gap-2 w-full p-4">
+	<div class="grid grid-rows-2 grid-flow-col auto-cols-auto w-full p-4 more-room-question-options">
 		{#each quiz_data.questions[selected_question].answers as answer, i}
 			<div
 				class="rounded-lg h-fit flex border-2 border-black"
@@ -75,17 +79,22 @@ SPDX-License-Identifier: MPL-2.0
 					quiz_data.questions[selected_question].type === QuizQuestionType.ABCD}
 			>
 				<img
-					class="w-14 inline-block pl-4"
+					class="inline-block pl-4 football-icon-answer"
 					alt="icon"
 					style="color: {get_foreground_color(answer.color ?? default_colors[i])}"
 					src={kahoot_icons[i]}
 				/>
 				<span
-					class="text-center text-2xl px-2 py-4 w-full"
+					class="text-center text-2xl px-4 py-4 w-full"
 					style="color: {get_foreground_color(answer.color ?? default_colors[i])}"
 					>{answer.answer}</span
 				>
-				<span class="pl-4 w-10" />
+				<img
+				class="inline-block pr-4 football-icon-answer"
+				alt="icon"
+				style="color: {get_foreground_color(answer.color ?? default_colors[i])}"
+				src={kahoot_icons[i]}
+			/>
 			</div>
 		{/each}
 	</div>
@@ -103,7 +112,28 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 	{:else}
 		<div class="flex justify-center">
-			<p class="text-2xl">{$t('admin_page.enter_answer_into_field')}</p>
+			<p class="text-2xl">Typ je antwoord in het vakje!</p>
 		</div>
 	{/if}
 {/if}
+
+<style>
+	.more-space-margin{
+		margin: 2.5rem 0;
+	}
+	.bigger-image{
+		max-height: 25vh;
+		border-radius: 10px;
+	}
+	.more-room-question-options{
+		padding-left: 5rem;
+		padding-right: 5rem;
+		gap: 1rem;
+	}
+	.football-icon-answer{
+		width: 4.5rem;
+	}
+	.pr-4{
+		padding-right: 1rem;
+	}
+</style>

@@ -49,15 +49,14 @@ SPDX-License-Identifier: MPL-2.0
 	style="background: {bg_color ? bg_color : 'transparent'}"
 	class:text-black={bg_color}
 >
-	<p class="mr-auto ml-0 col-start-1 col-end-1">
-		{selected_question === -1 ? '0' : selected_question + 1}
-		/{quiz_data.questions.length}
+	<p class="mr-auto col-start-1 col-end-1 question-counter">
+		{selected_question === -1 ? '0' : selected_question + 1}/{quiz_data.questions.length}
 	</p>
 	<div class="justify-self-end ml-auto mr-0 col-start-3 col-end-3">
 		{#if selected_question + 1 === quiz_data.questions.length && ((timer_res === '0' && question_results !== null) || quiz_data?.questions?.[selected_question]?.type === QuizQuestionType.SLIDE)}
 			{#if JSON.stringify(final_results) === JSON.stringify([null])}
 				<button on:click={get_final_results} class="admin-button"
-					>{$t('admin_page.get_final_results')}
+					>Toon Eind Resultaten
 				</button>
 			{/if}
 		{:else if timer_res === '0' || selected_question === -1}
@@ -67,7 +66,7 @@ SPDX-License-Identifier: MPL-2.0
 						set_question_number(selected_question + 1);
 					}}
 					class="admin-button"
-					>{$t('admin_page.next_question', { question: selected_question + 2 })}
+					>Volgende Vraag: (Vraag {selected_question + 2})
 				</button>
 			{/if}
 			{#if question_results === null && selected_question !== -1}
@@ -77,7 +76,7 @@ SPDX-License-Identifier: MPL-2.0
 							set_question_number(selected_question + 1);
 						}}
 						class="admin-button"
-						>{$t('admin_page.next_question', { question: selected_question + 2 })}
+						>Volgende Vraag: (Vraag {selected_question + 2})
 					</button>
 				{:else if quiz_data.questions[selected_question]?.hide_results === true}
 					<button
@@ -88,11 +87,11 @@ SPDX-License-Identifier: MPL-2.0
 							}, 200);
 						}}
 						class="admin-button"
-						>{$t('admin_page.next_question', { question: selected_question + 2 })}
+						>Volgende Vraag: (Vraag {selected_question + 2})
 					</button>
 				{:else}
 					<button on:click={get_question_results} class="admin-button"
-						>{$t('admin_page.show_results')}
+						>Toon Resultaten
 					</button>
 				{/if}
 			{/if}
@@ -103,13 +102,25 @@ SPDX-License-Identifier: MPL-2.0
 						set_question_number(selected_question + 1);
 					}}
 					class="admin-button"
-					>{$t('admin_page.next_question', { question: selected_question + 2 })}
+					>Volgende Vraag: (Vraag {selected_question + 2})
 				</button>
 			{:else}
 				<button on:click={show_solutions} class="admin-button"
-					>{$t('admin_page.stop_time_and_solutions')}
+					>Stop Timer en Toon Oplossing
 				</button>
 			{/if}
 		{/if}
 	</div>
 </div>
+
+<style>
+	.admin-button{
+		margin-top: 0.75rem;
+		margin-right: 0.5rem;
+	}
+	.question-counter{
+		font-size: 2rem;
+		margin-left: 1rem;
+		font-weight: bold;
+	}
+</style>

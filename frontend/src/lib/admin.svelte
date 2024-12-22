@@ -108,6 +108,7 @@ SPDX-License-Identifier: MPL-2.0
 	<span
 		class="fixed top-0 bg-red-500 h-8 transition-all"
 		class:mt-10={control_visible}
+		class:big-redtimer={control_visible}
 		style="width: {(100 / parseInt(quiz_data.questions[selected_question].time)) *
 			parseInt(timer_res)}vw"
 	/>
@@ -134,7 +135,7 @@ SPDX-License-Identifier: MPL-2.0
 		{#if question_results === undefined}
 			{#if !final_results_clicked}
 				<div class="w-full flex justify-center">
-					<h1 class="text-3xl">{$t('admin_page.no_answers')}</h1>
+					<h1 class="text-3xl">Geen antwoorden!</h1>
 				</div>
 			{/if}
 		{:else if quiz_data.questions[selected_question].type === QuizQuestionType.VOTING}
@@ -179,3 +180,9 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 	{/if}
 </div>
+
+<style>
+	.big-redtimer{
+		margin-top: 3.5rem;
+	}
+</style>
