@@ -132,7 +132,7 @@ async def logout(request: Request, response: Response):
 
 @router.get("/check")
 async def check_token(user: User = Depends(get_current_user)):
-    return {"email": user.email}
+    return {"email": user.email,"admin_user": user.admin_user}
 
 
 @router.get("/verify/{verify_key}")

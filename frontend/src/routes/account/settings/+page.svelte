@@ -22,6 +22,7 @@ SPDX-License-Identifier: MPL-2.0
 		username: string;
 		verified: boolean;
 		created_at: string;
+		admin_user: boolean;
 	}
 
 	interface ChangePasswordData {
@@ -169,8 +170,10 @@ SPDX-License-Identifier: MPL-2.0
 				<div>
 					<h1 class="text-4xl font-bold my-2">{user.username}</h1>
 					<p class="text-lg mb-6 md:max-w-lg">
-						E-mailadres: {user.email}
-					</p>
+						E-mailadres: {user.email}</p>
+						{#if user.admin_user === true}
+						<p class="text-lg font-bold mb-6 text-red-600 md:max-w-lg">Administrator!</p>
+						{/if}
 				</div>
 				<div class="p-4 flex justify-center">
 					<div class="m-auto">

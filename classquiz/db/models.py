@@ -33,7 +33,7 @@ class User(ormar.Model):
     email: str = ormar.String(unique=True, max_length=100)
     username: str = ormar.String(unique=True, max_length=100)
     password: Optional[str] = ormar.String(max_length=100, nullable=True)
-    admin: bool = ormar.Boolean(default=False, nullable=False)
+    admin_user: bool = ormar.Boolean(default=False, nullable=False)
     verified: bool = ormar.Boolean(default=False)
     verify_key: str = ormar.String(unique=True, max_length=100, nullable=True)
     created_at: datetime = ormar.DateTime(default=datetime.now())
