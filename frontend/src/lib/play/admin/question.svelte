@@ -13,7 +13,7 @@ SPDX-License-Identifier: MPL-2.0
 	import MediaComponent from '$lib/editor/MediaComponent.svelte';
 	import { getLocalization } from '$lib/i18n';
 
-	export let quiz_data: QuizData;bigger-image
+	export let quiz_data: QuizData;
 	export let selected_question: number;
 	export let timer_res: string;
 
@@ -41,7 +41,7 @@ SPDX-License-Identifier: MPL-2.0
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
-	<div class="grid grid-cols-3 my-2 more-space-margin">
+	<div class="grid grid-cols-3 my-2 more-space-margin-quiz">
 		<span />
 		<div class="m-auto">
 			<CircularTimer
@@ -64,7 +64,7 @@ SPDX-License-Identifier: MPL-2.0
 		<MediaComponent
 			src={quiz_data.questions[selected_question].image}
 			muted={false}
-			css_classes="bigger-image rounded object-cover mx-auto mb-8 w-auto"
+			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-8 w-auto"
 		/>
 	</div>
 {/if}
@@ -90,7 +90,7 @@ SPDX-License-Identifier: MPL-2.0
 					>{answer.answer}</span
 				>
 				<img
-				class="inline-block pr-4 football-icon-answer"
+				class="inline-block pr-1-rem football-icon-answer"
 				alt="icon"
 				style="color: {get_foreground_color(answer.color ?? default_colors[i])}"
 				src={kahoot_icons[i]}
@@ -116,24 +116,3 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 	{/if}
 {/if}
-
-<style>
-	.more-space-margin{
-		margin: 2.5rem 0;
-	}
-	.bigger-image{
-		max-height: 25vh;
-		border-radius: 10px;
-	}
-	.more-room-question-options{
-		padding-left: 5rem;
-		padding-right: 5rem;
-		gap: 1rem;
-	}
-	.football-icon-answer{
-		width: 4.5rem;
-	}
-	.pr-4{
-		padding-right: 1rem;
-	}
-</style>

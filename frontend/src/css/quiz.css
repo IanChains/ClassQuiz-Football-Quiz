@@ -1,0 +1,17 @@
+.more-space-margin-quiz{
+    margin: 2.5rem 0;
+}
+.bigger-image-quiz{
+    max-height: 30vh;
+}
+.more-room-question-options{
+    padding-left: 5rem;
+    padding-right: 5rem;
+    gap: 1rem;
+}
+.football-icon-answer{
+    width: 4.5rem;
+}
+.pr-1-rem{
+    padding-right: 1rem;
+}
