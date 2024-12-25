@@ -117,10 +117,11 @@ async def rememberme_token(request: Request, response: Response):
 
 
 @router.get("/logout")
-async def logout(request: Request, response: Response):
+async def logout(request: Request, response: Response, user: User = Depends(get_current_user)):
     remember_token = request.cookies.get("rememberme_token")
     if remember_token is not None:
         await UserSession.objects.filter(session_key=remember_token).delete()
+    await clear_cache_for_account(user)
     response.delete_cookie("access_token")
     response.delete_cookie("expiry")
     response.delete_cookie("rememberme")
@@ -134,6 +135,9 @@ async def logout(request: Request, response: Response):
 async def check_token(user: User = Depends(get_current_user)):
     return {"email": user.email,"admin_user": user.admin_user}
 
+@router.get("/admin")
+async def check_token(user: User = Depends(get_current_user)):
+    return {"admin_user": user.admin_user}
 
 @router.get("/verify/{verify_key}")
 async def verify_user(verify_key: str):

@@ -5,14 +5,11 @@ SPDX-License-Identifier: MPL-2.0
 -->
 
 <script lang="ts">
-	import { getLocalization } from '$lib/i18n';
 	import { DateTime } from 'luxon';
 	import { UAParser } from 'ua-parser-js';
 	import Spinner from '$lib/Spinner.svelte';
 	import { onMount } from 'svelte';
 	import BrownButton from '$lib/components/buttons/brown.svelte';
-
-	const { t } = getLocalization();
 
 	let showMap = false;
 
@@ -169,10 +166,11 @@ SPDX-License-Identifier: MPL-2.0
 			<div class="grid grid-cols-2">
 				<div>
 					<h1 class="text-4xl font-bold my-2">{user.username}</h1>
-					<p class="text-lg mb-6 md:max-w-lg">
-						E-mailadres: {user.email}</p>
 						{#if user.admin_user === true}
+						<p class="text-lg md:max-w-lg">E-mailadres: {user.email}</p>
 						<p class="text-lg font-bold mb-6 text-red-600 md:max-w-lg">Administrator!</p>
+						{:else}
+						<p class="text-lg md:max-w-lg mb-6">E-mailadres: {user.email}</p>
 						{/if}
 				</div>
 				<div class="p-4 flex justify-center">
@@ -305,7 +303,7 @@ SPDX-License-Identifier: MPL-2.0
 				on:click={() => {
 					showMap = false;
 				}}
-				class="bg-black text-white rounded-t-lg px-1">{$t('words.close')}</button
+				class="bg-black text-white rounded-t-lg px-1">Close</button
 			>
 			<div class="w-full h-full">
 				<svelte:component

@@ -46,7 +46,7 @@ SPDX-License-Identifier: MPL-2.0
 					body: 'Please try again. Your email and or password were incorrect.',
 					title: 'Wrong Credentials'
 				});*/
-				alert('Probeer het opnieuw. Je e-mailadres en wachtwoord zijn onjuist.');
+				alert('Probeer het opnieuw. Je e-mailadres en/of wachtwoord zijn onjuist.');
 			}
 		}
 	};

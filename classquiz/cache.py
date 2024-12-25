@@ -39,13 +39,6 @@ async def cache_account(criteria: str, content: str) -> Union[User, None]:
             return None
         await insert_into_redis(res, content)
         return res
-    elif criteria == "admin_user":
-        try:
-            res = await User.objects.get(admin_user=content, verified=True)
-        except ormar.exceptions.NoMatch:
-            return None
-        await insert_into_redis(res, content)
-        return res
     else:
         return None
 
@@ -54,7 +47,6 @@ async def clear_cache_for_account(user: User):
     await redis.delete(user.email)
     await redis.delete(user.username)
     await redis.delete(str(user.id))
-    await redis.delete(user.admin_user)
 
 
 async def get_from_redis(key: str) -> Union[None, User]:

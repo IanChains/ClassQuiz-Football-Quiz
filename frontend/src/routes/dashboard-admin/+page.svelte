@@ -10,7 +10,6 @@ SPDX-License-Identifier: MPL-2.0
 	import { getLocalization } from '$lib/i18n';
 	import Footer from '$lib/footer.svelte';
 	import { navbarVisible, signedIn } from '$lib/stores';
-	import CommandpaletteNotice from '$lib/components/popover/commandpalettenotice.svelte';
 	// import Spinner from "$lib/Spinner.svelte";
 	import Fuse from 'fuse.js';
 	import BrownButton from '$lib/components/buttons/brown.svelte';
@@ -104,7 +103,6 @@ SPDX-License-Identifier: MPL-2.0
 	<title>Admin Dashboard</title>
 </svelte:head>
 <Analytics bind:quiz={analytics_quiz_selected} />
-<CommandpaletteNotice />
 <div class="min-h-screen flex flex-col">
 	{#await getData()}
 		<svg class="h-8 w-8 animate-spin mx-auto my-20" viewBox="3 3 18 18">
@@ -128,25 +126,25 @@ SPDX-License-Identifier: MPL-2.0
 					<div
 						class="flex gap-2"
 						transition:fly={{ y: 10 }}
-						use:tippy={{ content: 'Unsure? Choose "Quiz".' }}
+						use:tippy={{ content: 'Normaal? Kies voor "Quiz"!' }}
 					>
-						<BrownButton href="/create">{$t('words.quiz')}</BrownButton>
-						<BrownButton href="/quiztivity/create">{$t('words.quiztivity')}</BrownButton
+						<BrownButton href="/create">Quiz</BrownButton>
+						<BrownButton href="/quiztivity/create">Quiztivity</BrownButton
 						>
 					</div>
 				{:else}
 					<BrownButton
 						on:click={() => {
 							create_button_clicked = true;
-						}}>{$t('words.create')}</BrownButton
+						}}>Creëren</BrownButton
 					>
 				{/if}
-				<BrownButton href="/import">{$t('words.import')}</BrownButton>
-				<BrownButton href="/results">{$t('words.results')}</BrownButton>
+				<BrownButton href="/import">Quiz Importeren</BrownButton>
+				<BrownButton href="/results">Quiz Resultaten</BrownButton>
 				<div class="flex gap-2">
-					<BrownButton href="/edit/files">{$t('words.files_library')}</BrownButton>
+					<BrownButton href="/edit/files">Bestanden Bibliotheek</BrownButton>
 					<BrownButton href="/account/settings">
-						{$t('words.settings')}
+						Instellingen
 					</BrownButton>
 				</div>
 			</div>
@@ -157,7 +155,7 @@ SPDX-License-Identifier: MPL-2.0
 							<input
 								bind:value={search_term}
 								class="p-2 rounded-lg outline-none text-center w-96 dark:bg-gray-700"
-								placeholder={$t('dashboard.search_for_own_quizzes')}
+								placeholder="Zoek naar een quiz!"
 							/>
 							<button
 								on:click={() => {
@@ -387,7 +385,7 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 			{:else}
 				<p>
-					{$t('overview_page.no_quizzes')}
+					Hey, hallo! Welkom! Klik op de "Creëer"-knop om aan de slag te gaan.
 				</p>
 			{/if}
 		</div>

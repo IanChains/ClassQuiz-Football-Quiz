@@ -6,48 +6,30 @@ SPDX-License-Identifier: MPL-2.0
 
 <script lang="ts">
 	import { navbarVisible } from '$lib/stores';
-	import { getLocalization } from '$lib/i18n';
 	import Footer from '$lib/footer.svelte';
+	import { fade } from 'svelte/transition';
 
-	/*	import LandingPromo from '$lib/landing/landing-promo.svelte';*/
-
-
-	const { t } = getLocalization();
+	import PeopleScreenshot from '$lib/assets/landing_quiz/groep.webp';
+	import QuizScreenshot from '$lib/assets/landing_quiz/quiz.webp';
 
 	navbarVisible.set(true);
 
-	/*	interface StatsData {
+	interface StatsData {
 		quiz_count: number;
 		user_count: number;
-	}*/
+	}
 
-	/*	const getStats = async (): Promise<StatsData> => {
-			const response = await fetch('/api/v1/stats/combined');
-			return await response.json();
-		};*/
+	const getStats = async (): Promise<StatsData> => {
+		const response = await fetch('/api/v1/stats/combined');
+		return await response.json();
+	};
 
-	// eslint-disable-next-line no-unused-vars
 	enum SelectedCreateThing {
-		// eslint-disable-next-line no-unused-vars
-		Create,
-		// eslint-disable-next-line no-unused-vars
-		Find,
-		// eslint-disable-next-line no-unused-vars
-		Import
+		People,
+		Quiz
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	enum SelectedPlayThing {
-		// eslint-disable-next-line no-unused-vars
-		Select,
-		// eslint-disable-next-line no-unused-vars
-		Results,
-		// eslint-disable-next-line no-unused-vars
-		Winners
-	}
-
-	let selected_create_thing = SelectedCreateThing.Create;
-	let selected_play_thing = SelectedPlayThing.Select;
+	let selected_create_thing = SelectedCreateThing.People;
 
 	/*	<li>No;
 		Tracking < /li>
@@ -61,53 +43,6 @@ SPDX-License-Identifier: MPL-2.0
 		are;
 		downloadable < /li>;*/
 
-	const classquiz_reasons = [
-		{
-			headline: $t('index_page.no_player_limit'),
-			content: $t('index_page.no_player_limit_content')
-		},
-		{
-			headline: $t('index_page.no_tracking'),
-			content: $t('index_page.no_tracking_content')
-		},
-		{
-			headline: $t('index_page.self_hostable'),
-			content: $t('index_page.self_hostable_content')
-		},
-		{
-			headline: $t('index_page.german_server'),
-			content: $t('index_page.german_server_content')
-		},
-		{
-			headline: $t('index_page.user_friendly'),
-			content: $t('index_page.user_friendly_content')
-		},
-		{
-			headline: $t('index_page.completely_free'),
-			content: $t('index_page.completely_free_content')
-		},
-		{
-			headline: $t('index_page.quiz_results_downloadable'),
-			content: $t('index_page.quiz_results_downloadable_content')
-		},
-		{
-			headline: $t('index_page.multilingual'),
-			content: $t('index_page.multilingual_content')
-		},
-		{
-			headline: $t('index_page.dark_mode'),
-			content: $t('index_page.dark_mode_content')
-		},
-		{
-			headline: $t('index_page.download_quizzes'),
-			content: $t('index_page.download_quizzes_content')
-		},
-		{
-			headline: $t('index_page.community_driven'),
-			content: $t('index_page.community_driven_content')
-		}
-	];
-	let selected_classquiz_reason = 0;
 </script>
 
 <svelte:head>
@@ -131,42 +66,7 @@ SPDX-License-Identifier: MPL-2.0
 	<meta name="application-name" content="Quiz Football Is Life" />
 </svelte:head>
 
-<!--<div class="min-h-screen flex flex-col">
-	<section class="pb-40">
-		<div class="pt-12 text-center">
-			<h1 class="sm:text-8xl text-6xl mt-6 marck-script">ClassQuiz</h1>
-			<p class="text-xl mt-4">{$t('index_page.slogan')}</p>
-		</div>
-	</section>
-
-	<section id="features" class="mt-8">
-		<div class="text-center snap-y">
-			<h1 class="sm:text-6xl text-4xl">{$t('words.features')}</h1>
-			<p class="text-xl pt-4">
-				{$t('index_page.features_description.1')}
-				<br />
-				{$t('index_page.features_description.2')}
-				<br />
-				{$t('index_page.features_description.3')}
-			</p>
-		</div>
-	</section>
-	<section class="py-8">
-		<h1 class="sm:text-6xl text-4xl text-center break-words">
-			{$t('words.screenshot', { count: 2 })}
-		</h1>
-		<div>
-			<LandingPromo />
-		</div>
-	</section>
-
-	<section>
-		<h1 class="sm:text-6xl text-4xl text-center">Testimonials</h1>
-		{#await import('$lib/landing/testimonials.svelte') then testimonials}
-			<svelte:component this={testimonials.default} />
-		{/await}
-	</section>
-
+<!--
 	<section id="stats">
 		<div class="text-center pb-20 pt-10 snap-y">
 			<h1 class="sm:text-6xl text-4xl">{$t('words.stats')}</h1>
@@ -184,15 +84,114 @@ SPDX-License-Identifier: MPL-2.0
 <div class="min-h-screen flex flex-col">
 	<section class="pb-40">
 		<div class="pt-12 text-center">
-			<h1 class="sm:text-8xl text-6xl mt-6">Football Is Life Quiz</h1>
-			<p class="text-xl mt-4">Voetbal wie houdt daar nu niet van?!</p>
+			<h1 class="sm:text-8xl font-bold text-6xl mt-6">Football Is Life Quiz</h1>
+			<p class="text-3xl mt-4">De partner voor uw voetbalquiz op maat!</p>
 		</div>
 	</section>
+
+	{#await getStats() then stats}
+	<section style="padding-bottom: 7.5rem;">
+		<div
+		class="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 bg-opacity-40 bg-white shadow-lg mb-12 lg:mx-12 mx-4 rounded-lg"
+	>
+		<div>
+			<div class="p-2 rounded-lg">
+				{#if selected_create_thing === SelectedCreateThing.People}
+					<img
+						class="rounded-lg relative"
+						src={PeopleScreenshot}
+						in:fade
+						alt="Screenshot of Football Is Live, group"
+					/>
+				{:else if selected_create_thing === SelectedCreateThing.Quiz}
+					<img
+						class="rounded-lg relative"
+						src={QuizScreenshot}
+						in:fade
+						alt="Screenshot of Quiz"
+					/>
+				{:else}
+					<p>Shouldn't happen!</p>
+				{/if}
+			</div>
+		</div>
+		<div
+			class=" flex lg:flex-col flex-row stretch"
+		>
+			<div
+				class="m-2 rounded-lg p-2 bg-opacity-40 bg-white transition-all cursor-pointer lg:h-full"
+				on:click={() => {
+					selected_create_thing = SelectedCreateThing.People;
+				}}
+				on:keyup={() => {
+					selected_create_thing = SelectedCreateThing.People;
+				}}
+				class:shadow-2xl={selected_create_thing === SelectedCreateThing.People}
+				class:opacity-70={selected_create_thing !== SelectedCreateThing.People}
+			>
+				<div
+					class="rounded-lg w-fit p-1 transition shadow-lg"
+					style="background-color: #F4B631;"
+				>
+					<svg
+						aria-label="Spark Icon"
+						class="w-8 h-8 text-black"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+					</svg>
+				</div>
+				<h5 class="text-xl w-fit dark:text-black">Aantal QuizMasters</h5>
+				<p class="dark:text-black">Samen hebben we een groep van maar liefst {stats.user_count} enthousiaste QuizMasters gevormd!</p>
+			</div>
+			<div
+				class="m-2 rounded-lg p-2 bg-opacity-40 bg-white transition-all cursor-pointer lg:h-full"
+				on:click={() => {
+					selected_create_thing = SelectedCreateThing.Quiz;
+				}}
+				on:keyup={() => {
+					selected_create_thing = SelectedCreateThing.Quiz;
+				}}
+				class:shadow-2xl={selected_create_thing === SelectedCreateThing.Quiz}
+				class:opacity-70={selected_create_thing !== SelectedCreateThing.Quiz}
+			>
+				<div
+					class="rounded-lg w-fit p-1 transition shadow-lg"
+					style="background-color: #F4B631;"
+				>
+					<svg
+						class="w-8 h-8 text-black"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+						aria-label="puzzle icon"
+					>
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M11.1206 1.02129C12.109 1.0067 12.9592 1.54344 13.7096 2.29199L13.7104 2.29285L14.9707 3.5531C15.1118 3.34249 15.2753 3.14257 15.461 2.95679C17.0025 1.4153 19.5018 1.4153 21.0433 2.9568C22.5848 4.49829 22.5848 6.99754 21.0433 8.53904C20.8575 8.72481 20.6576 8.88828 20.447 9.02939L21.7072 10.2896L21.708 10.2905C22.4565 11.0408 22.9932 11.891 22.9787 12.8794C22.9642 13.8602 22.41 14.6797 21.7058 15.3789C21.7054 15.3793 21.7049 15.3798 21.7045 15.3802L20.4287 16.656C19.9519 17.1327 19.3279 17.0824 18.9512 16.9234C18.5783 16.7659 18.1803 16.4041 18.0897 15.8508C18.0262 15.4628 17.8456 15.0914 17.5452 14.791C16.7847 14.0306 15.5518 14.0306 14.7914 14.791C14.0309 15.5515 14.0309 16.7844 14.7914 17.5448C15.0917 17.8452 15.4631 18.0259 15.8511 18.0894C16.4044 18.18 16.7663 18.5779 16.9237 18.9509C17.0827 19.3276 17.1331 19.9516 16.6564 20.4283L15.377 21.7077C15.3766 21.7081 15.3762 21.7085 15.3757 21.709C14.6777 22.412 13.8591 22.965 12.8794 22.9795C11.8922 22.994 11.0429 22.4585 10.2938 21.7112L10.2929 21.7103L9.0295 20.4469C8.88841 20.6575 8.72496 20.8573 8.53922 21.0431C6.99773 22.5846 4.49847 22.5846 2.95698 21.0431C1.41549 19.5016 1.41549 17.0023 2.95698 15.4608C3.14272 15.2751 3.3426 15.1116 3.55317 14.9706L2.29294 13.7103L2.29208 13.7095C1.54353 12.9591 1.00681 12.1089 1.02141 11.1205C1.03589 10.1397 1.59009 9.32029 2.29424 8.62107C2.29469 8.62062 2.29515 8.62017 2.2956 8.61972L3.57165 7.34366C4.0484 6.86691 4.67249 6.9173 5.04916 7.07633C5.4221 7.23378 5.82003 7.59563 5.91062 8.14898C5.97414 8.53701 6.15479 8.90842 6.45519 9.20882C7.21563 9.96926 8.44856 9.96926 9.209 9.20882C9.96945 8.44837 9.96945 7.21545 9.20901 6.455C8.90861 6.1546 8.53719 5.97396 8.14917 5.91043C7.59581 5.81984 7.23397 5.42191 7.07652 5.04897C6.91749 4.6723 6.86709 4.04821 7.34384 3.57146L8.61978 2.29553C8.62025 2.29506 8.62071 2.29459 8.62118 2.29413C9.32039 1.58996 10.1398 1.03576 11.1206 1.02129ZM11.1501 3.02107C10.9456 3.02409 10.6003 3.13919 10.0393 3.70438L10.0367 3.70706L9.49334 4.25039C9.90279 4.44025 10.2863 4.70387 10.6232 5.04079C12.1647 6.58228 12.1647 9.08154 10.6232 10.623C9.08173 12.1645 6.58247 12.1645 5.04098 10.623C4.70406 10.2861 4.44044 9.9026 4.25058 9.49315L3.70715 10.0366L3.70449 10.0392C3.13933 10.6002 3.02421 10.9455 3.02119 11.1501C3.01827 11.3476 3.11651 11.7039 3.70773 12.2967C3.70782 12.2968 3.70792 12.2969 3.70801 12.297L6.03813 14.6271C6.30605 14.895 6.39954 15.2913 6.2796 15.6508C6.15966 16.0102 5.8469 16.2709 5.47177 16.3243C5.06894 16.3815 4.68196 16.5643 4.37119 16.8751C3.61075 17.6355 3.61075 18.8684 4.3712 19.6289C5.13164 20.3893 6.36456 20.3893 7.12501 19.6289C7.43577 19.3181 7.61854 18.9311 7.67581 18.5283C7.72914 18.1532 7.9899 17.8404 8.34931 17.7205C8.70872 17.6005 9.10505 17.694 9.37296 17.9619L11.7063 20.2953C11.7066 20.2955 11.7068 20.2958 11.7071 20.296C11.7071 20.2961 11.7071 20.2961 11.7072 20.2961C12.2975 20.8848 12.6529 20.9826 12.8499 20.9797C13.0539 20.9767 13.3986 20.8619 13.9575 20.2988L13.9601 20.2961L14.5069 19.7494C14.0975 19.5595 13.714 19.2959 13.3772 18.9591C11.8357 17.4176 11.8357 14.9183 13.3772 13.3768C14.9186 11.8353 17.4179 11.8353 18.9594 13.3768C19.2963 13.7137 19.5599 14.0972 19.7497 14.5065L20.2929 13.9633L20.2956 13.9607C20.8608 13.3998 20.9759 13.0544 20.9789 12.8499C20.9818 12.6524 20.8836 12.2961 20.2928 11.7036C20.2925 11.7034 20.2923 11.7031 20.2921 11.7029L17.9619 9.3728C17.694 9.10487 17.6005 8.70853 17.7205 8.34912C17.8404 7.9897 18.1532 7.72895 18.5284 7.67564C18.9312 7.61839 19.3183 7.43561 19.6291 7.12482C20.3895 6.36438 20.3895 5.13145 19.6291 4.37101C18.8686 3.61056 17.6357 3.61056 16.8752 4.37101C16.5644 4.6818 16.3817 5.06882 16.3244 5.4717C16.2711 5.84683 16.0104 6.15962 15.6509 6.27957C15.2915 6.39953 14.8952 6.30604 14.6273 6.03812L12.2971 3.70792C12.2969 3.70779 12.2968 3.70767 12.2967 3.70754C11.704 3.11638 11.3476 3.01815 11.1501 3.02107Z" fill="#000000"/>
+					</svg>
+				</div>
+				<h5 class="text-xl dark:text-black">Aantal Quizzen</h5>
+				<p class="dark:text-black">Wij hebben al meer dan {stats.quiz_count} unieke quizzen gecreëerd en tot leven gebracht op deze geweldige Quiz Site!</p>
+			</div>
+		</div>
+	</div>
+	</section>
+	{/await}
+	
 	<section>
-		<h2 class="text-center text-5xl mb-6">De partner voor uw voetbalquiz op maat!</h2>
+		<h2 class="text-center text-3xl mb-2">Op zoek naar een uitdagende teambuilding?</h2>
+		<h2 class="text-center text-3xl mb-10">Voor jouw voetbalploeg of vereniging?</h2>
+		<h2 class="text-center text-4xl mb-10">Neem dan <a href="mailto:football.is.life.quiz@gmail.com" target="_blank" class="underline font-bold" style="text-decoration-color:#F4B631">contact</a> met ons op!</h2>
+		<h2 class="text-center text-3xl mb-2">Wij boksen een quiz op maat in elkaar, speciaal voor jou!</h2>
+		<h2 class="text-center text-3xl mb-2">Wij komen ter plaatse OF wij doen enkel de inhoud!</h2>
+		<h2 class="text-center text-3xl mb-10">Alles is mogelijk! Alles volledig naar uw wensen!</h2>
+		<h2 class="text-center text-3xl mb-10">Bekijk ook zeker eens onze <a href="https://www.instagram.com/football_is_life_quiz/" target="_blank" class="underline font-bold" style="text-decoration-color:#F4B631">Instagram</a>!</h2>
+		<h2 class="text-center text-4xl font-bold" style="margin-bottom:7.5rem">Tot snel!<br>Vinnie & Clint</h2>
 	</section>
 
-	
 </div>
 
 <Footer />

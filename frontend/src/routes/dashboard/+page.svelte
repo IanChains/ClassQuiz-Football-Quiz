@@ -10,12 +10,10 @@ SPDX-License-Identifier: MPL-2.0
 	import { getLocalization } from '$lib/i18n';
 	import Footer from '$lib/footer.svelte';
 	import { navbarVisible, signedIn } from '$lib/stores';
-	import CommandpaletteNotice from '$lib/components/popover/commandpalettenotice.svelte';
 	// import Spinner from "$lib/Spinner.svelte";
 	import Fuse from 'fuse.js';
 	import BrownButton from '$lib/components/buttons/brown.svelte';
 	import type { PageData } from './$types';
-	import { fly } from 'svelte/transition';
 	import StartGamePopup from '$lib/dashboard/start_game.svelte';
 	import Analytics from './Analytics.svelte';
 	import MediaComponent from '$lib/editor/MediaComponent.svelte';
@@ -104,7 +102,6 @@ SPDX-License-Identifier: MPL-2.0
 	<title>Dashboard - Football Is Life Quiz</title>
 </svelte:head>
 <Analytics bind:quiz={analytics_quiz_selected} />
-<CommandpaletteNotice />
 <div class="min-h-screen flex flex-col">
 	{#await getData()}
 		<svg class="h-8 w-8 animate-spin mx-auto my-20" viewBox="3 3 18 18">
@@ -123,30 +120,14 @@ SPDX-License-Identifier: MPL-2.0
                     class='px-4 py-2 font-medium tracking-wide text-gray-500 whitespace-nowrap dark:text-gray-400 capitalize transition-colors dark:bg-gray-700 duration-200 transform bg-[#B07156] rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
                     Primary
                 </button>-->
-			<div class="w-full grid lg:grid-cols-4 gap-2 grid-cols-2 px-4">
-				{#if create_button_clicked}
-					<div
-						class="flex gap-2"
-						transition:fly={{ y: 10 }}
-						use:tippy={{ content: 'Unsure? Choose "Quiz".' }}
-					>
-						<BrownButton href="/create">{$t('words.quiz')}</BrownButton>
-						<BrownButton href="/quiztivity/create">{$t('words.quiztivity')}</BrownButton
-						>
-					</div>
-				{:else}
-					<BrownButton
-						on:click={() => {
-							create_button_clicked = true;
-						}}>{$t('words.create')}</BrownButton
-					>
-				{/if}
-				<BrownButton href="/import">{$t('words.import')}</BrownButton>
-				<BrownButton href="/results">{$t('words.results')}</BrownButton>
+			<div class="w-full grid lg:grid-cols-3 gap-2 grid-cols-2 px-4">
+				
+				<BrownButton href="/import">Quiz Importeren</BrownButton>
+				<BrownButton href="/results">Quiz Resultaten</BrownButton>
 				<div class="flex gap-2">
-					<BrownButton href="/edit/files">{$t('words.files_library')}</BrownButton>
+					<BrownButton href="/edit/files">Bestanden Bibliotheek</BrownButton>
 					<BrownButton href="/account/settings">
-						{$t('words.settings')}
+						Instellingen
 					</BrownButton>
 				</div>
 			</div>
@@ -157,7 +138,7 @@ SPDX-License-Identifier: MPL-2.0
 							<input
 								bind:value={search_term}
 								class="p-2 rounded-lg outline-none text-center w-96 dark:bg-gray-700"
-								placeholder={$t('dashboard.search_for_own_quizzes')}
+								placeholder="Zoek naar een quiz!"
 							/>
 							<button
 								on:click={() => {
@@ -386,8 +367,15 @@ SPDX-License-Identifier: MPL-2.0
 					{/each}
 				</div>
 			{:else}
-				<p>
-					{$t('overview_page.no_quizzes')}
+					<p style="margin-left: 2rem; margin-top: 1rem; font-size: 1.10rem; max-width: 90%;">
+						Je hebt nog geen Quiz in jouw bezit.
+					<br>Neem contact met ons op om een Quiz te kopen!
+					<br>Onze Email: <a href="mailto:football.is.life.quiz@gmail.com" target="_blank" class="underline">football.is.life.quiz@gmail.com</a>
+					<br><a href="https://www.facebook.com/profile.php?id=100040198507954" target="_blank">Klik hier om naar onze Facebook te gaan!</a>
+					<br><a href="https://www.instagram.com/football_is_life_quiz/" target="_blank">Klik hier om naar onze Instagram te gaan!</a>
+					<br>
+					<br>IT Problemen? Neem contact op met onze Webmaster!
+					<br>Email: <a href="mailto:support@ian-chains.it" target="_blank" class="underline">support@ian-chains.it</a>
 				</p>
 			{/if}
 		</div>

@@ -5,23 +5,14 @@ SPDX-License-Identifier: MPL-2.0
 -->
 
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 	import '@fontsource/marck-script/index.css';
-	import { getLocalization } from '$lib/i18n';
 	import { signedIn, pathname } from '$lib/stores';
-	import { createTippy } from 'svelte-tippy';
-	import { browser } from '$app/environment';
 	import { beforeNavigate } from '$app/navigation';
 	import { draw, slide } from 'svelte/transition';
 
 	import logo from '$lib/logo.png';
-
-	const tippy = createTippy({
-		arrow: true,
-		animation: 'perspective-subtle',
-		placement: 'bottom'
-	});
-
-	const { t } = getLocalization();
 
 	let menuIsClosed = true;
 	const toggleMenu = () => {
@@ -32,18 +23,22 @@ SPDX-License-Identifier: MPL-2.0
 		menuIsClosed = true; // Closes menu to let the user see the page beneath
 	});
 
-	let darkMode = false;
-	if (browser) {
-		darkMode =
-			localStorage.theme === 'dark' ||
-			(!('theme' in localStorage) &&
-				window.matchMedia('(prefers-color-scheme: dark)').matches);
-	}
+	const isAdmin = writable(false);
 
-	const switchDarkMode = () => {
-		!darkMode ? localStorage.setItem('theme', 'dark') : localStorage.setItem('theme', 'light');
-		window.location.reload();
-	};
+	onMount(async () => {
+    try {
+      const response = await fetch('/api/v1/users/admin');
+
+      if (response.ok) {
+        const result = await response.json();
+        isAdmin.set(result.admin_user);
+      } else {
+        isAdmin.set(false);
+      }
+    } catch (error) {
+      console.error('Error fetching admin status:', error);
+    }
+  });
 </script>
 
 <nav class="w-screen px-4 lg:px-10 py-2 fixed backdrop-blur-2xl bg-white/70 shadow-md z-30 top-0">
@@ -59,9 +54,12 @@ SPDX-License-Identifier: MPL-2.0
 			>
 			<a class="btn-nav border-2 rounded" href="/play">Play</a>
 			<a class="btn-nav" href="https://footballislife.be">Meer Info</a>
-			{#if $signedIn}
-				<a class="btn-nav" href="/dashboard">Dashboard</a>
-			{/if}
+				{#if $signedIn}
+					<a class="btn-nav" href="/dashboard">Dashboard</a>
+					{#if $isAdmin}
+						<a class="btn-nav text-red-600" href="/dashboard-admin">Admin Dashboard</a>
+					{/if}
+				{/if}
 		</div>
 		<div class="lg:flex lg:items-center lg:flex-row gap-1">
 			{#if $signedIn}
@@ -142,9 +140,12 @@ SPDX-License-Identifier: MPL-2.0
 		{#if !menuIsClosed}
 			<div class="flex flex-col" transition:slide={{ duration: 400 }}>
 				<a class="btn-nav" href="https://footballislife.be">Meer Info</a>
-				{#if $signedIn}
-					<a class="btn-nav" href="/dashboard">Dashboard</a>
-				{/if}
+					{#if $signedIn}
+						<a class="btn-nav" href="/dashboard">Dashboard</a>
+						{#if $isAdmin}
+							<a class="btn-nav text-red-600" href="/dashboard-admin">Admin Dashboard</a>
+						{/if}
+					{/if}
 
 				<hr class="my-1 border" />
 				{#if $signedIn}

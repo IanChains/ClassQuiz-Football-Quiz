@@ -37,11 +37,11 @@ class Settings(BaseSettings):
     db_url: PostgresDsn | str = "postgresql://postgres:mysecretpassword@localhost:5432/classquiz"
     hcaptcha_key: str | None = None
     recaptcha_key: str | None = None
-    mail_address: str
-    mail_password: str
-    mail_username: str
-    mail_server: str
-    mail_port: int
+    mail_address: str = "no-reply@footballislife.be"
+    mail_password: str = "aQyM8BKRE5n6CG6GbQ7S"
+    mail_username: str = "no-reply@footballislife.be"
+    mail_server: str = "mail.web01.ian-chains.it"
+    mail_port: int = "587"
     secret_key: str
     access_token_expire_minutes: int = 30
     cache_expiry: int = 86400
@@ -60,10 +60,10 @@ class Settings(BaseSettings):
     registration_disabled: bool = False
 
     # storage_backend
-    storage_backend: str  # either "local" or "s3"
+    storage_backend: str  = "local" # either "local" or "s3"
 
-    # if storage_backend == "local":
-    storage_path: str | None = None
+    #if storage_backend == "local":
+    storage_path: str = "/root/classquiz-data"
 
     # if storage_backend == "s3":
     s3_access_key: str | None = None
