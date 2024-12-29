@@ -26,22 +26,22 @@ SPDX-License-Identifier: MPL-2.0
 	const isAdmin = writable(false);
 
 	onMount(async () => {
-    try {
-      const response = await fetch('/api/v1/users/admin');
+		try {
+			const response = await fetch('/api/v1/users/admin');
 
-      if (response.ok) {
-        const result = await response.json();
-        isAdmin.set(result.admin_user);
-      } else {
-        isAdmin.set(false);
-      }
-    } catch (error) {
-      console.error('Error fetching admin status:', error);
-    }
-  });
+			if (response.ok) {
+				const result = await response.json();
+				isAdmin.set(result.admin_user);
+			} else {
+				isAdmin.set(false);
+			}
+		} catch (error) {
+		console.error('Error fetching admin status:', error);
+		}
+  	});
 </script>
 
-<nav class="w-screen px-4 lg:px-10 py-2 fixed backdrop-blur-2xl bg-white/70 shadow-md z-30 top-0">
+<nav class="w-screen px-4 lg:px-10 py-2 fixed backdrop-blur-2xl custom-dark-blue-bg shadow-md z-30 top-0">
 	<!-- Desktop navbar -->
 	<div class="hidden lg:flex lg:items-center lg:flex-row lg:justify-between">
 
@@ -49,27 +49,28 @@ SPDX-License-Identifier: MPL-2.0
 			<img style="max-height: 50px" src={logo}/>
 			<a
 				href="/"
-				class="font-black tracking-tight text-xl lg:text-2xl text-black link-hover px-3 lg:px-5"
+				class="font-black tracking-tight text-xl lg:text-2xl custom-bright-orange custom-bright-red-hover px-3 lg:px-5 duration-300"
 				>Football Is Life Quiz</a
 			>
-			<a class="btn-nav border-2 rounded" href="/play">Play</a>
-			<a class="btn-nav" href="https://footballislife.be">Meer Info</a>
+			<a class="btn-nav border-2 rounded custom-nav-btn" href="/play">Play</a>
+			<a class="btn-nav custom-nav-btn" href="https://footballislife.be">Meer Info</a>
 				{#if $signedIn}
-					<a class="btn-nav" href="/dashboard">Dashboard</a>
 					{#if $isAdmin}
-						<a class="btn-nav text-red-600" href="/dashboard-admin">Admin Dashboard</a>
+						<a class="btn-nav-admin custom-nav-btn-admin" href="/dashboard-admin">Admin Dashboard</a>
+					{:else}
+						<a class="btn-nav custom-nav-btn" href="/dashboard">Dashboard</a>
 					{/if}
 				{/if}
 		</div>
 		<div class="lg:flex lg:items-center lg:flex-row gap-1">
 			{#if $signedIn}
-				<a class="btn-nav" href="/api/v1/users/logout">Uitloggen</a>
+				<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
 			{:else}
 				{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
-					<a class="btn-nav" href="/account/register">Registreren</a>
+					<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
 				{/if}
 
-				<a class="btn-nav" href="/account/login?returnTo={$pathname}">Inloggen</a>
+				<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}">Inloggen</a>
 			{/if}
 		</div>
 	</div>
@@ -80,7 +81,7 @@ SPDX-License-Identifier: MPL-2.0
 		<div class="flex items-center justify-between">
 			<img style="max-height: 50px" src={logo}/>
 			<a href="/"
-				class="font-black tracking-tight text-xl lg:text-2xl text-black link-hover px-3 lg:px-5"
+				class="font-black tracking-tight text-xl lg:text-2xl custom-bright-orange custom-bright-red-hover px-3 lg:px-5 duration-300"
 				>Football Is Life Quiz</a
 			>
 			<a class="btn-nav flex" href="/play">Play</a>
@@ -101,7 +102,7 @@ SPDX-License-Identifier: MPL-2.0
 							height="24"
 							viewBox="0 0 24 24"
 							fill="none"
-							stroke="#000000"
+							stroke="#FFFFFF"
 							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -122,7 +123,7 @@ SPDX-License-Identifier: MPL-2.0
 							height="24"
 							viewBox="0 0 24 24"
 							fill="none"
-							stroke="#000000"
+							stroke="#FFFFFF"
 							stroke-width="2"
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -139,23 +140,24 @@ SPDX-License-Identifier: MPL-2.0
 		<!-- Navbar content -->
 		{#if !menuIsClosed}
 			<div class="flex flex-col" transition:slide={{ duration: 400 }}>
-				<a class="btn-nav" href="https://footballislife.be">Meer Info</a>
+				<a class="btn-nav custom-nav-btn" href="https://footballislife.be">Meer Info</a>
 					{#if $signedIn}
-						<a class="btn-nav" href="/dashboard">Dashboard</a>
 						{#if $isAdmin}
-							<a class="btn-nav text-red-600" href="/dashboard-admin">Admin Dashboard</a>
+							<a class="btn-nav-admin custom-nav-btn-admin" href="/dashboard-admin">Admin Dashboard</a>
+						{:else}
+							<a class="btn-nav custom-nav-btn" href="/dashboard">Dashboard</a>
 						{/if}
 					{/if}
 
 				<hr class="my-1 border" />
 				{#if $signedIn}
-					<a class="btn-nav" href="/api/v1/users/logout">Uitloggen</a>
+					<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
 				{:else}
 					{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
-						<a class="btn-nav" href="/account/register">Registreren</a>
+						<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
 					{/if}
 
-					<a class="btn-nav" href="/account/login?returnTo={$pathname}"
+					<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}"
 						>Inloggen</a
 					>
 				{/if}
@@ -166,7 +168,10 @@ SPDX-License-Identifier: MPL-2.0
 
 <style lang="scss">
 	.btn-nav {
-		@apply text-lg font-medium px-3 text-gray-600 hover:text-green-600 py-1.5 transition-all duration-300;
+		@apply text-lg font-medium px-3 py-1.5 transition-all duration-300;
+	}
+	.btn-nav-admin {
+		@apply text-lg font-medium px-3 py-1.5 transition-all duration-300;
 	}
 
 </style>

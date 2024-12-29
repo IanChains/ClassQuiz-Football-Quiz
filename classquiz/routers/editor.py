@@ -22,6 +22,8 @@ from uuid import UUID
 from classquiz.helpers import get_meili_data, check_image_string, extract_image_ids_from_quiz
 from classquiz.storage.errors import DeletionFailedError
 
+from cryptography.fernet import Fernet
+
 settings = settings()
 
 router = APIRouter()
@@ -37,7 +39,6 @@ class EditSessionData(BaseModel):
     quiz_id: UUID
     edit: bool
     user_id: UUID
-
 
 async def delete_images_for_edit_id(edit_id: str):
     await asyncio.sleep(30)
@@ -55,6 +56,9 @@ async def init_editor(edit: bool, quiz_id: Optional[UUID] = None, user: User = D
         raise HTTPException(status_code=400, detail="You can't choose the id for your quiz")
     if edit and quiz_id is None:
         raise HTTPException(status_code=400, detail="Edit can't be true if quiz_id is None")
+    if not user.admin_user:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
+    
     if quiz_id is None:
         quiz_id = uuid.uuid4()
     edit_id = os.urandom(4).hex()
@@ -66,10 +70,12 @@ async def init_editor(edit: bool, quiz_id: Optional[UUID] = None, user: User = D
 
 
 @router.post("/finish")
-async def finish_edit(edit_id: str, quiz_input: QuizInput):
+async def finish_edit(edit_id: str, quiz_input: QuizInput, user: User = Depends(get_current_user)):
     session_data = await redis.get(f"edit_session:{edit_id}")
     if session_data is None:
         raise HTTPException(status_code=401, detail="Edit ID not found!")
+    if not user.admin_user:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
     session_data = EditSessionData.parse_raw(session_data)
     quiz_input.title = bleach.clean(quiz_input.title, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
     quiz_input.description = bleach.clean(quiz_input.description, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
@@ -139,12 +145,15 @@ async def finish_edit(edit_id: str, quiz_input: QuizInput):
         await quiz.update()
         return quiz
     else:
+        quiz_license_key_value = Fernet.generate_key()
+
         quiz = Quiz(
             **quiz_input.dict(),
             user_id=session_data.user_id,
             id=session_data.quiz_id,
             created_at=datetime.now(),
             updated_at=datetime.now(),
+            quiz_license_key=quiz_license_key_value
         )
 
         await redis.delete("global_quiz_count")

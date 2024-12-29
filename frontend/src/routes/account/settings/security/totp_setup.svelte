@@ -21,29 +21,29 @@ SPDX-License-Identifier: MPL-2.0
 <div class="w-screen h-screen fixed top-0 left-0 p-48 z-30 bg-black bg-opacity-50">
 	<div class="w-full h-full">
 		<button
-			class="bg-gray-200 dark:bg-gray-900 px-2 py-1 rounded-t-lg hover:bg-gray-300 transition"
+			class="bg-gray-900 px-2 py-1 rounded-t-lg hover:bg-gray-300 transition"
 			on:click={() => {
 				totp_data = undefined;
 			}}
-			>{$t('words.close')}
+			>Sluiten
 		</button>
-		<div class="bg-white dark:bg-gray-700 rounded-b-lg rounded-tr-lg w-full h-full">
+		<div class="bg-gray-700 rounded-b-lg rounded-tr-lg w-full h-full">
 			<div class="grid grid-cols-3 w-full h-full">
 				<div class="flex flex-col justify-center w-full h-5/6">
 					<span class="m-auto" />
 					<div class="h-5/6 flex">
 						<p class="my-auto ml-auto">
-							{$t('security_settings.totp_setup.scan_to_set_up')}
+							Scan deze QR-code om de 2FA in te stellen.
 						</p>
 					</div>
 					<div class="flex">
 						<p class="my-auto ml-auto">
-							{$t('security_settings.totp_setup.enter_as_secret_if_no_see_code')}
+							Voer dit in als de 'secret' als u de QR-code niet kunt scannen.
 						</p>
 					</div>
 				</div>
 				<div class="flex flex-col justify-start w-full h-5/6">
-					<h2 class="text-2xl m-auto">{$t('security_settings.totp_setup.totp_setup')}</h2>
+					<h2 class="text-2xl m-auto">2FA Setup</h2>
 					{#await get_image_url()}
 						<Spinner my_20={false} />
 					{:then data}
@@ -59,7 +59,7 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 				<div class="flex justify-center h-5/6 w-full">
 					<p class="m-auto text-3xl p-4">
-						{$t('security_settings.totp_setup.do_not_forget_backup_code')}
+						Vergeet niet je herstelcode/backupcode op te slaan!
 					</p>
 				</div>
 			</div>

@@ -23,9 +23,17 @@ SPDX-License-Identifier: MPL-2.0
 	<p class="text-center">
 		De pagina die je zocht is verdwenen of heeft zelfs nooit bestaan. Wie zal het zeggen?
 	</p>
+{:else if status === 401}
+	<p class="text-center">
+		Oeps, je hebt geen toegang tot deze pagina! Je bent hier niet welkom!
+	</p>
+{:else if status === 403}
+	<p class="text-center">
+		Oeps, je hebt geen toegang tot deze pagina! Je bent hier niet welkom!
+	</p>
 {:else}
 	<p class="text-center">
-		Oei, er is iets misgegaan. Deze pagina is opgegaan in de mist!
+		Oei, er is iets misgegaan. Je hebt de goal gemist. Deze pagina is opgegaan in de rook!
 	</p>
 {/if}
 

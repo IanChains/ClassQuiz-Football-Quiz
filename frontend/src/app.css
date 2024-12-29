@@ -7,6 +7,9 @@ SPDX-License-Identifier: MPL-2.0
 @import 'tippy.js/animations/perspective-subtle.css';
 @import 'tippy.js/dist/tippy.css';
 @import './css/quiz.css';
+@import './css/button.css';
+@import './css/colors.css';
+
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
@@ -36,4 +39,8 @@ SPDX-License-Identifier: MPL-2.0
 	.action-button {
 		@apply px-4 py-2 leading-5 text-black dark:text-white transition-colors duration-200 transform bg-gray-50 dark:bg-gray-700 rounded text-center hover:bg-gray-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-gray-600;
 	}
+}
+
+@layer components {
+	.custom-bright-orange{color: #FAA12D;}
 }

@@ -1,0 +1,14 @@
+.orange-red-button{
+    background-color: transparent;
+    background-image: linear-gradient(to right, #EC0927 0%, #FAA12D 51%, #EC0927 100%);
+    display: block;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+}
+
+.orange-red-button:hover{
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }

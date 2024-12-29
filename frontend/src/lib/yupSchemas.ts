@@ -85,5 +85,5 @@ export const dataSchema = yup.object({
 			})
 		)
 		.min(1, 'You need at least one question')
-		.max(50, "You can't have more than 32 questions")
+		.max(100, "You can't have more than 64 questions")
 });

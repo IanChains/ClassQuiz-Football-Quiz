@@ -37,17 +37,17 @@ SPDX-License-Identifier: MPL-2.0
 		transition:fade|local={{ duration: 100 }}
 	>
 		<div
-			class="m-auto bg-white dark:bg-gray-600 rounded shadow-2xl flex p-4 flex-col lg:w-2/3 w-11/12 h-5/6"
+			class="m-auto bg-gray-600 rounded shadow-2xl flex p-4 flex-col lg:w-2/3 w-11/12 h-5/6"
 		>
-			<h1 class="text-center text-5xl">{$t('words.analytics')}</h1>
+			<h1 class="text-center text-5xl">Analytics Quiz</h1>
 			<section class="flex flex-col gap-2 mt-8">
-				<h2 class="mx-auto text-2xl">{$t('words.rating')}</h2>
+				<h2 class="mx-auto text-2xl">Beoordelingen</h2>
 				<table class="w-fit mx-auto">
 					<tr class="border-b-2 dark:border-gray-500 text-left border-gray-300">
 						<th class="border-r dark:border-gray-500 p-1 mx-auto border-gray-300"
-							>{$t('words.like', { count: 2 })}</th
+							>Likes</th
 						>
-						<th class="p-1 mx-auto">{$t('words.dislike', { count: 2 })}</th>
+						<th class="p-1 mx-auto">Dislikes</th>
 					</tr>
 					<tr class="text-left">
 						<td class="border-r dark:border-gray-500 p-1 border-gray-300"
@@ -58,13 +58,13 @@ SPDX-License-Identifier: MPL-2.0
 				</table>
 			</section>
 			<section class="flex flex-col gap-2 mt-8">
-				<h2 class="mx-auto text-2xl">{$t('dashboard.views_n_plays')}</h2>
+				<h2 class="mx-auto text-2xl">Weergaven & Plays</h2>
 				<table class="w-fit mx-auto">
 					<tr class="border-b-2 dark:border-gray-500 text-left border-gray-300">
 						<th class="border-r dark:border-gray-500 p-1 mx-auto border-gray-300"
-							>{$t('words.view', { count: 2 })}</th
+							>Views</th
 						>
-						<th class="p-1 mx-auto">{$t('words.play', { count: 2 })}</th>
+						<th class="p-1 mx-auto">Plays</th>
 					</tr>
 					<tr class="text-left">
 						<td class="border-r dark:border-gray-500 p-1 border-gray-300"
@@ -75,16 +75,18 @@ SPDX-License-Identifier: MPL-2.0
 				</table>
 			</section>
 			<section class="flex flex-col gap-2 mt-8">
-				<h2 class="mx-auto text-2xl">{$t('words.info')}</h2>
+				<h2 class="mx-auto text-2xl">Extra Info</h2>
 				<p class="mx-auto max-w-[70%] text-center">
-					{$t('dashboard.info_analytics')}
+					De "Plays" laten zien hoevaak deze quiz is gestart/gespeeld (inclusief jij zelf).
+					<br> De "Views" laten zien hoeveel keer de Quiz Pagina is bezocht (inclusief jij zelf & bots).
 				</p>
 			</section>
 			<section class="mt-auto">
 				<p class="mt-6 mx-auto max-w-[70%] text-sm dark:text-gray-200 text-center">
-					Since there's still some space left down here, I guess that I take this
-					opportunity to thank You for using ClassQuiz! Have a great day and continue
-					using ClassQuiz ;)
+					Omdat er hier nog een beetje plaats vrij is, wil ik jou graag bedanken voor het gebruiken van deze Quiz Site.
+					<br>Deze Quiz Site is mogelijk gemaakt door het Open Source Project <a href="https://classquiz.de/" class="underline" target="_blank">ClassQuiz</a>!
+					<br>Graag wil ik <a href="https://mawoka.eu/" class="underline" target="_blank">Mawoka</a> en <a href="https://classquiz.de/docs/attribution" class="underline" target="_blank">zijn team</a> bedanken voor het maken van ClassQuiz!
+					<br>Ik wens jou een fijne dag toe! ♥ WebMaster <a href="https://ian-chains.it" class="underline" target="_blank">Ian-Chains IT</a> ♥
 				</p>
 			</section>
 		</div>

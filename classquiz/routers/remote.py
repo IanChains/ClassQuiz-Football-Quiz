@@ -11,7 +11,7 @@ from classquiz.config import redis
 
 router = APIRouter()
 
-
+"""
 @router.get("/game_waiting")
 async def get_game_in_lobby(user: User = Depends(get_current_user)):
     game_in_lobby_raw = await redis.get(f"game_in_lobby:{user.id.hex}")
@@ -19,3 +19,4 @@ async def get_game_in_lobby(user: User = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="No game waiting")
     game_in_lobby = GameInLobby.parse_raw(game_in_lobby_raw)
     return game_in_lobby
+"""

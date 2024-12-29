@@ -11,7 +11,7 @@ from classquiz.db.models import User, Quiz
 
 router = APIRouter()
 
-
+"""
 @router.get("/status")
 async def get_mod_status(resp: Response, user: User = Depends(get_current_moderator)):
     resp.status_code = 200
@@ -59,3 +59,4 @@ async def set_mod_rating_for_quiz(
         raise HTTPException(status_code=404, detail="Quiz not found")
     quiz.mod_rating = data.rating
     return await quiz.update()
+"""

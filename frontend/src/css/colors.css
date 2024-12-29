@@ -1,0 +1,24 @@
+.custom-dark-blue-bg{background-color: #000910;}
+.custom-dark-blue{color: #000910;}
+
+.custom-bright-orange{color: #FAA12D;}
+.custom-bright-orange-border{border-color: #FAA12D;}
+
+.custom-bright-red{color:#F3572A;}
+.custom-bright-red-hover:hover{color:#F3572A;}
+.custom-bright-red-border-focus:focus{color:#F3572A;}
+
+.custom-nav-btn{
+    color: white;
+}
+.custom-nav-btn:hover{
+    color: #FAA12D;
+    border-color: #FAA12D;
+}
+
+.custom-nav-btn-admin{
+    color:#F3572A;
+}
+.custom-nav-btn-admin:hover{
+    color: #FAA12D;
+}

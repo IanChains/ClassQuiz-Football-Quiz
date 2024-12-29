@@ -25,10 +25,25 @@ from classquiz.kahoot_importer.import_quiz import import_quiz
 from uuid import UUID
 import urllib.parse
 
+from cryptography.fernet import Fernet, InvalidToken
+
 settings = settings()
 
 router = APIRouter()
 
+"""
+class QuizGetModel(Quiz.get_pydantic(exclude={"quiz_license_key"})):
+    id: uuid.UUID
+    public: bool
+    title: str
+    description: Optional[str] = None
+    user_id: uuid.UUID
+    questions: list
+    imported_from_kahoot: bool
+    cover_image: str
+    background_color: str
+    background_image: str
+"""
 
 @router.get("/get/{quiz_id}")
 async def get_quiz_from_id(quiz_id: str, user: User | None = Depends(get_current_user)):
@@ -36,25 +51,23 @@ async def get_quiz_from_id(quiz_id: str, user: User | None = Depends(get_current
         quiz_id = uuid.UUID(quiz_id)
     except ValueError:
         raise HTTPException(status_code=400, detail="badly formed quiz id")
+    
     if user is None:
-        quiz = await Quiz.objects.get_or_none(id=quiz_id, public=True)
+        return JSONResponse(status_code=404, content={"detail": "user not found"})
     else:
         quiz = await Quiz.objects.get_or_none(id=quiz_id, user_id=user.id)
+
     if quiz is None:
-        public_quiz = await Quiz.objects.get_or_none(id=quiz_id, public=True)
-        if public_quiz is None:
-            return JSONResponse(status_code=404, content={"detail": "quiz not found"})
-        else:
-            return public_quiz
+        return JSONResponse(status_code=404, content={"detail": "quiz not found"})
     else:
-        return quiz
+        return quiz.to_dict(exclude_fields=["quiz_license_key"])
 
 
 class PublicQuizResponseUser(BaseModel):
     username: str
     id: uuid.UUID
 
-
+"""
 class PublicQuizResponse(Quiz.get_pydantic(exclude={"questions"})):
     user_id: PublicQuizResponseUser
     questions: list[QuizQuestion]
@@ -62,23 +75,74 @@ class PublicQuizResponse(Quiz.get_pydantic(exclude={"questions"})):
     dislikes: int
     views: int
     plays: int
-
-
-@router.get("/get/public/{quiz_id}")
-async def get_public_quiz(quiz_id: uuid.UUID):
+"""
+    
+class PublicInfoQuizResponse(Quiz.get_pydantic(exclude={"questions","background_color","background_image", "quiz_license_key"})):
+    user_id: PublicQuizResponseUser
+    likes: int
+    dislikes: int
+    views: int
+    plays: int
+    
+@router.get("/get/public/info/{quiz_id}",)
+async def get_public_info_quiz(quiz_id: uuid.UUID):
     quiz = await Quiz.objects.select_related("user_id").get_or_none(id=quiz_id)
     if quiz is None:
         return JSONResponse(status_code=404, content={"detail": "quiz not found"})
     else:
         quiz.views += 1
         await quiz.update()
+        return PublicInfoQuizResponse(**quiz.dict())
+    
+"""
+@router.get("/get/public/{quiz_id}")
+async def get_public_quiz(quiz_id: uuid.UUID):
+    quiz = await Quiz.objects.select_related("user_id").get_or_none(id=quiz_id)
+    if quiz is None:
+        return JSONResponse(status_code=404, content={"detail": "quiz not found"})
+    else:
         return PublicQuizResponse(**quiz.dict())
+"""
+        
+@router.post("/license/{quiz_id}")
+async def license_gen_quiz(
+    quiz_id: str,
+    username: str,
+    user: User = Depends(get_current_user),
+):
+    if not user.admin_user:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
+    
+    try:
+        quiz_id = uuid.UUID(quiz_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="badly formed quiz id")
+    
+    quiz = await Quiz.objects.get_or_none(id=quiz_id, user_id=user.id)
+    if quiz is None:
+        quiz = await Quiz.objects.get_or_none(id=quiz_id, public=True)
+        if quiz is None:
+            return JSONResponse(status_code=404, content={"detail": "quiz not found"})
+        
+    user_input = await User.objects.get_or_none(username=username)
+    if user_input is None:
+        return JSONResponse(status_code=404, content={"detail": "user not found"})
+    
+    message = user_input.user_license_key
+    key = quiz.quiz_license_key
+
+    fernet = Fernet(key)
+
+    license = fernet.encrypt(message.encode())
+    
+    return {"license_key": license}
 
 
 @router.post("/start/{quiz_id}")
 async def start_quiz(
     quiz_id: str,
     game_mode: str,
+    license: str,
     captcha_enabled: bool = True,
     custom_field: str | None = None,
     cqcs_enabled: bool = False,
@@ -94,6 +158,20 @@ async def start_quiz(
         quiz = await Quiz.objects.get_or_none(id=quiz_id, public=True)
         if quiz is None:
             return JSONResponse(status_code=404, content={"detail": "quiz not found"})
+        
+
+    if (not user.admin_user):
+        key = quiz.quiz_license_key
+
+        fernet = Fernet(key)
+        try:
+            decMessage = fernet.decrypt(license.encode()).decode()
+
+            if (decMessage != user.user_license_key):
+                return JSONResponse(status_code=403, content={"detail": "invalid license key"})
+        except InvalidToken:
+            return JSONResponse(status_code=403, content={"detail": "invalid license key"})
+        
     quiz.plays += 1
     await quiz.update()
     game_pin = randint(100000, 999999)

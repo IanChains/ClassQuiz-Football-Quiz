@@ -31,7 +31,7 @@ class AvatarItemsAsList:
     clothe_color = list(av.Color)
     clothe_graphic_type = list(av.ClotheGraphicType)
 
-
+"""
 @router.get("/custom", response_class=PlainTextResponse)
 async def get_customized_avatar(
     resp: Response,
@@ -97,7 +97,7 @@ async def get_customized_avatar(
     # print(f"clothe_color: {len(AvatarItemsAsList.clothe_color)},")
     # print(f"clothe_graphic_type: {len(AvatarItemsAsList.clothe_graphic_type)},")
     return avatar
-
+"""
 
 @router.post("/save")
 async def save_avatar(

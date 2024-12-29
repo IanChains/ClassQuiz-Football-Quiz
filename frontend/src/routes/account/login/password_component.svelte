@@ -53,24 +53,24 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
+	<h2 class="text-3xl font-bold text-center text-white">Football Is Life Quiz</h2>
 
 	<form on:submit|preventDefault={continue_in_login}>
 		<div class="w-full mt-4">
-			<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+			<div class="bg-gray-800 p-4 rounded-lg">
 				<div class="relative bg-inherit w-full">
 					<input
 						id="password"
 						bind:value={password}
 						name="password"
 						type="password"
-						class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+						class="w-full peer bg-transparent h-10 rounded-lg text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
 						placeholder="Wachtwoord"
 						autocomplete="current-password"
 					/>
 					<label
 						for="password"
-						class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+						class="absolute cursor-text left-0 -top-3 text-sm text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 					>
 						Wachtwoord
 					</label>
@@ -81,7 +81,7 @@ SPDX-License-Identifier: MPL-2.0
 					on:click={() => {
 						selected_method = 'BACKUP';
 					}}
-					class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
+					class="text-sm text-gray-200 hover:text-gray-500"
 					>{$t('login_page.use_backup_code')}</button
 				>
 				<button

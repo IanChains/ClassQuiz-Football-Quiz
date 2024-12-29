@@ -144,7 +144,7 @@ SPDX-License-Identifier: MPL-2.0
 	const default_colors = ['#D6EDC9', '#B07156', '#7F7057', '#4E6E58'];
 </script>
 
-<div class="h-screen w-screen">
+<div class="h-screen w-screen flex">
 	{#if game_mode === 'normal'}
 		<div
 			class="flex flex-col justify-start"
@@ -383,12 +383,19 @@ SPDX-License-Identifier: MPL-2.0
 			{/await}
 		{/if}
 
-		<!--{:else if question.type === QuizQuestionType.VOTING}
-    {#await import('$lib/play/admin/voting_results.svelte')}
-        <Spinner />
-    {:then c}
-        <svelte:component this={c.default} bind:data={question_results}
-                          bind:question={quiz_data.questions[selected_question]} />
-    {/await}-->
+			<!--{:else if question.type === QuizQuestionType.VOTING}
+		{#await import('$lib/play/admin/voting_results.svelte')}
+			<Spinner />
+		{:then c}
+			<svelte:component this={c.default} bind:data={question_results}
+							bind:question={quiz_data.questions[selected_question]} />
+		{/await}-->
+	{:else}
+				
+		<div class="my-auto mx-auto">
+			<p class="text-white text-xl mb-6">Eventjes Wachten ...</p>
+			<Spinner my_20={false} />
+		</div>
+
 	{/if}
 </div>

@@ -154,7 +154,7 @@ SPDX-License-Identifier: MPL-2.0
 	<div class="grid grid-rows-2 h-screen">
 		<div class="grid grid-cols-2 h-full border-b-2 border-black">
 			<div class="h-full w-full border-r-2 border-black">
-				<h2 class="text-center text-2xl">Backup Code</h2>
+				<h2 class="text-center text-2xl mt-4">Backup Code</h2>
 				<div class="flex h-full w-full justify-center">
 					<div class="m-auto">
 						<BrownButton on:click={get_backup_code}
@@ -164,7 +164,7 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 			</div>
 			<div class="h-full w-full">
-				<h2 class="text-center text-2xl">Activeer Tweestapsauthenticatie (2FA)</h2>
+				<h2 class="text-center text-2xl mt-4">Activeer Tweestapsauthenticatie (2FA)</h2>
 				<div
 					class="flex h-full w-full justify-center flex-col"
 					class:pointer-events-none={!totp_activated}
@@ -190,7 +190,7 @@ SPDX-License-Identifier: MPL-2.0
 										class="pointer-events-none inline-block h-4 w-4 translate-x-3 rounded-full bg-white transition will-change-transform"
 									/>
 								</button>
-								<span class="text-sm font-medium text-gray-700 dark:text-white"
+								<span class="text-sm font-medium text-white"
 									>Tweestapsauthenticatie (2FA) is geactiveerd!</span
 								>
 							</div>
@@ -212,8 +212,8 @@ SPDX-License-Identifier: MPL-2.0
 										class="pointer-events-none inline-block h-4 w-4 translate-x-0 rounded-full bg-white transition will-change-transform"
 									/>
 								</button>
-								<span class="text-sm font-medium text-gray-700 dark:text-white"
-									>Tweestapsauthenticatie (2FA) is gedeactiveerd!</span
+								<span class="text-sm font-medium text-white"
+									>Tweestapsauthenticatie (2FA) is niet actief!</span
 								>
 							</div>
 						{/if}
@@ -223,9 +223,11 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 		<div class="grid grid-cols-2 h-full">
 			<div class="h-full w-full flex flex-col border-r-2 border-black">
-				<h2 class="text-center text-2xl">{$t('security_settings.webauthn')}</h2>
+				<h2 class="text-center text-2xl mb-10 mt-4">Webauthn</h2>
 				<div class="flex justify-center">
-						<p>Webauthn is momenteel niet beschikbaar!</p>
+						<p>Webauthn is niet beschikbaar!
+							<br> Wij ondersteunen Webauthn nog niet.
+						</p>
 				</div>
 
 				<div class="flex justify-center">
@@ -244,8 +246,8 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 			</div>
 			<div class="h-full w-full flex flex-col">
-				<h2 class="text-center text-2xl">2FA Via Telefoon, Authenticator App</h2>
-				<div class="flex justify-center">
+				<h2 class="text-center text-2xl mb-10 mt-4">2FA Via Telefoon, Authenticator App</h2>
+				<div class="flex justify-center mb-10">
 					{#if totp_activated}
 						<p>2FA is ingesteld!</p>
 					{:else}

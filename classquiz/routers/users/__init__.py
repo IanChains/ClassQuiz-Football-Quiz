@@ -66,7 +66,7 @@ router.include_router(oauth.router, tags=["users", "oauth"], prefix="/oauth")
 async def create_user(user: RouteUser, background_task: BackgroundTasks) -> User | JSONResponse:
     if settings.registration_disabled:
         raise HTTPException(status_code=423)
-    user = User(**user.dict(), id=uuid.uuid4(), avatar=gzipped_user_avatar(), created_at=datetime.now())
+    user = User(**user.dict(), id=uuid.uuid4(), avatar=gzipped_user_avatar(), created_at=datetime.now(), user_license_key=str(os.urandom(16).hex()))
     try:
         validate_email(user.email)
     except EmailNotValidError as e:
@@ -136,8 +136,17 @@ async def check_token(user: User = Depends(get_current_user)):
     return {"email": user.email,"admin_user": user.admin_user}
 
 @router.get("/admin")
-async def check_token(user: User = Depends(get_current_user)):
+async def admin_check(user: User = Depends(get_current_user)):
     return {"admin_user": user.admin_user}
+
+@router.get("/list", response_model=list[str])
+async def list_usernames(user: User = Depends(get_current_user)):
+    if not user.admin_user:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
+    else:
+        users = await User.objects.all()
+        usernames = [user.username for user in users]
+        return usernames
 
 @router.get("/verify/{verify_key}")
 async def verify_user(verify_key: str):
@@ -191,6 +200,7 @@ async def signout_everywhere(response: Response, user: User = Depends(get_curren
         "backup_code",
         "apikeys",
         "totp_secret",
+        "user_license_key",
     },
     response_model=User,
 )

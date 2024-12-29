@@ -45,6 +45,7 @@ class User(ormar.Model):
     backup_code: str = ormar.String(max_length=64, min_length=64, nullable=False, default=os.urandom(32).hex())
     totp_secret: str = ormar.String(max_length=32, min_length=32, nullable=True, default=None)
     storage_used: int = ormar.BigInteger(nullable=False, default=0, minimum=0)
+    user_license_key: str = ormar.String(unique=True, nullable=False, max_length=64)
 
     ormar_config = ormar.OrmarConfig(database=database, metadata=metadata, tablename="users")
 
@@ -172,8 +173,13 @@ class Quiz(ormar.Model):
     plays: int = ormar.Integer(nullable=False, default=0, server_default="0")
     views: int = ormar.Integer(nullable=False, default=0, server_default="0")
     mod_rating: int | None = ormar.SmallInteger(nullable=True)
+    quiz_license_key: str = ormar.String(max_length=44, unique=True, nullable=False)
 
     ormar_config = ormar.OrmarConfig(tablename="quiz", metadata=metadata, database=database)
+
+    def to_dict(self, exclude_fields=None):
+        exclude_fields = exclude_fields or []
+        return {k: v for k, v in self.dict().items() if k not in exclude_fields}
 
 
 class InstanceData(ormar.Model):

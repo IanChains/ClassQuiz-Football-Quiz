@@ -7,7 +7,6 @@ SPDX-License-Identifier: MPL-2.0
 <script lang="ts">
 	import DownloadQuiz from '$lib/components/DownloadQuiz.svelte';
 	import type { QuizData } from '$lib/quiz_types';
-	import { getLocalization } from '$lib/i18n';
 	import Footer from '$lib/footer.svelte';
 	import { navbarVisible, signedIn } from '$lib/stores';
 	// import Spinner from "$lib/Spinner.svelte";
@@ -28,7 +27,6 @@ SPDX-License-Identifier: MPL-2.0
 	let download_id: string | null = null;
 	signedIn.set(true);
 	navbarVisible.set(true);
-	const { t } = getLocalization();
 
 	let items_to_show = [];
 	let all_items: Array<any>;
@@ -121,7 +119,7 @@ SPDX-License-Identifier: MPL-2.0
                     class='px-4 py-2 font-medium tracking-wide text-gray-500 whitespace-nowrap dark:text-gray-400 capitalize transition-colors dark:bg-gray-700 duration-200 transform bg-[#B07156] rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
                     Primary
                 </button>-->
-			<div class="w-full grid lg:grid-cols-4 gap-2 grid-cols-2 px-4">
+			<div class="w-full grid lg:grid-cols-4 gap-2 grid-cols-2 px-4 mt-4">
 				{#if create_button_clicked}
 					<div
 						class="flex gap-2"
@@ -139,7 +137,7 @@ SPDX-License-Identifier: MPL-2.0
 						}}>Creëren</BrownButton
 					>
 				{/if}
-				<BrownButton href="/import">Quiz Importeren</BrownButton>
+				<BrownButton href="/import-admin">Quiz Importeren</BrownButton>
 				<BrownButton href="/results">Quiz Resultaten</BrownButton>
 				<div class="flex gap-2">
 					<BrownButton href="/edit/files">Bestanden Bibliotheek</BrownButton>
@@ -184,7 +182,7 @@ SPDX-License-Identifier: MPL-2.0
 				<div class="flex flex-col gap-4 mt-4 px-2">
 					{#each items_to_show as quiz}
 						<div
-							class="grid grid-cols-2 lg:grid-cols-3 w-full rounded border-[#B07156] border-2 p-2 h-[20vh] overflow-hidden max-h-[20vh]"
+							class="grid grid-cols-2 lg:grid-cols-3 w-full rounded custom-bright-orange-border border-4 p-2 h-[20vh] overflow-hidden max-h-[20vh]"
 						>
 							<div class="hidden lg:flex w-auto h-full items-center relative">
 								{#if quiz.cover_image}

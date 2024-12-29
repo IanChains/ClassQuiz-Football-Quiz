@@ -103,7 +103,7 @@ SPDX-License-Identifier: MPL-2.0
 		if (res.ok) {
 			confirm_to_leave = false;
 			console.log(confirm_to_leave);
-			window.location.href = '/dashboard';
+			window.location.href = '/dashboard-admin';
 		} else {
 			alert('Error');
 		}

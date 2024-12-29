@@ -75,8 +75,8 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
-	<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
+	<h2 class="text-3xl font-bold text-center text-white">Football Is Life Quiz</h2>
+	<p class="mt-1 text-center text-gray-400">
 		De verificatie van de beveiligingssleutel starten.
 	</p>
 
@@ -86,7 +86,7 @@ SPDX-License-Identifier: MPL-2.0
 				on:click={() => {
 					selected_method = 'BACKUP';
 				}}
-				class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
+				class="text-sm text-gray-200 hover:text-gray-500"
 				>Gebruik Backup Code</button
 			>
 			<button

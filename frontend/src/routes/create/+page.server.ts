@@ -4,10 +4,16 @@
 
 import { redirect } from '@sveltejs/kit';
 
-export async function load({ parent }) {
-	const { email } = await parent();
-	if (!email) {
-		throw redirect(302, '/account/login?returnTo=/create');
+export async function load({ locals }) {
+	if (!locals.email) {
+		throw redirect(302, '/account/login?returnTo=/dashboard-admin');
+	} else if (locals.admin_user === false) {
+		throw redirect(302, '/dashboard');
+	} else if (locals.admin_user === undefined) {
+		throw redirect(302, '/dashboard');
 	}
-	return {};
-}
+	return {
+		email: locals.email,
+	};
+};
+

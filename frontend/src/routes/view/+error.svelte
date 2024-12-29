@@ -18,12 +18,11 @@ SPDX-License-Identifier: MPL-2.0
 
 {#if status === 404}
 	<p class="text-center">
-		The quiz you were looking for is gone or never even existed. Who knows?
+		De quiz die je zocht is verdwenen of heeft zelfs nooit bestaan. Wie zal het zeggen?
 	</p>
 {:else}
 	<p>
-		That shouldn't happen. It's probably my fault, not yours, but maybe you have a magical power
-		to break stuff...
+		Dit zou niet mogen gebeuren. Het is waarschijnlijk mijn schuld, niet de jouwe, maar misschien heb je een magische kracht om dingen kapot te maken ...
 	</p>
 {/if}
 

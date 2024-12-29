@@ -30,16 +30,16 @@ SPDX-License-Identifier: MPL-2.0
 <div class="w-screen h-screen fixed top-0 left-0 p-48 z-30 bg-black bg-opacity-50">
 	<div class="w-full h-full">
 		<button
-			class="bg-gray-200 dark:bg-gray-900 px-2 py-1 rounded-t-lg hover:bg-gray-300 transition"
+			class="bg-gray-900 px-2 py-1 rounded-t-lg hover:bg-gray-300 transition"
 			on:click={() => {
 				backup_code = undefined;
 			}}
-			>{$t('words.close')}
+			>Sluiten
 		</button>
 		<div
-			class="bg-white dark:bg-gray-700 rounded-b-lg rounded-tr-lg w-full h-full flex flex-col"
+			class="bg-gray-700 rounded-b-lg rounded-tr-lg w-full h-full flex flex-col"
 		>
-			<h2 class="text-3xl m-auto">{$t('security_settings.backup_codes.your_backup_code')}</h2>
+			<h2 class="text-3xl m-auto">Jouw Back-Up Code:</h2>
 			<p
 				class="select-all font-mono text-xl m-auto"
 				on:click={() => {
@@ -48,13 +48,13 @@ SPDX-License-Identifier: MPL-2.0
 			>
 				{backup_code}
 			</p>
-			<p class="m-auto">{$t('security_settings.backup_codes.save_somewhere_save')}</p>
+			<p class="m-auto">Bewaar deze code ergens veilig, deel deze met niemand!</p>
 			<button
 				on:click={() => {
 					download_code(true);
 				}}
-				class="m-auto p-2 bg-[#B07156] rounded-lg"
-				>{$t('security_settings.backup_codes.download_code')}
+				class="m-auto p-2 orange-red-button rounded-lg"
+				>Download Back-Up Code
 			</button>
 		</div>
 	</div>

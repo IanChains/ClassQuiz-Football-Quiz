@@ -16,7 +16,7 @@ SPDX-License-Identifier: MPL-2.0
 			>Google Login
 
 			<svg
-				class="h-6 w-6 ml-4 dark:fill-gray-300"
+				class="h-6 w-6 ml-4 fill-gray-300"
 				role="img"
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ SPDX-License-Identifier: MPL-2.0
 			class="inline-flex w-fit p-1 rounded-lg border-gray-500 border border-2 hover:bg-[#181717] transition hover:text-white group"
 			>GitHub Login
 			<svg
-				class="h-6 w-6 ml-4 dark:fill-gray-300 group-hover:fill-white transition"
+				class="h-6 w-6 ml-4 fill-gray-300 group-hover:fill-white transition"
 				role="img"
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ SPDX-License-Identifier: MPL-2.0
 			class="inline-flex w-fit p-1 rounded-lg border-gray-500 border border-2 hover:bg-[#F78C40] transition hover:text-white group"
 			>OpenID Login
 			<svg
-				class="h-6 w-6 ml-4 dark:fill-gray-300 group-hover:fill-white transition"
+				class="h-6 w-6 ml-4 fill-gray-300 group-hover:fill-white transition"
 				role="img"
 				viewBox="0 0 24 24"
 				xmlns="http://www.w3.org/2000/svg"

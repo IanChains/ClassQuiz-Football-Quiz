@@ -83,30 +83,30 @@ SPDX-License-Identifier: MPL-2.0
 <div class="flex items-center justify-center h-full px-4">
 	<div>
 		<div
-			class="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800"
+			class="w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-md bg-gray-800"
 		>
 			<div class="px-6 py-4">
-				<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">
+				<h2 class="text-3xl font-bold text-center text-white">
 					Football Is Life Quiz
 				</h2>
 
-				<h3 class="mt-1 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
+				<h3 class="mt-1 text-xl font-medium text-center text-gray-200">
 					Welkom, leuk je te ontmoeten!
 				</h3>
 
-				<p class="mt-1 text-center text-gray-500 dark:text-gray-400">
+				<p class="mt-1 text-center text-gray-400">
 					Maak hier je account aan!
 				</p>
 
 				<form use:form>
 					<div class="w-full mt-4">
-						<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+						<div class="bg-gray-800 p-4 rounded-lg">
 							<div class="relative bg-inherit w-full">
 								<input
 									id="email"
 									name="email"
 									type="email"
-									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+									class="w-full peer bg-transparent h-10 rounded-lg text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
 									placeholder="E-mailadres"
 									class:ring-red-700={$errors.email !== null}
 									class:ring-green-600={$touched.email === true &&
@@ -114,19 +114,19 @@ SPDX-License-Identifier: MPL-2.0
 								/>
 								<label
 									for="email"
-									class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+									class="absolute cursor-text left-0 -top-3 text-sm text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
 									E-mailadres
 								</label>
 							</div>
 						</div>
-						<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+						<div class="bg-gray-800 p-4 rounded-lg">
 							<div class="relative bg-inherit w-full">
 								<input
 									id="username"
 									name="username"
 									type="text"
-									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+									class="w-full peer bg-transparent h-10 rounded-lg text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
 									placeholder="Gebruikersnaam"
 									class:ring-red-700={$errors.username !== null}
 									class:ring-green-600={$touched.username === true &&
@@ -134,13 +134,13 @@ SPDX-License-Identifier: MPL-2.0
 								/>
 								<label
 									for="username"
-									class="absolute cursor-text left-0 -top-3 text-sm text-gray-700 dark:text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
+									class="absolute cursor-text left-0 -top-3 text-sm text-white bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-sky-600 peer-focus:text-sm transition-all"
 								>
 									Gebruikersnaam
 								</label>
 							</div>
 						</div>
-						<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+						<div class="bg-gray-800 p-4 rounded-lg">
 							<div class="relative bg-inherit w-full">
 								<input
 									id="password1"
@@ -149,7 +149,7 @@ SPDX-License-Identifier: MPL-2.0
 									class:ring-red-700={$errors.password1 !== null}
 									class:ring-green-600={$touched.password1 === true &&
 										$errors.password1 === null}
-									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+									class="w-full peer bg-transparent h-10 rounded-lg text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
 									placeholder="Wachtwoord"
 								/>
 								<label
@@ -160,13 +160,13 @@ SPDX-License-Identifier: MPL-2.0
 								</label>
 							</div>
 						</div>
-						<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+						<div class="bg-gray-800 p-4 rounded-lg">
 							<div class="relative bg-inherit w-full">
 								<input
 									id="password2"
 									name="password2"
 									type="password"
-									class="w-full peer bg-transparent h-10 rounded-lg text-gray-700 dark:text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
+									class="w-full peer bg-transparent h-10 rounded-lg text-white placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-sky-600 focus:outline-none focus:border-rose-600"
 									placeholder="Herhaal Wachtwoord"
 									class:ring-red-700={$errors.password2 !== null}
 									class:ring-green-600={$touched.password2 === true &&
@@ -188,7 +188,7 @@ SPDX-License-Identifier: MPL-2.0
 						>
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="privacy_accept" class="ml-3" />
-							<label class="text-sm text-gray-600 dark:text-gray-200">
+							<label class="text-sm text-gray-200">
 								Ik heb het <a href="/docs/privacy-policy" class="underline"
 									>privacybeleid</a
 								> gelezen.
@@ -202,7 +202,7 @@ SPDX-License-Identifier: MPL-2.0
 						>
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="tos_accept" class="ml-3" />
-							<label class="text-sm text-gray-600 dark:text-gray-200">
+							<label class="text-sm text-gray-200">
 								Ik heb de <a href="/docs/tos" class="underline"
 									>algemene voorwaarden</a
 								> gelezen.
@@ -212,7 +212,7 @@ SPDX-License-Identifier: MPL-2.0
 						<div class="flex items-center justify-between mt-4">
 							<a
 								href="/account/reset-password"
-								class="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
+								class="text-sm text-gray-200 hover:text-gray-500"
 								>Wachtwoord vergeten?</a
 							>
 
@@ -244,15 +244,15 @@ SPDX-License-Identifier: MPL-2.0
 			</div>
 
 			<div
-				class="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700"
+				class="flex items-center justify-center py-4 text-center bg-gray-700"
 			>
-				<span class="text-sm text-gray-600 dark:text-gray-200"
+				<span class="text-sm text-gray-200"
 					>Heb je al een account?
 				</span>
 
 				<a
 					href="/account/login"
-					class="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
+					class="mx-2 text-sm font-bold text-blue-400 hover:underline"
 					>Inloggen</a
 				>
 			</div>

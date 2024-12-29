@@ -16,7 +16,7 @@ from classquiz.db.models import User, Quiz, Rating
 router = APIRouter()
 
 
-#
+"""
 @router.get("/user/{user_id}", response_model_include={"username", "created_at", "id"}, response_model=User)
 async def get_user_by_user_id(user_id: UUID):
     user = await User.objects.get_or_none(id=user_id)
@@ -28,7 +28,7 @@ async def get_user_by_user_id(user_id: UUID):
         return user
 
 
-@router.get("/quizzes/{user_id}", response_model_exclude={"questions", "user_id"}, response_model=list[Quiz])
+@router.get("/quizzes/{user_id}", response_model_exclude={"questions", "user_id",}, response_model=list[Quiz])
 async def get_quizzes_from_user(user_id: UUID, imported: bool | None = None):
     if imported is None:
         quizzes = await Quiz.objects.all(user_id=user_id, public=True)
@@ -40,7 +40,7 @@ async def get_quizzes_from_user(user_id: UUID, imported: bool | None = None):
         raise HTTPException(status_code=404, detail="no quizzes found")
     else:
         return quizzes
-
+"""
 
 class RateQuizInputType(str, enum.Enum):
     LIKE = "LIKE"

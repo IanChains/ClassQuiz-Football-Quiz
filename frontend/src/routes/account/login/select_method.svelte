@@ -22,14 +22,14 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="px-6 py-4">
-	<h2 class="text-3xl font-bold text-center text-gray-700 dark:text-white">Football Is Life Quiz</h2>
+	<h2 class="text-3xl font-bold text-center text-white">Football Is Life Quiz</h2>
 
 	<div class="w-full mt-4">
-		<div class="dark:bg-gray-800 bg-white p-4 rounded-lg">
+		<div class="bg-gray-800 p-4 rounded-lg">
 			<ul class="flex flex-col gap-4">
 				{#if available_methods.includes('PASSKEY')}
 					<div
-						class="flex flex-row bg-gray-100 dark:bg-gray-700 rounded-lg p-2 hover:cursor-pointer hover:bg-gray-200 transition"
+						class="flex flex-row bg-gray-700 rounded-lg p-2 hover:cursor-pointer hover:bg-gray-200 transition"
 						on:click={() => {
 							selected_method = 'PASSKEY';
 						}}
@@ -60,7 +60,7 @@ SPDX-License-Identifier: MPL-2.0
 				{/if}
 				{#if available_methods.includes('PASSWORD')}
 					<div
-						class="flex flex-row bg-gray-100 dark:bg-gray-700 rounded-lg p-2 hover:cursor-pointer hover:bg-gray-200 transition"
+						class="flex flex-row bg-gray-700 rounded-lg p-2 hover:cursor-pointer hover:bg-gray-200 transition"
 						on:click={() => {
 							selected_method = 'PASSWORD';
 						}}
@@ -70,7 +70,7 @@ SPDX-License-Identifier: MPL-2.0
 					>
 						<!-- iconoir/password-cursor -->
 						<svg
-							class="w-12 h-12 dark:text-white"
+							class="w-12 h-12 text-white"
 							stroke-width="2"
 							viewBox="0 0 24 24"
 							fill="none"

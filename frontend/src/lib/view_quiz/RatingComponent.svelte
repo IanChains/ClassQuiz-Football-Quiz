@@ -43,12 +43,12 @@ SPDX-License-Identifier: MPL-2.0
 	};
 </script>
 
-<div class="flex flex-col border-[#B07156] rounded border-2 p-2 gap-2">
+<div class="flex flex-col custom-bright-orange-border rounded border-2 p-2 gap-2">
 	<div class="grid grid-cols-2 gap-2 group mx-auto">
 		<Hoverable bind:hovering={FeedBackButtonsHovered.like}>
 			<button
 				class="bg-green-500 rounded-full h-10 w-10 transition"
-				use:tippy={{ content: 'Like this quiz!' }}
+				use:tippy={{ content: 'Like deze Quiz!' }}
 				class:opacity-40={FeedBackButtonsHovered.dislike}
 				on:click={() => complete_action(true)}
 			>
@@ -72,7 +72,7 @@ SPDX-License-Identifier: MPL-2.0
 		<Hoverable bind:hovering={FeedBackButtonsHovered.dislike}>
 			<button
 				class="rounded-full bg-red-500 h-10 w-10 transition"
-				use:tippy={{ content: 'Dislike this quiz!' }}
+				use:tippy={{ content: 'Dislike deze Quiz!' }}
 				class:opacity-40={FeedBackButtonsHovered.like}
 				on:click={() => complete_action(false)}
 			>
@@ -96,13 +96,13 @@ SPDX-License-Identifier: MPL-2.0
 		<span class="text-center">{quiz.likes}</span>
 		<span class="text-center">{quiz.dislikes}</span>
 	</div>
-	<span class="w-full border-t-2 border-[#B07156]" />
+	<span class="w-full border-t-2 custom-bright-orange-border" />
 	<div class="mx-auto grid grid-cols-2 gap-2">
 		<div class="flex flex-col">
 			<!-- heroicons/legacy-outline/Play -->
 			<svg
 				class="w-8 h-8"
-				use:tippy={{ content: 'How often the quiz was started' }}
+				use:tippy={{ content: 'Hoeveel keer deze Quiz is gespeeld.' }}
 				aria-hidden="true"
 				fill="none"
 				stroke="currentColor"
@@ -121,7 +121,7 @@ SPDX-License-Identifier: MPL-2.0
 					stroke-linejoin="round"
 				/>
 			</svg>
-			<p class="mx-auto" use:tippy={{ content: 'How often the quiz was started' }}>
+			<p class="mx-auto" use:tippy={{ content: 'Hoeveel keer deze Quiz is gespeeld.' }}>
 				{quiz.plays}
 			</p>
 		</div>
@@ -129,7 +129,7 @@ SPDX-License-Identifier: MPL-2.0
 			<!-- heroicons/legacy-outline/Eye -->
 			<svg
 				class="w-8 h-8 mx-auto"
-				use:tippy={{ content: 'Quiz views' }}
+				use:tippy={{ content: 'Quiz Weergaven' }}
 				aria-hidden="true"
 				fill="none"
 				stroke="currentColor"
@@ -148,7 +148,7 @@ SPDX-License-Identifier: MPL-2.0
 					stroke-linejoin="round"
 				/>
 			</svg>
-			<p class="mx-auto" use:tippy={{ content: 'Quiz views' }}>{quiz.views}</p>
+			<p class="mx-auto" use:tippy={{ content: 'Quiz Weergaven' }}>{quiz.views}</p>
 		</div>
 	</div>
 </div>

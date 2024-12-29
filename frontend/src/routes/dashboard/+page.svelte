@@ -5,9 +5,7 @@ SPDX-License-Identifier: MPL-2.0
 -->
 
 <script lang="ts">
-	import DownloadQuiz from '$lib/components/DownloadQuiz.svelte';
 	import type { QuizData } from '$lib/quiz_types';
-	import { getLocalization } from '$lib/i18n';
 	import Footer from '$lib/footer.svelte';
 	import { navbarVisible, signedIn } from '$lib/stores';
 	// import Spinner from "$lib/Spinner.svelte";
@@ -24,10 +22,8 @@ SPDX-License-Identifier: MPL-2.0
 	export let data: PageData;
 	let search_term = '';
 	let start_game = null;
-	let download_id: string | null = null;
 	signedIn.set(true);
 	navbarVisible.set(true);
-	const { t } = getLocalization();
 
 	let items_to_show = [];
 	let all_items: Array<any>;
@@ -93,7 +89,6 @@ SPDX-License-Identifier: MPL-2.0
 		}
 		window.location.reload();
 	};
-	let create_button_clicked = false;
 
 	let analytics_quiz_selected: undefined | QuizData = undefined;
 </script>
@@ -120,7 +115,7 @@ SPDX-License-Identifier: MPL-2.0
                     class='px-4 py-2 font-medium tracking-wide text-gray-500 whitespace-nowrap dark:text-gray-400 capitalize transition-colors dark:bg-gray-700 duration-200 transform bg-[#B07156] rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80'>
                     Primary
                 </button>-->
-			<div class="w-full grid lg:grid-cols-3 gap-2 grid-cols-2 px-4">
+			<div class="w-full grid lg:grid-cols-3 gap-2 grid-cols-2 px-4 mt-4">
 				
 				<BrownButton href="/import">Quiz Importeren</BrownButton>
 				<BrownButton href="/results">Quiz Resultaten</BrownButton>
@@ -167,7 +162,7 @@ SPDX-License-Identifier: MPL-2.0
 				<div class="flex flex-col gap-4 mt-4 px-2">
 					{#each items_to_show as quiz}
 						<div
-							class="grid grid-cols-2 lg:grid-cols-3 w-full rounded border-[#B07156] border-2 p-2 h-[20vh] overflow-hidden max-h-[20vh]"
+							class="grid grid-cols-2 lg:grid-cols-3 w-full rounded custom-bright-orange-border border-4 p-2 h-[20vh] overflow-hidden max-h-[20vh]"
 						>
 							<div class="hidden lg:flex w-auto h-full items-center relative">
 								{#if quiz.cover_image}
@@ -190,9 +185,7 @@ SPDX-License-Identifier: MPL-2.0
 								</p>
 							</div>
 							<div
-								class="grid grid-rows-2 ml-auto gap-2 w-fit self-end my-auto"
-								class:grid-cols-3={quiz.type === 'quiz'}
-								class:grid-cols-2={quiz.type !== 'quiztivity'}
+								class="grid grid-rows-2 ml-auto gap-2 w-fit self-end my-auto grid-cols-2"
 							>
 								<BrownButton
 									flex={true}
@@ -237,29 +230,6 @@ SPDX-License-Identifier: MPL-2.0
 									>
 										<path
 											d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										/>
-									</svg>
-								</BrownButton>
-								<BrownButton
-									href={quiz.type === 'quiz'
-										? `/edit?quiz_id=${quiz.id}`
-										: `/quiztivity/edit?id=${quiz.id}`}
-									flex={true}
-								>
-									<!-- heroicons/legacy-outline/Pencil -->
-									<svg
-										class="w-5 h-5"
-										aria-hidden="true"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="2"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
 											stroke-linecap="round"
 											stroke-linejoin="round"
 										/>
@@ -342,26 +312,6 @@ SPDX-License-Identifier: MPL-2.0
 										/>
 									</svg>
 								</BrownButton>
-								<BrownButton
-									on:click={() => (download_id = quiz.id)}
-									flex={true}
-									disabled={quiz.type !== 'quiz'}
-									><!-- heroicons/download -->
-									<svg
-										class="w-5 h-5"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-										/>
-									</svg>
-								</BrownButton>
 							</div>
 						</div>
 					{/each}
@@ -387,4 +337,3 @@ SPDX-License-Identifier: MPL-2.0
 {#if start_game !== null}
 	<StartGamePopup bind:quiz_id={start_game} />
 {/if}
-<DownloadQuiz bind:quiz_id={download_id} />
