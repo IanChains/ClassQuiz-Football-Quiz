@@ -41,7 +41,7 @@ SPDX-License-Identifier: MPL-2.0
 					selected_tab = SelectedTab.Overview;
 				}}
 				class="m-auto w-full h-full"
-				>{$t('words.overview')}
+				>Overzicht
 			</button>
 		</div>
 		<div
@@ -55,7 +55,7 @@ SPDX-License-Identifier: MPL-2.0
 				}}
 				class="m-auto w-full h-full"
 			>
-				{$t('words.player', { count: 2 })}
+				Spelers
 			</button>
 		</div>
 		<div
@@ -68,7 +68,7 @@ SPDX-License-Identifier: MPL-2.0
 					selected_tab = SelectedTab.Questions;
 				}}
 				class="m-auto w-full h-full"
-				>{$t('words.question', { count: 2 })}
+				>Vragen
 			</button>
 		</div>
 	</div>

@@ -154,7 +154,7 @@ SPDX-License-Identifier: MPL-2.0
 	{/if}
 	{#if data.questions[selected_question].answers.length < 4}
 		<button
-			class="p-4 rounded-lg bg-transparent border-gray-500 border-2 hover:bg-gray-300 transition dark:hover:bg-gray-600"
+			class="p-4 rounded-lg bg-transparent border-gray-500 border-2 transition hover:bg-gray-600"
 			type="button"
 			in:fade|local={{ duration: 150 }}
 			on:click={() => {

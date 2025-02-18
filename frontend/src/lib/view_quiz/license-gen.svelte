@@ -1,3 +1,5 @@
+<!-- this code is no longer being used
+
 <script lang="ts">
 	import { fade } from 'svelte/transition';
     import Spinner from '$lib/Spinner.svelte';
@@ -160,3 +162,4 @@
 
     </div>
 {/if}
+-->

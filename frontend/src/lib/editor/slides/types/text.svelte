@@ -10,7 +10,7 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 {#if editor}
-	<textarea bind:value={data} class="w-full h-full dark:text-black resize-none" />
+	<textarea bind:value={data} class="w-full h-full text-black resize-none" />
 {:else}
 	<p>{data}</p>
 {/if}

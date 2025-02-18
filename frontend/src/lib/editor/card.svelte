@@ -85,8 +85,8 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="w-full max-h-full pb-10 px-10 h-full">
-	<div class="rounded-lg bg-white w-full h-full border-gray-500 dark:bg-gray-700 shadow-2xl">
-		<div class="h-12 bg-gray-300 rounded-t-lg dark:bg-gray-500">
+	<div class="rounded-lg w-full h-full border-gray-500 bg-gray-700 shadow-2xl">
+		<div class="h-12 rounded-t-lg bg-gray-500">
 			<div class="flex align-middle p-4 gap-3">
 				<span
 					class="inline-block bg-gray-600 w-4 h-4 rounded-full hover:bg-red-400 transition"
@@ -141,7 +141,7 @@ SPDX-License-Identifier: MPL-2.0
 							<Spinner my_20={false} />
 						{:then c}
 							<div
-								class="rounded-lg placeholder:italic placeholder:font-normal dark:bg-gray-500"
+								class="rounded-lg placeholder:italic placeholder:font-normal bg-gray-500"
 								class:bg-yellow-500={!reach(
 									dataSchema,
 									'questions[].question'
@@ -270,7 +270,7 @@ SPDX-License-Identifier: MPL-2.0
 		class="fixed top-0 left-0 w-full h-full bg-black/60 flex"
 		transition:fade={{ duration: 150 }}
 	>
-		<div class="w-1/4 h-1/3 m-auto bg-white dark:bg-gray-700 rounded-lg flex flex-col p-2 gap-2">
+		<div class="w-1/4 h-1/3 m-auto bg-gray-700 rounded-lg flex flex-col p-2 gap-2">
 			<h1 class="text-3xl mx-auto">{$t('editor.advanced_settings')}</h1>
 			<label class="flex justify-around text-lg">
 				<span class="my-auto">{$t('editor.hide_question_results')}</span>

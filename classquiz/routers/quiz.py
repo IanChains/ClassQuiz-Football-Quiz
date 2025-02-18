@@ -18,7 +18,7 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import ValidationError, BaseModel
 
 from classquiz.auth import get_current_user
-from classquiz.config import redis, settings, storage, meilisearch
+from classquiz.config import redis, settings, storage, meilisearch, license_api_user, license_api_pass, webshop_api_user, webshop_api_pass
 from classquiz.db.models import Quiz, User, PlayGame, GameInLobby, QuizQuestion, QuizQuestionType
 from classquiz.helpers.box_controller import generate_code
 from classquiz.kahoot_importer.import_quiz import import_quiz
@@ -26,6 +26,9 @@ from uuid import UUID
 import urllib.parse
 
 from cryptography.fernet import Fernet, InvalidToken
+
+import requests 
+from requests.auth import HTTPBasicAuth
 
 settings = settings()
 
@@ -103,7 +106,9 @@ async def get_public_quiz(quiz_id: uuid.UUID):
     else:
         return PublicQuizResponse(**quiz.dict())
 """
-        
+
+"""
+This code is no longer being used
 @router.post("/license/{quiz_id}")
 async def license_gen_quiz(
     quiz_id: str,
@@ -136,6 +141,7 @@ async def license_gen_quiz(
     license = fernet.encrypt(message.encode())
     
     return {"license_key": license}
+"""
 
 
 @router.post("/start/{quiz_id}")
@@ -149,6 +155,7 @@ async def start_quiz(
     randomize_answers: bool = False,
     user: User = Depends(get_current_user),
 ):
+    quiz_id_str = quiz_id
     try:
         quiz_id = uuid.UUID(quiz_id)
     except ValueError:
@@ -159,8 +166,119 @@ async def start_quiz(
         if quiz is None:
             return JSONResponse(status_code=404, content={"detail": "quiz not found"})
         
-
+    #licentie check
     if (not user.admin_user):
+        if not license: #lege string, geen license
+            return JSONResponse(status_code=403, content={"detail": "Gelieve een licentie code in te vullen."})
+
+        #api request license check
+        license_check = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/{license}',
+            auth = HTTPBasicAuth(license_api_user, license_api_pass))
+        
+        #data verzamelen uit request
+        json_license_check = license_check.json()
+        print("License Check:", json_license_check)
+        license_status_code = json_license_check.get('data', {}).get('status')
+
+        #errors en fouten filteren
+        if license_status_code == 404:
+            return JSONResponse(status_code=403, content={"detail": "De ingevoerde licentie code is ongeldig."})
+        elif license_status_code == 4:
+            return JSONResponse(status_code=403, content={"detail": "Deze licentie code is gedeactiveerd. Neem contact met ons op."})
+        elif license_status_code not in [2, 3]:
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie."})
+        
+        if not json_license_check.get('success'):
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie."})
+        
+        #gelukt, license bestaat -> data verkrijgen
+        license_id = json_license_check.get('data', {}).get('id')
+        license_order_id = json_license_check.get('data', {}).get('orderId')
+        license_product_id = json_license_check.get('data', {}).get('productId')
+
+        #api request wc for quiz check
+        quiz_check = requests.get(f'https://footballislife.be/wp-json/wc/v3/products/{license_product_id}',
+            auth = HTTPBasicAuth(webshop_api_user, webshop_api_pass))
+        
+        #data verzamelen uit request
+        json_quiz_check = quiz_check.json()
+        print("Quiz Check:", json_quiz_check)
+
+        #als product niet gevonden is, error
+        if "invalid_id" in json_quiz_check:
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de id controle van de licentie."})
+        
+        #sku krijgen ne vergelijken
+        sku = json_quiz_check.get('sku')
+        if sku != quiz_id_str:
+            return JSONResponse(status_code=403, content={"detail": "De licentie code is niet voor deze quiz bestemd.", "sku": sku, "quiz_id_str": quiz_id_str})
+        
+        #enkel en alleen als er een order id is anders niet
+        if license_order_id:
+            #api request wc for user check
+            user_check = requests.get(f'https://footballislife.be/wp-json/wc/v3/orders/{license_order_id}',
+                auth = HTTPBasicAuth(webshop_api_user, webshop_api_pass))
+            
+            #data verzamelen & omzetten
+            json_user_check = user_check.json()
+            print("User Check:", json_user_check)
+            found_shop_item = None
+            found_username = None
+
+            for shop_item in json_user_check['line_items']: #voor elk shop item in order
+                if (shop_item['product_id'] == license_product_id) or (shop_item['variation_id'] == license_product_id): #als shop item id = shop item license
+                    found_shop_item = shop_item
+
+                    for meta in found_shop_item['meta_data']:
+                        if meta['key'].lower() == 'gebruikersnaam' or meta['key'].lower() == 'username':
+                            found_username = meta['value']
+                            if found_username == user.username:
+                                break
+                                
+            if found_username == None:
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de gebruiker controle van de licentie."})
+            elif found_username != user.username:
+                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet aan uw account gekoppeld."})
+        
+        #status aanpassen key naar active
+        if license_status_code != 3:
+            license_change_status = requests.put(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/{license}', json={'status':'ACTIVE'}, auth = HTTPBasicAuth(license_api_user, license_api_pass))
+            json_change_status = license_change_status.json()
+            print("Status Change:", json_change_status)
+            license_status_code = json_change_status.get('data', {}).get('status')
+
+            if not json_change_status.get('success'):
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren (3) van de licentie."})
+            if license_status_code != 3:
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren (3) van de licentie."})
+
+        #license activeren - request
+        license_activate = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/activate/{license}',
+            auth = HTTPBasicAuth(license_api_user, license_api_pass))
+        
+        #data verkrijgen
+        json_license_activate = license_activate.json()
+        print("Activate Check:", json_license_activate)
+        str_license_activate = str(json_license_activate)
+
+        #filteren
+        if "error" in str_license_activate:
+            if "expired" in str_license_activate:
+                license_expired_message = json_license_activate['data']['errors']['lmfwc_rest_license_expired'][0]
+                date_expired = re.search(r'(\d{4}-\d{2}-\d{2})', license_expired_message)
+                if date_expired:
+                    date_expired = date_expired.group(0).split("-")
+                    formatted_date = f"{date_expired[2]}/{date_expired[1]}/{date_expired[0]}"
+                    return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {formatted_date}."})
+                else:
+                    return JSONResponse(status_code=403, content={"detail": "De licentie is vervallen."})
+            elif "maximum activation count" in str_license_activate:
+                return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt."})
+            else:
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie."})
+
+        """
+        old license code
         key = quiz.quiz_license_key
 
         fernet = Fernet(key)
@@ -171,6 +289,7 @@ async def start_quiz(
                 return JSONResponse(status_code=403, content={"detail": "invalid license key"})
         except InvalidToken:
             return JSONResponse(status_code=403, content={"detail": "invalid license key"})
+        """
         
     quiz.plays += 1
     await quiz.update()

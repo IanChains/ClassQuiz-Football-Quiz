@@ -74,13 +74,13 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div
-	class="bg-white m-auto rounded-lg shadow-lg p-4 flex flex-col dark:bg-gray-600 h-fit"
+	class="m-auto rounded-lg shadow-lg p-4 flex flex-col bg-gray-600 h-fit"
 	transition:fade={{ duration: 100 }}
 >
 	<ul>
 		{#each element_list as el}
 			<li
-				class="flex flex-row mt-4 w-full bg-gray-200 shadow-xl rounded-lg p-2 hover:bg-gray-300 hover:shadow-2xl hover:cursor-pointer transition dark:bg-gray-800"
+				class="flex flex-row mt-4 w-full shadow-xl rounded-lg p-2 hover:bg-gray-300 hover:shadow-2xl hover:cursor-pointer transition bg-gray-800"
 				on:click={() => {
 					selected_element = el.type;
 				}}

@@ -37,10 +37,10 @@ class Settings(BaseSettings):
     db_url: PostgresDsn | str = "postgresql://postgres:mysecretpassword@localhost:5432/classquiz"
     hcaptcha_key: str | None = None
     recaptcha_key: str | None = None
-    mail_address: str = "no-reply@footballislife.be"
-    mail_password: str = "aQyM8BKRE5n6CG6GbQ7S"
-    mail_username: str = "no-reply@footballislife.be"
-    mail_server: str = "mail.web01.ian-chains.it"
+    mail_address: str = ""
+    mail_password: str = ""
+    mail_username: str = ""
+    mail_server: str = ""
     mail_port: int = "587"
     secret_key: str
     access_token_expire_minutes: int = 30
@@ -103,3 +103,10 @@ ALLOWED_TAGS_FOR_QUIZ = ["b", "strong", "i", "em", "small", "mark", "del", "sub"
 ALLOWED_MIME_TYPES = ["image/png", "video/mp4", "image/jpeg", "image/gif", "image/webp"]
 
 server_regex = rf"^{re.escape(settings().root_address)}/api/v1/storage/download/.{{36}}--.{{36}}$"
+
+#API keys
+license_api_user = ""
+license_api_pass = ""
+
+webshop_api_user = ""
+webshop_api_pass = ""

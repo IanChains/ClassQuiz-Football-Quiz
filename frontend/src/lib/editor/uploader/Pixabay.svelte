@@ -53,7 +53,7 @@ SPDX-License-Identifier: MPL-2.0
 	{:else}
 		<div class="flex w-screen p-8 h-full mt-8 mb-1">
 			<div
-				class="flex flex-col w-1/3 m-auto overflow-scroll h-full rounded p-4 gap-2 bg-white dark:bg-gray-700"
+				class="flex flex-col w-1/3 m-auto overflow-scroll h-full rounded p-4 gap-2 bg-gray-700"
 			>
 				<h1 class="text-2xl text-center">{$t('uploader.images_by_pixabay')}</h1>
 				<div class="flex">
@@ -67,7 +67,7 @@ SPDX-License-Identifier: MPL-2.0
 					on:submit|preventDefault={() => (fetched_data = fetch_data())}
 				>
 					<input
-						class="w-full outline-none p-1 rounded dark:bg-gray-500 bg-gray-300"
+						class="w-full outline-none p-1 rounded bg-gray-500"
 						bind:value={search_term}
 					/>
 					<div class="w-fit">

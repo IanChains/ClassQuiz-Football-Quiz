@@ -22,23 +22,23 @@ SPDX-License-Identifier: MPL-2.0
 <div class="w-full">
 	<div class="flex justify-center w-full">
 		<table class="w-11/12 m-auto">
-			<tr class="border-b-2 dark:border-gray-500 text-left border-gray-300">
-				<th class="border-r dark:border-gray-500 p-1 mx-auto border-gray-300"
-					>{$t('result_page.player_name')}
+			<tr class="border-b-2 border-gray-500 text-left">
+				<th class="border-r border-gray-500 p-1 mx-auto"
+					>Naam Speler
 				</th>
-				<th class="p-1 mx-auto">{$t('result_page.player_score')}</th>
+				<th class="p-1 mx-auto">Speler Score</th>
 				{#if Object.keys(custom_field).length !== 0}
-					<th class="border-l dark:border-gray-500 p-1 mx-auto border-gray-300"
-						>{$t('result_page.custom_field')}
+					<th class="border-l border-gray-500 p-1 mx-auto"
+						>Aangepast Veld
 					</th>
 				{/if}
 			</tr>
 			{#each usernames as uname}
 				<tr class="text-left">
-					<td class="border-r dark:border-gray-500 p-1 border-gray-300">{uname}</td>
+					<td class="border-r border-gray-500 p-1">{uname}</td>
 					<td class="p-1">{scores[uname]}</td>
 					{#if custom_field[uname]}
-						<td class="border-l dark:border-gray-500 p-1 border-gray-300"
+						<td class="border-l border-gray-500 p-1"
 							>{custom_field[uname]}</td
 						>
 					{/if}

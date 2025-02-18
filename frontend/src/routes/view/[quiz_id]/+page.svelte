@@ -7,7 +7,6 @@ SPDX-License-Identifier: MPL-2.0
 <script lang="ts">
 	import { createTippy } from 'svelte-tippy';
 	import StartGamePopup from '$lib/dashboard/start_game.svelte';
-	import LicensePopup from '$lib/view_quiz/license-gen.svelte';
 	import { onMount } from 'svelte';
 	import BrownButton from '$lib/components/buttons/brown.svelte';
 	import RatingComponent from '$lib/view_quiz/RatingComponent.svelte';
@@ -21,11 +20,9 @@ SPDX-License-Identifier: MPL-2.0
 	});
 
 	let start_game = null;
-	let license_menu = null;
 	const close_start_game_if_esc_is_pressed = (key: KeyboardEvent) => {
 		if (key.code === 'Escape') {
 			start_game = null;
-			license_menu = null;
 		}
 	};
 	onMount(() => {
@@ -48,6 +45,17 @@ SPDX-License-Identifier: MPL-2.0
 		kahoot_id?: string;
 		mod_rating?: number;
 	}
+
+
+	function copyToClipboard() {
+        navigator.clipboard.writeText(quiz.id)
+            .then(() => {
+                alert("Quiz ID gekopieerd naar plakbord.");
+            })
+            .catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+        }
 </script>
 
 <svelte:head>
@@ -137,14 +145,10 @@ SPDX-License-Identifier: MPL-2.0
 			{/if}
 			
 			{#if admin_user}
-				<BrownButton
-					on:click={() => {
-						license_menu = quiz.id;
-					}}
-					flex={true}
-				>
-					Licentie
-				</BrownButton>
+				<div class="text-center my-2">
+					<p>Quiz ID (Click to Copy):</p>
+					<p on:click={copyToClipboard}>{@html quiz.id}</p>
+				</div>
 			{/if}
 			
 		</div>
@@ -163,8 +167,4 @@ SPDX-License-Identifier: MPL-2.0
 
 {#if start_game !== null}
 	<StartGamePopup bind:quiz_id={start_game} />
-{/if}
-
-{#if license_menu !== null}
-	<LicensePopup bind:quiz_id={license_menu} />
 {/if}

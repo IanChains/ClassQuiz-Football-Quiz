@@ -87,7 +87,8 @@ SPDX-License-Identifier: MPL-2.0
 		}
 
 		if (res.status === 403) {
-			error_message.set('De ingevoerde licentie key is ongeldig.');
+			const errorResponse = await res.json();
+			error_message.set(errorResponse.detail || 'Er is iets met gegaan met de licentie code.');
 			loading = false;
 		} else if (res.status !== 200) {
 			/*			alertModal.set({
@@ -103,6 +104,7 @@ SPDX-License-Identifier: MPL-2.0
 		} else {
 			const data = await res.json();
 			// eslint-disable-next-line no-undef
+			loading = false;
 			window.location.assign(
 				`/admin?token=${data.game_id}&pin=${data.game_pin}&connect=1&cqc_code=${data.cqc_code}`
 			);
@@ -164,7 +166,7 @@ SPDX-License-Identifier: MPL-2.0
 
 		{#if !$isAdmin}
 			<div class="flex justify-center items-center my-auto">
-				<label class="mr-4 font-bold" style="font-size: 18px;">Quiz Licentie Key</label>
+				<label class="mr-4 font-bold" style="font-size: 18px;">Quiz Licentie Code: (incl. "QUIZ")</label>
 				<input
 					bind:value={licentie_key}
 					on:input={ClearError}
@@ -204,7 +206,7 @@ SPDX-License-Identifier: MPL-2.0
 
 		{#if $error_message }
 			<div class="flex justify-center w-full mt-auto">
-				<p class="font-bold text-red-600 underline" style="font-size: 25px;">{$error_message}</p>
+				<p class="font-bold text-red-600 underline" style="font-size: 20px;">{$error_message}</p>
 			</div>
 		{/if}
 		
@@ -212,7 +214,7 @@ SPDX-License-Identifier: MPL-2.0
 			class="mt-auto mx-auto orange-red-button p-4 rounded-lg shadow-lg transition-all text-2xl"
 			on:click={() => {
 				if ( (!$licentie_key_write) && (!$isAdmin) ) {
-					error_message.set('Je moet een licentie key invullen.');
+					error_message.set('Gelieve een licentie code in te vullen.');
 				} else {
 					start_game(quiz_id);
 				}

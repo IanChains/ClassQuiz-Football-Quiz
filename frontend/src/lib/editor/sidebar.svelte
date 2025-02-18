@@ -82,9 +82,8 @@ SPDX-License-Identifier: MPL-2.0
 	<div class="border-r-2 pt-6 px-6 overflow-scroll h-full">
 		<div
 			bind:this={propertyCard}
-			class="bg-white shadow rounded-lg h-40 p-2 mb-6 hover:cursor-pointer drop-shadow-2xl border border-gray-500 dark:bg-gray-600 transition"
-			class:bg-green-300={selected_question === -1}
-			class:dark:bg-green-500={selected_question === -1}
+			class="shadow rounded-lg h-40 p-2 mb-6 hover:cursor-pointer drop-shadow-2xl border border-gray-500 bg-gray-600 transition"
+			class:bg-green-500={selected_question === -1}
 			on:click={() => setSelectedQuestion(-1)}
 		>
 			<div
@@ -96,8 +95,8 @@ SPDX-License-Identifier: MPL-2.0
 			>
 				<p
 					type="text"
-					class="whitespace-nowrap truncate text-center w-full bg-transparent rounded dark:text-white"
-					class:dark:text-black={selected_question === -1}
+					class="whitespace-nowrap truncate text-center w-full bg-transparent rounded text-white"
+					class:text-black={selected_question === -1}
 				>
 					{#if data.title}
 						{@html data.title}
@@ -117,13 +116,13 @@ SPDX-License-Identifier: MPL-2.0
 			>
 				<textarea
 					bind:value={data.description}
-					class="bg-transparent resize-none w-full rounded text-sm dark:text-white"
-					class:dark:text-black={selected_question === -1}
+					class="bg-transparent resize-none w-full rounded text-sm text-white"
+					class:text-black={selected_question === -1}
 				/>
 			</div>
 			<div
-				class="w-full flex justify-center dark:text-white"
-				class:dark:text-black={selected_question === -1}
+				class="w-full flex justify-center text-white"
+				class:text-black={selected_question === -1}
 			>
 				<button
 					type="button"
@@ -170,9 +169,8 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 		{#each data.questions as question, index}
 			<div
-				class="bg-white shadow rounded-lg h-40 p-2 mb-6 hover:cursor-pointer drop-shadow-2xl border border-gray-500 dark:bg-gray-600 transition relative"
-				class:bg-green-300={index === selected_question}
-				class:dark:bg-green-500={index === selected_question}
+				class="shadow rounded-lg h-40 p-2 mb-6 hover:cursor-pointer drop-shadow-2xl border border-gray-500 bg-gray-600 transition relative"
+				class:bg-green-500={index === selected_question}
 				on:click={() => {
 					setSelectedQuestion(index);
 				}}
@@ -278,11 +276,11 @@ SPDX-License-Identifier: MPL-2.0
 					class="m-1 border border-gray-500 rounded-lg p-0.5"
 				>
 					<h1
-						class="whitespace-nowrap truncate text-center rounded-lg dark:text-white transition"
+						class="whitespace-nowrap truncate text-center rounded-lg text-white transition"
 						class:bg-yellow-500={!reach(dataSchema, 'questions[].question').isValidSync(
 							question.question
 						)}
-						class:dark:text-black={index === selected_question}
+						class:text-black={index === selected_question}
 					>
 						{#if question.question === ''}
 							<span class="italic text-gray-500">{$t('editor.no_title')}</span>
@@ -344,8 +342,7 @@ SPDX-License-Identifier: MPL-2.0
 							{#each question.answers as answer}
 								<span
 									class="whitespace-nowrap truncate rounded-lg p-0.5 text-sm text-center border border-gray-700"
-									class:dark:bg-gray-500={answer.answer}
-									class:bg-gray-300={answer.answer}
+									class:bg-gray-500={answer.answer}
 									class:bg-yellow-500={!reach(
 										ABCDQuestionSchema,
 										'answer'
@@ -375,11 +372,11 @@ SPDX-License-Identifier: MPL-2.0
 			</div>
 		{/each}
 		<div
-			class="bg-white shadow rounded-lg h-40 p-2 hover:cursor-pointer drop-shadow-2xl border border-gray-500 dark:bg-gray-600 grid grid-cols-2"
+			class="shadow rounded-lg h-40 p-2 hover:cursor-pointer drop-shadow-2xl border border-gray-500 bg-gray-600 grid grid-cols-2"
 		>
 			<button
 				type="button"
-				class="h-full flex justify-center w-full flex-col border-r border-black dark:text-white"
+				class="h-full flex justify-center w-full flex-col border-r border-black text-white"
 				on:click={() => {
 					add_new_question_popup_open = true;
 				}}
@@ -402,7 +399,7 @@ SPDX-License-Identifier: MPL-2.0
 			</button>
 			<button
 				type="button"
-				class="h-full flex justify-center w-full dark:text-white flex-col"
+				class="h-full flex justify-center w-full text-white flex-col"
 				on:click={() => {
 					data.questions = [...data.questions, { ...empy_slide }];
 				}}

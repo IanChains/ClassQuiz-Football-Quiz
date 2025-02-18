@@ -57,7 +57,7 @@ SPDX-License-Identifier: MPL-2.0
 		{#each questions as question, i}
 			<div class="transition-all">
 				<div
-					class="w-full bg-white p-2 rounded grid grid-cols-3 z-40 dark:bg-gray-700 bg-opacity-60 dark:bg-opacity-80"
+					class="w-full p-2 rounded grid grid-cols-3 z-40 bg-gray-700 bg-opacity-80"
 				>
 					<button
 						class="text-center underline text-xl"
@@ -68,14 +68,10 @@ SPDX-License-Identifier: MPL-2.0
 					{#if question.type !== QuizQuestionType.VOTING}
 						{@const correct_answers = get_number_of_correct_answers(i)}
 						<p class="text-center text-sm my-auto">
-							{$t('result_page.average_score', {
-								average_score: get_average_score(i)
-							})}
+							Gemiddelde Score: {get_average_score(i)}
 						</p>
 						<p class="text-center text-sm my-auto">
-							{$t('result_page.correct_answer', { count: correct_answers })}
-							<!--							{correct_answers} correct
-							{#if correct_answers === 1}Answer{:else}Answers{/if}-->
+							{correct_answers} juiste antwoorden
 						</p>
 					{/if}
 				</div>

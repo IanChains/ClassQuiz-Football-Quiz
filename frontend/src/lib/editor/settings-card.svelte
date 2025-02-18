@@ -28,8 +28,8 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="w-full h-full pb-20 px-20">
-	<div class="rounded-lg bg-white w-full h-full border-gray-500 dark:bg-gray-700">
-		<div class="h-fit bg-gray-300 rounded-t-lg dark:bg-gray-500">
+	<div class="rounded-lg w-full h-full border-gray-500 bg-gray-700">
+		<div class="h-fit rounded-t-lg bg-gray-500">
 			<div class="flex align-middle p-4 gap-3">
 				<span
 					class="inline-block bg-gray-600 w-4 h-4 rounded-full hover:bg-red-400 transition"
@@ -43,17 +43,12 @@ SPDX-License-Identifier: MPL-2.0
 			</div>
 		</div>
 		<div
-			class="dark:bg-gray-700 h-full"
+			class="bg-gray-700 h-full"
 			style="background-repeat: no-repeat;background-size: 100% 100%;background-image: {data.background_image
 				? `url("/api/v1/storage/download/${data.background_image}")`
 				: `unset`}"
 		>
 			<div class="flex justify-center pt-10 w-full">
-				<!--<input
-				type="text"
-				bind:value={data.title}
-				class="p-3 rounded-lg border-gray-500 border text-center w-1/3 text-lg font-semibold dark:bg-gray-500"
-			/>-->
 				{#await import('$lib/inline-editor.svelte')}
 					<Spinner my_20={false} />
 				{:then c}
@@ -65,7 +60,7 @@ SPDX-License-Identifier: MPL-2.0
 					type="text"
 					placeholder="Description"
 					bind:value={data.description}
-					class="p-3 rounded-lg border-gray-500 border text-center w-1/3 h-20 resize-none dark:bg-gray-500 outline-none focus:shadow-2xl transition-all"
+					class="p-3 rounded-lg border-gray-500 border text-center w-1/3 h-20 resize-none bg-gray-500 outline-none focus:shadow-2xl transition-all"
 				/>
 			</div>
 
@@ -148,7 +143,7 @@ SPDX-License-Identifier: MPL-2.0
 							class:pointer-events-none={custom_bg_color}
 						>
 							<span
-								class="inline-block w-full h-full bg-[#d6edc9] dark:bg-[#4e6e58]"
+								class="inline-block w-full h-full bg-[#4e6e58]"
 							/>
 						</div>
 					</div>
@@ -164,7 +159,7 @@ SPDX-License-Identifier: MPL-2.0
 								class="sr-only peer"
 							/>
 							<span
-								class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+								class="w-14 h-7 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer bg-gray-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all border-gray-600 peer-checked:bg-blue-600"
 							/>
 						</label>
 					</div>

@@ -39,13 +39,7 @@ SPDX-License-Identifier: MPL-2.0
 		}
 	});
 
-	let darkMode = false;
-	if (browser) {
-		darkMode =
-			localStorage.theme === 'dark' ||
-			(!('theme' in localStorage) &&
-				window.matchMedia('(prefers-color-scheme: dark)').matches);
-	}
+	let darkMode = true;
 	const add_text_field = () => {
 		if (selected_element === ElementTypes.Text) {
 			canvas.shapes.label.insert({

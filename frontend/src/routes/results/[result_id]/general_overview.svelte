@@ -39,12 +39,15 @@ SPDX-License-Identifier: MPL-2.0
 <div class="w-full">
 	<div class="flex justify-center w-full">
 		<p class="text-3xl w-5/6 text-center">
+			De quiz "{title}", die werd gespeeld op {new Date(timestamp).toLocaleString()} had {usernames.length} spelers met een gemiddelde score van {get_average_final_score()}.
+			<!--
 			{$t('results_page.general_overview.sentence', {
 				title,
 				date: new Date(timestamp).toLocaleString(),
 				player_count: usernames.length,
 				average_score: get_average_final_score()
 			})}
+			-->
 		</p>
 	</div>
 </div>
