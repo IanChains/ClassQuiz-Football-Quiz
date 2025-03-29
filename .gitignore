@@ -13,3 +13,6 @@ survey.json
 .coverage
 export_deta.py
 target/
+classquiz/config.py
+frontend/src/lib/analytics.svelte
+classquiz/config.py
