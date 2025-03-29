@@ -39,24 +39,24 @@ SPDX-License-Identifier: MPL-2.0
 	<div class="w-screen flex justify-center">
 		{#if solution.type === QuizQuestionType.ABCD}
 			<div class="relative overflow-x-auto shadow-md rounded-lg">
-				<table class="w-fit text-sm text-left text-gray-500 dark:text-gray-400">
-					<thead class="bg-gray-50 dark:bg-gray-700">
+				<table class="w-fit text-sm text-left text-gray-400">
+					<thead class="bg-gray-700">
 						<tr>
 							<th
 								scope="col"
-								class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+								class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase text-gray-400"
 							>
 								{$t('words.answer')}
 							</th>
 							<th
 								scope="col"
-								class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+								class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase text-gray-400"
 							>
 								{$t('words.count')}
 							</th>
 							<th
 								scope="col"
-								class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+								class="py-3 px-6 text-xs font-medium tracking-wider text-left uppercase text-gray-400"
 							>
 								{$t('words.correct')}
 							</th>
@@ -64,19 +64,19 @@ SPDX-License-Identifier: MPL-2.0
 					</thead>
 					<tbody>
 						{#each solution.answers as answer}
-							<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+							<tr class="border-b bg-gray-800 border-gray-700">
 								<td
-									class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+									class="py-4 px-6 text-sm font-medium whitespace-nowrap text-white"
 								>
 									{answer.answer}
 								</td>
 								<td
-									class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400"
+									class="py-4 px-6 text-sm whitespace-nowrap text-gray-400"
 								>
 									{data_store[answer.answer]}
 								</td>
 								<td
-									class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400"
+									class="py-4 px-6 text-sm whitespace-nowrap text-gray-400"
 								>
 									{#if answer.right}
 										✅

@@ -119,7 +119,7 @@ SPDX-License-Identifier: MPL-2.0
 		margin-right: 0.5rem;
 	}
 	.question-counter{
-		font-size: 2rem;
+		font-size: 1.75rem;
 		margin-left: 1rem;
 		font-weight: bold;
 	}

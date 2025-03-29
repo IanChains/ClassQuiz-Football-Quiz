@@ -64,6 +64,10 @@ SPDX-License-Identifier: MPL-2.0
 	});
 
 	const start_game = async (id: string) => {
+		if (loading) {
+			return;
+		}
+
 		let res;
 		loading = true;
 		localStorage.setItem('custom_field', custom_field);
@@ -186,6 +190,7 @@ SPDX-License-Identifier: MPL-2.0
 				placeholder="Email/Telefoon/Groep (Niet Verplicht)"
 			/>
 		</div>
+
 		<div class="flex justify-center w-full my-auto">
 			<label
 				for="randomized-answers-toggle"
@@ -204,6 +209,10 @@ SPDX-License-Identifier: MPL-2.0
 			</label>
 		</div>
 
+		<div class="flex justify-center items-center my-auto">
+			<label class="mr-4 font-bold" style="font-size: 18px;">We raden je aan om als Quiz Host Fullscreen te gebruiken!<br>Windows: F11 of Fn + F11<br>MacOS: Ctrl + ⌘ + F</label>
+		</div>
+
 		{#if $error_message }
 			<div class="flex justify-center w-full mt-auto">
 				<p class="font-bold text-red-600 underline" style="font-size: 20px;">{$error_message}</p>
@@ -215,7 +224,7 @@ SPDX-License-Identifier: MPL-2.0
 			on:click={() => {
 				if ( (!$licentie_key_write) && (!$isAdmin) ) {
 					error_message.set('Gelieve een licentie code in te vullen.');
-				} else {
+				} else if (!loading) {
 					start_game(quiz_id);
 				}
 			}}

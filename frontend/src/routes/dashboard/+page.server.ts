@@ -4,12 +4,13 @@
 
 import { redirect } from '@sveltejs/kit';
 
-export const load = async ({ parent }) => {
-	const { email } = await parent();
-	if (!email) {
+export async function load({ locals }) {
+	if (!locals.email) {
 		throw redirect(302, '/account/login?returnTo=/dashboard');
+	} else if (locals.admin_user === true) {
+		throw redirect(302, '/dashboard-admin');
 	}
 	return {
-		email
+		email: locals.email,
 	};
 };

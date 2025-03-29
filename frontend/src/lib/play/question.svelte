@@ -144,15 +144,15 @@ SPDX-License-Identifier: MPL-2.0
 	const default_colors = ['#D6EDC9', '#B07156', '#7F7057', '#4E6E58'];
 </script>
 
-<div class="h-screen w-screen flex">
+<div class="h-screen w-screen flex flex-col">
 	{#if game_mode === 'normal'}
 		<div
-			class="flex flex-col justify-start"
-			class:mt-10={[QuizQuestionType.RANGE, QuizQuestionType.ORDER, QuizQuestionType.TEXT]}
+			class="flex flex-col justify-start mt-4 mx-auto"
 			style="height: {question.image ? '33.333333' : '16.666667'}%"
 		>
 			<h1
-				class="lg:text-2xl text-lg text-center text-black dark:text-white mt-2 break-normal mb-2"
+				class="lg:text-2xl text-lg text-center text-black mt-2 break-normal mb-2"
+				style="font-size: 1.25rem; font-weight:bold;"
 			>
 				{@html question.question}
 			</h1>
@@ -171,6 +171,7 @@ SPDX-License-Identifier: MPL-2.0
 			<div class="w-full relative h-full" style="height: {get_div_height()}%">
 				<div
 					class="absolute top-0 bottom-0 left-0 right-0 m-auto rounded-full h-fit w-fit border-2 border-black shadow-2xl z-40"
+					style="scale: 0.75;"
 				>
 					<CircularTimer
 						bind:text={timer_res}
@@ -197,7 +198,7 @@ SPDX-License-Identifier: MPL-2.0
 									src={kahoot_icons[i]}
 								/>
 							{:else}
-								<p class="m-auto">{answer.answer}</p>
+								<p class="m-auto" style="font-size: 18px;">{answer.answer}</p>
 							{/if}
 						</button>
 					{/each}
@@ -240,14 +241,14 @@ SPDX-License-Identifier: MPL-2.0
 					style="width: {(100 / parseInt(question.time)) * parseInt(timer_res)}vw"
 				/>
 				<div class="flex justify-center mt-10">
-					<p class="text-black dark:text-white">Enter your answer</p>
+					<p class="text-white">Enter your answer</p>
 				</div>
 				<div class="flex justify-center m-2">
 					<input
 						type="text"
 						bind:value={text_input}
 						disabled={selected_answer}
-						class="bg-gray-50 focus:ring text-gray-900 rounded-lg focus:ring-blue-500 block w-full p-2 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-500 outline-none transition text-center disabled:opacity-50 disabled:cursor-not-allowed"
+						class="focus:ring rounded-lg block w-full p-2 bg-gray-700 text-white focus:ring-blue-500 outline-none transition text-center disabled:opacity-50 disabled:cursor-not-allowed"
 					/>
 				</div>
 
@@ -392,8 +393,8 @@ SPDX-License-Identifier: MPL-2.0
 		{/await}-->
 	{:else}
 				
-		<div class="my-auto mx-auto">
-			<p class="text-white text-xl mb-6">Eventjes Wachten ...</p>
+		<div class="my-auto mx-auto flex flex-col">
+			<p class="text-white text-xl mb-6 mx-auto">Eventjes Wachten ...</p>
 			<Spinner my_20={false} />
 		</div>
 

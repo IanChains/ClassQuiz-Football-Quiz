@@ -66,7 +66,7 @@ router.include_router(oauth.router, tags=["users", "oauth"], prefix="/oauth")
 async def create_user(user: RouteUser, background_task: BackgroundTasks) -> User | JSONResponse:
     if settings.registration_disabled:
         raise HTTPException(status_code=423)
-    user = User(**user.dict(), id=uuid.uuid4(), avatar=gzipped_user_avatar(), created_at=datetime.now(), user_license_key=str(os.urandom(16).hex()))
+    user = User(**user.dict(), id=uuid.uuid4(), avatar=bytes.fromhex('5c78'), created_at=datetime.now(), user_license_key=str(os.urandom(16).hex()))
     try:
         validate_email(user.email)
     except EmailNotValidError as e:
@@ -119,13 +119,16 @@ async def rememberme_token(request: Request, response: Response):
 @router.get("/logout")
 async def logout(request: Request, response: Response, user: User = Depends(get_current_user)):
     remember_token = request.cookies.get("rememberme_token")
-    if remember_token is not None:
-        await UserSession.objects.filter(session_key=remember_token).delete()
-    await clear_cache_for_account(user)
+
     response.delete_cookie("access_token")
     response.delete_cookie("expiry")
     response.delete_cookie("rememberme")
     response.delete_cookie("rememberme_token")
+    await clear_cache_for_account(user)
+
+    if remember_token is not None:
+        await UserSession.objects.filter(session_key=remember_token).delete()
+
     response.status_code = 302
     response.headers["Location"] = "/"
     return response
@@ -136,8 +139,10 @@ async def check_token(user: User = Depends(get_current_user)):
     return {"email": user.email,"admin_user": user.admin_user}
 
 @router.get("/admin")
-async def admin_check(user: User = Depends(get_current_user)):
-    return {"admin_user": user.admin_user}
+async def admin_check(request: Request, user: User = Depends(get_current_user)):
+    x_forwarded_for = request.headers.get("X-Forwarded-For", request.client.host)
+    cf_connecting_ip = request.headers.get("CF-Connecting-IP", request.client.host)
+    return {"admin_user": user.admin_user, "x_forwarded_for": x_forwarded_for, "cf_connecting_ip": cf_connecting_ip}
 
 @router.get("/list", response_model=list[str])
 async def list_usernames(user: User = Depends(get_current_user)):
@@ -294,6 +299,7 @@ async def delete_user_account(input_data: DeleteUserInput, user: User = Depends(
     await user.delete()
 
 
+"""
 @router.get("/avatar", response_class=PlainTextResponse)
 async def get_own_avatar(respo: Response, user: User = Depends(get_current_user)):
     respo.headers.append("Content-Type", "image/svg+xml")
@@ -306,7 +312,8 @@ async def get_other_avatar(respo: Response, user_id: uuid.UUID):
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     respo.headers.append("Content-Type", "image/svg+xml")
-    return gzip.decompress(base64.b64decode(user.avatar))
+    return gzip.decompress(base64.b64decode(user.avatar))"
+"""
 
 
 class InternalAuthData(BaseModel):

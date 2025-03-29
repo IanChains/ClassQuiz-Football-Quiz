@@ -56,17 +56,18 @@ async def init_editor(edit: bool, quiz_id: Optional[UUID] = None, user: User = D
         raise HTTPException(status_code=400, detail="You can't choose the id for your quiz")
     if edit and quiz_id is None:
         raise HTTPException(status_code=400, detail="Edit can't be true if quiz_id is None")
-    if not user.admin_user:
-        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
+    if user.admin_user:
     
-    if quiz_id is None:
-        quiz_id = uuid.uuid4()
-    edit_id = os.urandom(4).hex()
-    await redis.sadd("edit_sessions", edit_id)
-    await redis.set(
-        f"edit_session:{edit_id}", EditSessionData(quiz_id=quiz_id, edit=edit, user_id=user.id).json(), ex=3600
-    )
-    return InitEditorResponse(token=edit_id)
+        if quiz_id is None:
+            quiz_id = uuid.uuid4()
+        edit_id = os.urandom(4).hex()
+        await redis.sadd("edit_sessions", edit_id)
+        await redis.set(
+            f"edit_session:{edit_id}", EditSessionData(quiz_id=quiz_id, edit=edit, user_id=user.id).json(), ex=3600
+        )
+        return InitEditorResponse(token=edit_id)
+    else:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
 
 
 @router.post("/finish")
@@ -74,101 +75,103 @@ async def finish_edit(edit_id: str, quiz_input: QuizInput, user: User = Depends(
     session_data = await redis.get(f"edit_session:{edit_id}")
     if session_data is None:
         raise HTTPException(status_code=401, detail="Edit ID not found!")
-    if not user.admin_user:
-        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
-    session_data = EditSessionData.parse_raw(session_data)
-    quiz_input.title = bleach.clean(quiz_input.title, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
-    quiz_input.description = bleach.clean(quiz_input.description, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
-    if quiz_input.background_color is not None:
-        quiz_input.background_color = bleach.clean(quiz_input.background_color, tags=[], strip=True)
+    if user.admin_user:
+    
+        session_data = EditSessionData.parse_raw(session_data)
+        quiz_input.title = bleach.clean(quiz_input.title, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
+        quiz_input.description = bleach.clean(quiz_input.description, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True)
+        if quiz_input.background_color is not None:
+            quiz_input.background_color = bleach.clean(quiz_input.background_color, tags=[], strip=True)
 
-    for i, question in enumerate(quiz_input.questions):
-        if question.type == QuizQuestionType.ABCD:
-            for i2, answer in enumerate(question.answers):
-                if answer.color is not None:
-                    quiz_input.questions[i].answers[i2].color = bleach.clean(answer.color, tags=[], strip=True)
-                if answer.answer == "":
-                    quiz_input.questions[i].answers[i2].answer = None
-                if answer.answer is not None:
-                    quiz_input.questions[i].answers[i2].answer = bleach.clean(
-                        answer.answer, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True
-                    )
+        for i, question in enumerate(quiz_input.questions):
+            if question.type == QuizQuestionType.ABCD:
+                for i2, answer in enumerate(question.answers):
+                    if answer.color is not None:
+                        quiz_input.questions[i].answers[i2].color = bleach.clean(answer.color, tags=[], strip=True)
+                    if answer.answer == "":
+                        quiz_input.questions[i].answers[i2].answer = None
+                    if answer.answer is not None:
+                        quiz_input.questions[i].answers[i2].answer = bleach.clean(
+                            answer.answer, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True
+                        )
 
-    images_to_delete = []
-    old_quiz_data: Quiz = await Quiz.objects.get_or_none(id=session_data.quiz_id, user_id=session_data.user_id)
+        images_to_delete = []
+        old_quiz_data: Quiz = await Quiz.objects.get_or_none(id=session_data.quiz_id, user_id=session_data.user_id)
 
-    for i, question in enumerate(quiz_input.questions):
-        image = question.image
-        quiz_input.questions[i].question = bleach.clean(
-            quiz_input.questions[i].question, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True
-        )
-        if image == "":
-            question.image = None
-        if image is not None and not check_image_string(image)[0]:
-            raise HTTPException(status_code=400, detail="Image URL(s) aren't valid!")
+        for i, question in enumerate(quiz_input.questions):
+            image = question.image
+            quiz_input.questions[i].question = bleach.clean(
+                quiz_input.questions[i].question, tags=ALLOWED_TAGS_FOR_QUIZ, strip=True
+            )
+            if image == "":
+                question.image = None
+            if image is not None and not check_image_string(image)[0]:
+                raise HTTPException(status_code=400, detail="Image URL(s) aren't valid!")
 
-    if quiz_input.cover_image == "":
-        quiz_input.cover_image = None
+        if quiz_input.cover_image == "":
+            quiz_input.cover_image = None
 
-    if quiz_input.cover_image is not None and not check_image_string(quiz_input.cover_image)[0]:
-        raise HTTPException(status_code=400, detail="image url is not valid")
+        if quiz_input.cover_image is not None and not check_image_string(quiz_input.cover_image)[0]:
+            raise HTTPException(status_code=400, detail="image url is not valid")
 
-    if quiz_input.background_image is not None and not check_image_string(quiz_input.background_image)[0]:
-        raise HTTPException(status_code=400, detail="image url is not valid")
+        if quiz_input.background_image is not None and not check_image_string(quiz_input.background_image)[0]:
+            raise HTTPException(status_code=400, detail="image url is not valid")
 
-    if session_data.edit:
-        await arq.enqueue_job("quiz_update", old_quiz_data, old_quiz_data.id, _defer_by=2)
-        quiz = old_quiz_data
-        meilisearch.index(settings.meilisearch_index).update_documents([await get_meili_data(quiz)])
-        if not quiz_input.public:
-            meilisearch.index(settings.meilisearch_index).delete_document(str(quiz.id))
-        else:
-            meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
-        quiz.title = quiz_input.title
-        quiz.public = quiz_input.public
-        quiz.description = quiz_input.description
-        quiz.updated_at = datetime.now()
-        quiz.questions = quiz_input.dict()["questions"]
-        quiz.cover_image = quiz_input.cover_image
-        quiz.background_color = quiz_input.background_color
-        quiz.background_image = quiz_input.background_image
-        quiz.mod_rating = None
-        for image in images_to_delete:
-            if image is not None:
-                try:
-                    await storage.delete([image])
-                except DeletionFailedError:
-                    pass
-        await redis.srem("edit_sessions", edit_id)
-        await redis.delete(f"edit_session:{edit_id}")
-        await redis.delete(f"edit_session:{edit_id}:images")
-        await quiz.update()
-        return quiz
-    else:
-        quiz_license_key_value = Fernet.generate_key()
-
-        quiz = Quiz(
-            **quiz_input.dict(),
-            user_id=session_data.user_id,
-            id=session_data.quiz_id,
-            created_at=datetime.now(),
-            updated_at=datetime.now(),
-            quiz_license_key=quiz_license_key_value
-        )
-
-        await redis.delete("global_quiz_count")
-        if quiz_input.public:
-            meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
-        try:
+        if session_data.edit:
+            await arq.enqueue_job("quiz_update", old_quiz_data, old_quiz_data.id, _defer_by=2)
+            quiz = old_quiz_data
+            meilisearch.index(settings.meilisearch_index).update_documents([await get_meili_data(quiz)])
+            if not quiz_input.public:
+                meilisearch.index(settings.meilisearch_index).delete_document(str(quiz.id))
+            else:
+                meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
+            quiz.title = quiz_input.title
+            quiz.public = quiz_input.public
+            quiz.description = quiz_input.description
+            quiz.updated_at = datetime.now()
+            quiz.questions = quiz_input.dict()["questions"]
+            quiz.cover_image = quiz_input.cover_image
+            quiz.background_color = quiz_input.background_color
+            quiz.background_image = quiz_input.background_image
+            quiz.mod_rating = None
+            for image in images_to_delete:
+                if image is not None:
+                    try:
+                        await storage.delete([image])
+                    except DeletionFailedError:
+                        pass
             await redis.srem("edit_sessions", edit_id)
             await redis.delete(f"edit_session:{edit_id}")
             await redis.delete(f"edit_session:{edit_id}:images")
-            await quiz.save()
-        except asyncpg.exceptions.UniqueViolationError:
-            raise HTTPException(status_code=400, detail="The quiz already exists")
-        new_images = extract_image_ids_from_quiz(quiz)
-        for image in new_images:
-            item = await StorageItem.objects.get_or_none(id=uuid.UUID(image))
-            if item is None:
-                continue
-            await quiz.storageitems.add(item)
+            await quiz.update()
+            return quiz
+        else:
+            quiz_license_key_value = Fernet.generate_key()
+
+            quiz = Quiz(
+                **quiz_input.dict(),
+                user_id=session_data.user_id,
+                id=session_data.quiz_id,
+                created_at=datetime.now(),
+                updated_at=datetime.now(),
+                quiz_license_key=quiz_license_key_value
+            )
+
+            await redis.delete("global_quiz_count")
+            if quiz_input.public:
+                meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
+            try:
+                await redis.srem("edit_sessions", edit_id)
+                await redis.delete(f"edit_session:{edit_id}")
+                await redis.delete(f"edit_session:{edit_id}:images")
+                await quiz.save()
+            except asyncpg.exceptions.UniqueViolationError:
+                raise HTTPException(status_code=400, detail="The quiz already exists")
+            new_images = extract_image_ids_from_quiz(quiz)
+            for image in new_images:
+                item = await StorageItem.objects.get_or_none(id=uuid.UUID(image))
+                if item is None:
+                    continue
+                await quiz.storageitems.add(item)
+    else:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")

@@ -59,7 +59,7 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <svelte:head>
-	<title>ClassQuiz - View {quiz.title}</title>
+	<title>Quiz - {quiz.title}</title>
 </svelte:head>
 
 <div class="flex flex-col w-full h-full">

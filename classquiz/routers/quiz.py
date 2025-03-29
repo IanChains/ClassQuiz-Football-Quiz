@@ -13,7 +13,7 @@ from random import randint
 import ormar.exceptions
 
 from classquiz.helpers import generate_spreadsheet, handle_import_from_excel
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import ValidationError, BaseModel
 
@@ -86,6 +86,7 @@ class PublicInfoQuizResponse(Quiz.get_pydantic(exclude={"questions","background_
     dislikes: int
     views: int
     plays: int
+    question_count: int
     
 @router.get("/get/public/info/{quiz_id}",)
 async def get_public_info_quiz(quiz_id: uuid.UUID):
@@ -93,9 +94,11 @@ async def get_public_info_quiz(quiz_id: uuid.UUID):
     if quiz is None:
         return JSONResponse(status_code=404, content={"detail": "quiz not found"})
     else:
+        question_count = len(quiz.questions) if quiz.questions else 0
+
         quiz.views += 1
         await quiz.update()
-        return PublicInfoQuizResponse(**quiz.dict())
+        return PublicInfoQuizResponse(**quiz.dict(), question_count=question_count)
     
 """
 @router.get("/get/public/{quiz_id}")
@@ -149,6 +152,7 @@ async def start_quiz(
     quiz_id: str,
     game_mode: str,
     license: str,
+    request: Request,
     captcha_enabled: bool = True,
     custom_field: str | None = None,
     cqcs_enabled: bool = False,
@@ -161,17 +165,29 @@ async def start_quiz(
     except ValueError:
         raise HTTPException(status_code=400, detail="badly formed quiz id")
     quiz = await Quiz.objects.get_or_none(id=quiz_id, user_id=user.id)
+    
     if quiz is None:
         quiz = await Quiz.objects.get_or_none(id=quiz_id, public=True)
         if quiz is None:
-            return JSONResponse(status_code=404, content={"detail": "quiz not found"})
+            quiz = await Quiz.objects.get_or_none(id=quiz_id, public=False)
+            if quiz is None:
+                return JSONResponse(status_code=403, content={"detail": "Quiz niet gevonden."})
+            elif not user.admin_user:
+                return JSONResponse(status_code=403, content={"detail": "De quiz is niet openbaar."})
         
     #licentie check
     if (not user.admin_user):
         if not license: #lege string, geen license
             return JSONResponse(status_code=403, content={"detail": "Gelieve een licentie code in te vullen."})
+        
+        try:
+            user_ip_forwarded = request.headers.get("X-Forwarded-For", request.client.host)
+            user_ip_connecting = request.headers.get("CF-Connecting-IP", request.client.host)
+        except Exception as error:
+            print("Error IP:", error)
 
-        #api request license check
+
+        #api request license check L-100
         license_check = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/{license}',
             auth = HTTPBasicAuth(license_api_user, license_api_pass))
         
@@ -179,39 +195,47 @@ async def start_quiz(
         json_license_check = license_check.json()
         print("License Check:", json_license_check)
         license_status_code = json_license_check.get('data', {}).get('status')
+        license_times_activated = json_license_check.get('data', {}).get('timesActivated')
+        license_times_activated_max = json_license_check.get('data', {}).get('timesActivatedMax')
+
+        if license_times_activated == None:
+            license_times_activated = 0
 
         #errors en fouten filteren
         if license_status_code == 404:
-            return JSONResponse(status_code=403, content={"detail": "De ingevoerde licentie code is ongeldig."})
+            return JSONResponse(status_code=403, content={"detail": "De ingevoerde licentie code is ongeldig. Error: 404 License Not Found"})
         elif license_status_code == 4:
-            return JSONResponse(status_code=403, content={"detail": "Deze licentie code is gedeactiveerd. Neem contact met ons op."})
+            return JSONResponse(status_code=403, content={"detail": "Deze licentie code is gedeactiveerd. Neem contact met ons op. Error: L-102 License Disabled"})
         elif license_status_code not in [2, 3]:
-            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie."})
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie. Error: L-1023 Wrong License Status"})
+        elif license_times_activated_max <= license_times_activated:
+            return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt. Error: L-104 Max Activation Reached"})
         
         if not json_license_check.get('success'):
-            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie."})
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie. Error: L-105 No Success "})
         
         #gelukt, license bestaat -> data verkrijgen
         license_id = json_license_check.get('data', {}).get('id')
         license_order_id = json_license_check.get('data', {}).get('orderId')
         license_product_id = json_license_check.get('data', {}).get('productId')
 
-        #api request wc for quiz check
-        quiz_check = requests.get(f'https://footballislife.be/wp-json/wc/v3/products/{license_product_id}',
-            auth = HTTPBasicAuth(webshop_api_user, webshop_api_pass))
-        
-        #data verzamelen uit request
-        json_quiz_check = quiz_check.json()
-        print("Quiz Check:", json_quiz_check)
+        if license_product_id:
+            #api request wc for quiz check 200
+            quiz_check = requests.get(f'https://footballislife.be/wp-json/wc/v3/products/{license_product_id}',
+                auth = HTTPBasicAuth(webshop_api_user, webshop_api_pass))
+            
+            #data verzamelen uit request
+            json_quiz_check = quiz_check.json()
+            print("Quiz Check:", json_quiz_check)
 
-        #als product niet gevonden is, error
-        if "invalid_id" in json_quiz_check:
-            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de id controle van de licentie."})
-        
-        #sku krijgen ne vergelijken
-        sku = json_quiz_check.get('sku')
-        if sku != quiz_id_str:
-            return JSONResponse(status_code=403, content={"detail": "De licentie code is niet voor deze quiz bestemd.", "sku": sku, "quiz_id_str": quiz_id_str})
+            #als product niet gevonden is, error
+            if "invalid_id" in json_quiz_check:
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de id controle van de licentie. Error: L-201 Invalid Product ID"})
+            
+            #sku krijgen ne vergelijken
+            sku = json_quiz_check.get('sku')
+            if sku != quiz_id_str:
+                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet voor deze quiz bestemd. Error: L-202 Wrong Quiz ID", "sku": sku, "quiz_id_str": quiz_id_str})
         
         #enkel en alleen als er een order id is anders niet
         if license_order_id:
@@ -236,9 +260,9 @@ async def start_quiz(
                                 break
                                 
             if found_username == None:
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de gebruiker controle van de licentie."})
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de gebruiker controle van de licentie. Error: L-301 No User in Order"})
             elif found_username != user.username:
-                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet aan uw account gekoppeld."})
+                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet aan uw account gekoppeld. Error: L-302 Wrong User"})
         
         #status aanpassen key naar active
         if license_status_code != 3:
@@ -248,12 +272,16 @@ async def start_quiz(
             license_status_code = json_change_status.get('data', {}).get('status')
 
             if not json_change_status.get('success'):
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren (3) van de licentie."})
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-401 No Success"})
             if license_status_code != 3:
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren (3) van de licentie."})
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-402 No Status Change"})
 
         #license activeren - request
-        license_activate = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/activate/{license}',
+        ip_headers = {
+           "X-Forwarded-For": f"IP:{user_ip_connecting}, User:{user.username}, Quiz: {quiz_id_str}" 
+        }
+
+        license_activate = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/activate/{license}', headers=ip_headers,
             auth = HTTPBasicAuth(license_api_user, license_api_pass))
         
         #data verkrijgen
@@ -269,13 +297,13 @@ async def start_quiz(
                 if date_expired:
                     date_expired = date_expired.group(0).split("-")
                     formatted_date = f"{date_expired[2]}/{date_expired[1]}/{date_expired[0]}"
-                    return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {formatted_date}."})
+                    return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {formatted_date}. Error: L-501 License Expired"})
                 else:
-                    return JSONResponse(status_code=403, content={"detail": "De licentie is vervallen."})
+                    return JSONResponse(status_code=403, content={"detail": "De licentie is vervallen. Error: L-502 License Expired, Date Unknown"})
             elif "maximum activation count" in str_license_activate:
-                return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt."})
+                return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt. Error: L-503 Max Activation Reached"})
             else:
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie."})
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-504 Unknown Error in Activation"})
 
         """
         old license code
@@ -383,14 +411,17 @@ async def get_quiz_list(user: User = Depends(get_current_user), page_size: int |
 async def import_quiz_route(quiz_id: str, user: User = Depends(get_current_user)):
     if user.storage_used > settings.free_storage_limit:
         raise HTTPException(status_code=409, detail="Storage limit reached")
-    resp_data = await import_quiz(quiz_id, user)
-    try:
-        if type(resp_data) is int:
-            raise HTTPException(status_code=resp_data, detail="kahoot")
-        else:
-            return resp_data
-    except ValidationError:
-        raise HTTPException(400, detail="unsupported")
+    if user.admin_user:
+        resp_data = await import_quiz(quiz_id, user)
+        try:
+            if type(resp_data) is int:
+                raise HTTPException(status_code=resp_data, detail="kahoot")
+            else:
+                return resp_data
+        except ValidationError:
+            raise HTTPException(400, detail="unsupported")
+    else:
+        raise HTTPException(status_code=403, detail="Only admins are allowed to do this")
 
 
 @router.delete("/delete/{quiz_id}")

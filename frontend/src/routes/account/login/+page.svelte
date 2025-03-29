@@ -78,6 +78,8 @@ SPDX-License-Identifier: MPL-2.0
 	}
 </script>
 
+
+
 <svelte:head>
 	<title>Login - Quiz Football Is Life</title>
 </svelte:head>

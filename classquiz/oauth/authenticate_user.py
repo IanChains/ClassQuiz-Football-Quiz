@@ -47,7 +47,7 @@ async def log_user_in(user: User, request: Request, response: Response):
         max_age=60 * 60 * 24 * 365,
     )
     response.set_cookie(
-        key="rememberme_token", value=session_key, httponly=True, samesite="lax", max_age=60 * 60 * 24 * 365
+        key="rememberme_token", value=session_key, httponly=True, samesite="lax", max_age=60 * 60 * 24 * 30
     )
     return {"access_token": access_token, "token_type": "bearer"}
 

@@ -21,6 +21,8 @@ import gzip
 import urllib.parse
 import magic
 
+from cryptography.fernet import Fernet
+
 router = APIRouter()
 settings = settings()
 quiz_delimiter = b"\xc7\xc7\xc7\x00"
@@ -132,6 +134,8 @@ async def import_quiz(file: UploadFile = File(), user: User = Depends(get_curren
     quiz.user_id = user.id
     quiz.imported_from_kahoot = None
     quiz.mod_rating = None
+    quiz_license_key_value = Fernet.generate_key()
+    quiz.quiz_license_key = quiz_license_key_value
     await quiz.save()
     return quiz
 

@@ -318,14 +318,16 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 			{:else}
 					<p style="margin-left: 2rem; margin-top: 1rem; font-size: 1.10rem; max-width: 90%;">
-						Je hebt nog geen Quiz in jouw bezit.
-					<br>Neem contact met ons op om een Quiz te kopen!
-					<br>Onze Email: <a href="mailto:football.is.life.quiz@gmail.com" target="_blank" class="underline">football.is.life.quiz@gmail.com</a>
-					<br><a href="https://www.facebook.com/profile.php?id=100040198507954" target="_blank">Klik hier om naar onze Facebook te gaan!</a>
-					<br><a href="https://www.instagram.com/football_is_life_quiz/" target="_blank">Klik hier om naar onze Instagram te gaan!</a>
+						All onze online quizzen kan je hier vinden: <a href="/search" target="_blank" class="underline">quiz.footballislife.be/search</a>
 					<br>
-					<br>IT Problemen? Neem contact op met onze Webmaster!
-					<br>Email: <a href="mailto:support@ian-chains.it" target="_blank" class="underline">support@ian-chains.it</a>
+					<br>Licentie Codes kan je online kopen via onze webshop: <a href="https://footballislife.be" target="_blank" class="underline">footballislife.be</a>
+					<br>
+					<br>Heb je een vraag, een technisch probleem of wil je een quiz speciaal voor jou en helemaal op maat?
+					<br>Neem dan contact met ons op, via onze contact pagina: <a href="https://footballislife.be/contact" target="_blank" class="underline">footballislife.be/contact</a>
+					<br>E-mail: <a href="mailto:info@footballislife.be" target="_blank" class="underline">info@footballislife.be</a>
+					<br>
+					<br>IT Vragen/Problemen? Neem dan contact op met onze Webmaster!
+					<br>E-mail: <a href="mailto:webmaster@footballislife.be" target="_blank" class="underline">webmaster@footballislife.be</a>
 				</p>
 			{/if}
 		</div>

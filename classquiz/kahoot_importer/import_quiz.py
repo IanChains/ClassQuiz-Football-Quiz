@@ -16,6 +16,8 @@ from classquiz.db.models import Quiz, ABCDQuizAnswer, QuizQuestion, User, Storag
 from classquiz.kahoot_importer.get import get as get_quiz
 from classquiz.helpers import get_meili_data
 
+from cryptography.fernet import Fernet
+
 settings = settings()
 
 
@@ -94,6 +96,9 @@ async def import_quiz(quiz_id: str, user: User) -> Quiz | int:
         img_obj = await handle_image_upload(quiz.kahoot.cover, user)
         uploaded_images.append(img_obj)
         cover = img_obj.id.hex
+    
+    quiz_license_key_value = Fernet.generate_key()
+
     quiz_data = Quiz(
         id=quiz_id,
         public=False,
@@ -106,6 +111,7 @@ async def import_quiz(quiz_id: str, user: User) -> Quiz | int:
         imported_from_kahoot=True,
         cover_image=cover,
         kahoot_id=uuid.UUID(kahoot_quiz_id),
+        quiz_license_key=quiz_license_key_value
     )
     meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz_data)])
     await quiz_data.save()

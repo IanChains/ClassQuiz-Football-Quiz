@@ -124,14 +124,6 @@ SPDX-License-Identifier: MPL-2.0
 		await socket.emit('save_quiz');
 	};
 
-	let darkMode = false;
-	if (browser) {
-		darkMode =
-			localStorage.theme === 'dark' ||
-			(!('theme' in localStorage) &&
-				window.matchMedia('(prefers-color-scheme: dark)').matches);
-	}
-
 	let bg_color;
 	let bg_image;
 	let results_saved = false;

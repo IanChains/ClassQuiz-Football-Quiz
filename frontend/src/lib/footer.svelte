@@ -4,10 +4,10 @@ SPDX-FileCopyrightText: 2023 Marlon W (Mawoka)
 SPDX-License-Identifier: MPL-2.0
 -->
 
-<footer class="text-center text-white border-black w-screen">
+<footer class="text-center text-white border-black">
 	<div class="grid justify-center w-full custom-dark-blue-bg p-4">
 		<p class="col-start-3 col-end-11 text-center w-full">
-			<br>Football Is Life Quiz
+			<br>VZW Football Is Life Quiz
 			<br>
 			<br>Made possible by the Open Source Project: <a href="https://classquiz.de/" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">ClassQuiz</a>!
 			<br>With special thanks to <a href="https://mawoka.eu" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">Mawoka</a> and <a href="https://classquiz.de/docs/attribution/" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">his team</a>!

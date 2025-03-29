@@ -106,7 +106,7 @@ SPDX-License-Identifier: MPL-2.0
 {/if}
 {#if timer_res !== '0' && selected_question >= 0}
 	<span
-		class="fixed top-0 bg-red-500 h-8 transition-all"
+		class="fixed top-0 bg-red-500 h-4 transition-all"
 		class:mt-10={control_visible}
 		class:big-redtimer={control_visible}
 		style="width: {(100 / parseInt(quiz_data.questions[selected_question].time)) *
@@ -114,7 +114,7 @@ SPDX-License-Identifier: MPL-2.0
 	/>
 {/if}
 
-<div class="w-full h-full" class:pt-28={control_visible} class:pt-12={!control_visible}>
+<div class="w-full h-full" style="padding-top: {(control_visible) ? '5rem' : '3rem'};">
 	{#if timer_res !== undefined && !final_results_clicked && !question_results}
 		<!-- Question is shown -->
 		{#if quiz_data.questions[selected_question].type === QuizQuestionType.SLIDE}

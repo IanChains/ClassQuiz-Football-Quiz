@@ -100,7 +100,8 @@ SPDX-License-Identifier: MPL-2.0
 		<img
 			src={img_data.data}
 			alt={img_data.alt_text ?? 'Not available'}
-			class="object-cover rounded m-auto max-h-full max-w-full"
+			class="object-contain rounded m-auto max-h-full max-w-full"
+			style="width: 100vw; height: 100vh;"
 		/>
 	</div>
 {/if}

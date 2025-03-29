@@ -34,6 +34,7 @@ SPDX-License-Identifier: MPL-2.0
 {:else}
 	<p class="text-center">
 		Oei, er is iets misgegaan. Je hebt de goal gemist. Deze pagina is opgegaan in de rook!
+		<br>Bekijk de status van de website op: <a href="https://status.ian-chains.it" target="_blank">status.ian-chains.it</a>
 	</p>
 {/if}
 

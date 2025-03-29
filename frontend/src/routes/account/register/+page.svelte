@@ -180,6 +180,8 @@ SPDX-License-Identifier: MPL-2.0
 								</label>
 							</div>
 						</div>
+
+
 						<div
 							class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
 							class:ring-red-700={$errors.privacy_accept !== null}
@@ -189,11 +191,28 @@ SPDX-License-Identifier: MPL-2.0
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="privacy_accept" class="ml-3" />
 							<label class="text-sm text-gray-200">
-								Ik heb het <a href="/docs/privacy-policy" class="underline"
-									>privacybeleid</a
-								> gelezen.
+								Ik heb het <a href="/docs/privacy-policy" class="underline" target="_blank"
+									>Privacybeleid Deel 1</a
+								> gelezen en ik ga akkoord.
 							</label>
 						</div>
+
+						<div
+							class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
+							class:ring-red-700={$errors.privacy_accept !== null}
+							class:ring-green-600={$touched.privacy_accept === true &&
+								$errors.privacy_accept === null}
+						>
+							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
+							<input type="checkbox" name="privacy_accept" class="ml-3" />
+							<label class="text-sm text-gray-200">
+								Ik heb het <a href="https://footballislife.be/privacybeleid/" class="underline" target="_blank"
+									>Privacybeleid Deel 2</a
+								> gelezen en ik ga akkoord.
+							</label>
+						</div>
+
+
 						<div
 							class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
 							class:ring-red-700={$errors.tos_accept !== null}
@@ -203,11 +222,26 @@ SPDX-License-Identifier: MPL-2.0
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
 							<input type="checkbox" name="tos_accept" class="ml-3" />
 							<label class="text-sm text-gray-200">
-								Ik heb de <a href="/docs/tos" class="underline"
-									>algemene voorwaarden</a
-								> gelezen.
+								Ik heb de <a href="/docs/tos" class="underline" target="_blank"
+									>Algemene Voorwaarden Deel 1</a
+								> gelezen en ik ga akkoord.
 							</label>
 						</div>
+
+						<div
+						class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
+						class:ring-red-700={$errors.tos_accept !== null}
+						class:ring-green-600={$touched.tos_accept === true &&
+							$errors.tos_accept === null}
+					>
+						<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
+						<input type="checkbox" name="tos_accept" class="ml-3" />
+						<label class="text-sm text-gray-200">
+							Ik heb de <a href="https://footballislife.be/algemene-voorwaarden" class="underline" target="_blank"
+								>Algemene Voorwaarden Deel 2</a
+							> gelezen en ik ga akkoord.
+						</label>
+					</div>
 
 						<div class="flex items-center justify-between mt-4">
 							<a
@@ -332,7 +366,7 @@ SPDX-License-Identifier: MPL-2.0
 							{:else if responseData.data === '400'}
 								Fout e-mailadres.
 							{:else}
-								Er is iets fout gegaan. Neem contact op met info@ian-chains.it
+								Er is iets fout gegaan. Neem contact op met webmaster@footballislife.be
 							{/if}
 						</h3>
 						<div class="mt-2">
@@ -342,13 +376,13 @@ SPDX-License-Identifier: MPL-2.0
 									Je hebt je succesvol geregistreerd!
 									Nu alleen nog even inloggen!
 								{:else if responseData.data === '409'}
-									Er bestaat al een account met dat e-mailadres.
+									Er bestaat al een account met dat e-mailadres of gebruikersnaam.
 								{:else if responseData.data === '400'}
 									Dit e-mailadres bestaat niet.
 								{:else if responseData.data === 'error'}
 									Er is een onverwachte fout opgetreden.
 								{:else}
-									Er is iets fout gegaan. Neem contact op met info@ian-chains.it
+									Er is iets fout gegaan. Neem contact op met webmaster@footballislife.be
 								{/if}
 							</p>
 						</div>

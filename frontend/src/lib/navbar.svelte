@@ -25,23 +25,28 @@ SPDX-License-Identifier: MPL-2.0
 
 	const isAdmin = writable(false);
 
+	let maintenance = false;
+
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/v1/users/admin');
 
-			if (response.ok) {
+			if (response.status === 502) {
+				maintenance = true;
+				isAdmin.set(false);
+			} else if (response.ok) {
 				const result = await response.json();
 				isAdmin.set(result.admin_user);
 			} else {
 				isAdmin.set(false);
 			}
 		} catch (error) {
-		console.error('Error fetching admin status:', error);
+			console.error('Error fetching admin status:', error);
 		}
-  	});
+	});
 </script>
 
-<nav class="w-screen px-4 lg:px-10 py-2 fixed backdrop-blur-2xl custom-dark-blue-bg shadow-md z-30 top-0">
+<nav class="px-4 lg:px-10 py-2 fixed backdrop-blur-2xl custom-dark-blue-bg shadow-md z-30 top-0" style="width:100%">
 	<!-- Desktop navbar -->
 	<div class="hidden lg:flex lg:items-center lg:flex-row lg:justify-between">
 
@@ -52,7 +57,11 @@ SPDX-License-Identifier: MPL-2.0
 				class="font-black tracking-tight text-xl lg:text-2xl custom-bright-orange custom-bright-red-hover px-3 lg:px-5 duration-300"
 				>Football Is Life Quiz</a
 			>
+			{#if maintenance}
+			<a class="btn-nav custom-nav-btn underline" href="/" style="color: red; font-weight:bold;">Quiz Site in onderhoud!</a>
+			{:else}
 			<a class="btn-nav border-2 rounded custom-nav-btn" href="/play">Play</a>
+			<a class="btn-nav custom-nav-btn" href="/search">Quiz Zoeken</a>
 			<a class="btn-nav custom-nav-btn" href="https://footballislife.be">Meer Info</a>
 				{#if $signedIn}
 					{#if $isAdmin}
@@ -61,16 +70,19 @@ SPDX-License-Identifier: MPL-2.0
 						<a class="btn-nav custom-nav-btn" href="/dashboard">Dashboard</a>
 					{/if}
 				{/if}
+			{/if}
 		</div>
 		<div class="lg:flex lg:items-center lg:flex-row gap-1">
-			{#if $signedIn}
-				<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
-			{:else}
-				{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
-					<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
-				{/if}
+			{#if !maintenance}
+				{#if $signedIn}
+					<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
+				{:else}
+					{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
+						<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
+					{/if}
 
-				<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}">Inloggen</a>
+					<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}">Inloggen</a>
+				{/if}
 			{/if}
 		</div>
 	</div>
@@ -84,7 +96,9 @@ SPDX-License-Identifier: MPL-2.0
 				class="font-black tracking-tight text-xl lg:text-2xl custom-bright-orange custom-bright-red-hover px-3 lg:px-5 duration-300"
 				>Football Is Life Quiz</a
 			>
-			<a class="btn-nav flex" href="/play">Play</a>
+			{#if !maintenance}
+				<a class="btn-nav flex" href="/play">Play</a>
+			{/if}
 
 			<!-- Dark/Light mode toggle + Open/Close menu -->
 			<div class="flex items-center">
@@ -140,26 +154,33 @@ SPDX-License-Identifier: MPL-2.0
 		<!-- Navbar content -->
 		{#if !menuIsClosed}
 			<div class="flex flex-col" transition:slide={{ duration: 400 }}>
-				<a class="btn-nav custom-nav-btn" href="https://footballislife.be">Meer Info</a>
-					{#if $signedIn}
-						{#if $isAdmin}
-							<a class="btn-nav-admin custom-nav-btn-admin" href="/dashboard-admin">Admin Dashboard</a>
-						{:else}
-							<a class="btn-nav custom-nav-btn" href="/dashboard">Dashboard</a>
-						{/if}
-					{/if}
-
-				<hr class="my-1 border" />
-				{#if $signedIn}
-					<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
+				{#if maintenance}
+					<a class="btn-nav custom-nav-btn underline" href="/" style="color: red; font-weight:bold;">Site in onderhoud!</a>
 				{:else}
-					{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
-						<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
-					{/if}
+					<a class="btn-nav custom-nav-btn" href="/search">Quiz Zoeken</a>
+					<a class="btn-nav custom-nav-btn" href="https://footballislife.be">Meer Info</a>
+						{#if $signedIn}
+							{#if $isAdmin}
+								<a class="btn-nav-admin custom-nav-btn-admin" href="/dashboard-admin">Admin Dashboard</a>
+							{:else}
+								<a class="btn-nav custom-nav-btn" href="/dashboard">Dashboard</a>
+							{/if}
+						{/if}
+				{/if}
 
-					<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}"
-						>Inloggen</a
-					>
+				{#if !maintenance}
+					<hr class="my-1 border" />
+					{#if $signedIn}
+						<a class="btn-nav custom-nav-btn" href="/api/v1/users/logout">Uitloggen</a>
+					{:else}
+						{#if !import.meta.env.VITE_REGISTRATION_DISABLED}
+							<a class="btn-nav custom-nav-btn" href="/account/register">Registreren</a>
+						{/if}
+
+						<a class="btn-nav custom-nav-btn" href="/account/login?returnTo={$pathname}"
+							>Inloggen</a
+						>
+					{/if}
 				{/if}
 			</div>
 		{/if}

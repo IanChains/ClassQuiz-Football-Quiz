@@ -36,14 +36,14 @@ SPDX-License-Identifier: MPL-2.0
 	}
 </script>
 
-<div class="flex flex-col justify-center w-screen h-1/6">
-	<h1 class="text-6xl text-center">
+<div class="flex flex-col justify-center w-full h-1/6">
+	<h1 class="text-5xl text-center">
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
-	<div class="grid grid-cols-3 my-2 more-space-margin-quiz">
+	<div class="grid grid-cols-3 more-space-margin-quiz">
 		<span />
-		<div class="m-auto">
+		<div class="m-auto" style="transform: scale(0.8);">
 			<CircularTimer
 				bind:text={timer_res}
 				bind:progress={circular_progress}
@@ -64,7 +64,7 @@ SPDX-License-Identifier: MPL-2.0
 		<MediaComponent
 			src={quiz_data.questions[selected_question].image}
 			muted={false}
-			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-8 w-auto"
+			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-4 w-auto"
 		/>
 	</div>
 {/if}
@@ -73,10 +73,7 @@ SPDX-License-Identifier: MPL-2.0
 		{#each quiz_data.questions[selected_question].answers as answer, i}
 			<div
 				class="rounded-lg h-fit flex border-2 border-black"
-				style="background-color: {answer.color ?? default_colors[i]};"
-				class:opacity-50={!answer.right &&
-					timer_res === '0' &&
-					quiz_data.questions[selected_question].type === QuizQuestionType.ABCD}
+				style="background-color: {answer.color ?? default_colors[i]}; opacity: {(!answer.right && timer_res === '0' && quiz_data.questions[selected_question].type === QuizQuestionType.ABCD) ? '0.20' : '1'};"
 			>
 				<img
 					class="inline-block pl-4 football-icon-answer"
