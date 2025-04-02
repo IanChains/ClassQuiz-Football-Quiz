@@ -120,9 +120,7 @@ async def finish_edit(edit_id: str, quiz_input: QuizInput, user: User = Depends(
         if session_data.edit:
             await arq.enqueue_job("quiz_update", old_quiz_data, old_quiz_data.id, _defer_by=2)
             quiz = old_quiz_data
-            meilisearch.index(settings.meilisearch_index).delete_document(str(quiz.id))
-            if quiz_input.public:
-                meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
+            
             quiz.title = quiz_input.title
             quiz.public = quiz_input.public
             quiz.license_required = quiz_input.license_required
@@ -133,6 +131,13 @@ async def finish_edit(edit_id: str, quiz_input: QuizInput, user: User = Depends(
             quiz.background_color = quiz_input.background_color
             quiz.background_image = quiz_input.background_image
             quiz.mod_rating = None
+
+            meilisearch.index(settings.meilisearch_index).update_documents([await get_meili_data(quiz)])
+            if not quiz_input.public:
+                meilisearch.index(settings.meilisearch_index).delete_document(str(quiz.id))
+            else:
+                meilisearch.index(settings.meilisearch_index).add_documents([await get_meili_data(quiz)])
+
             for image in images_to_delete:
                 if image is not None:
                     try:
