@@ -15,3 +15,11 @@
 .pr-1-rem{
     padding-right: 1rem;
 }
+
+.search-card-hover:hover{
+    transform: scale(1.25);
+}
+
+.search-card-hover{
+    transition-duration: 500ms;
+}

@@ -152,6 +152,7 @@ class QuizInput(BaseModel):
     background_color: str | None = None
     questions: list[QuizQuestion]
     background_image: str | None = None
+    license_required: bool = True
 
 
 class Quiz(ormar.Model):
@@ -174,6 +175,7 @@ class Quiz(ormar.Model):
     views: int = ormar.Integer(nullable=False, default=0, server_default="0")
     mod_rating: int | None = ormar.SmallInteger(nullable=True)
     quiz_license_key: str = ormar.String(max_length=44, unique=True, nullable=False)
+    license_required: bool = ormar.Boolean(default=True)
 
     ormar_config = ormar.OrmarConfig(tablename="quiz", metadata=metadata, database=database)
 

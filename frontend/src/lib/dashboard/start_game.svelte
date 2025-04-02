@@ -33,6 +33,7 @@ SPDX-License-Identifier: MPL-2.0
 	const error_message = writable('');
 	const licentie_key_write = writable('');
 	const isAdmin = writable(false);
+	const license_required = writable(true);
 
 	onMount(async () => {
 		try {
@@ -49,6 +50,18 @@ SPDX-License-Identifier: MPL-2.0
 		}
 	});
 
+	onMount(async () => {
+		try {
+		const response = await fetch(`/api/v1/quiz/get/public/info/${quiz_id}`);
+		if (!response.ok) {
+			throw new Error(`Error fetching license status: ${response}`);
+		}
+		const data = await response.json();
+		license_required.set(data.license_required);
+		} catch (error) {
+		console.error('Error fetching quiz info:', error);
+		}
+  	});
 
 	function ClearError(event) {
 		const value = event.target.value;
@@ -168,7 +181,7 @@ SPDX-License-Identifier: MPL-2.0
 			</div>
 		</div>
 
-		{#if !$isAdmin}
+		{#if !$isAdmin && $license_required}
 			<div class="flex justify-center items-center my-auto">
 				<label class="mr-4 font-bold" style="font-size: 18px;">Quiz Licentie Code: (incl. "QUIZ")</label>
 				<input
@@ -222,12 +235,13 @@ SPDX-License-Identifier: MPL-2.0
 		<button
 			class="mt-auto mx-auto orange-red-button p-4 rounded-lg shadow-lg transition-all text-2xl"
 			on:click={() => {
-				if ( (!$licentie_key_write) && (!$isAdmin) ) {
+				if ( (!$licentie_key_write) && (!$isAdmin) && ($license_required)) {
 					error_message.set('Gelieve een licentie code in te vullen.');
 				} else if (!loading) {
 					start_game(quiz_id);
 				}
 			}}
+			disabled={loading}
 		>
 			{#if loading}
 				<Spinner my_20={false} />

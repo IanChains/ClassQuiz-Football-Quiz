@@ -16,12 +16,12 @@ settings = settings()
 
 router = APIRouter()
 
-
 class Hit(pydantic.BaseModel):
     id: UUID
     title: str
     description: str
     user: str
+    license_required: bool
     imported_from_kahoot: Optional[bool]
     formatted: Optional["Hit"] = pydantic.Field(None, alias="_formatted")
 

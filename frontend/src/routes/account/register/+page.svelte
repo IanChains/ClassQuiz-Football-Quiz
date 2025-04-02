@@ -39,7 +39,11 @@ SPDX-License-Identifier: MPL-2.0
 		privacy_accept: yup
 			.boolean()
 			.oneOf([true], 'Je moet akkoord gaan met ons privacybeleid om je te kunnen registreren.'),
-		tos_accept: yup.boolean().oneOf([true], 'Je moet akkoord gaan met onze algemene voorwaarden om je te kunnen registreren.')
+		tos_accept: yup.boolean().oneOf([true], 'Je moet akkoord gaan met onze algemene voorwaarden om je te kunnen registreren.'),
+		privacy_accept2: yup
+			.boolean()
+			.oneOf([true], 'Je moet akkoord gaan met ons privacybeleid om je te kunnen registreren.'),
+		tos_accept2: yup.boolean().oneOf([true], 'Je moet akkoord gaan met onze algemene voorwaarden om je te kunnen registreren.')
 	});
 
 	const { form, errors, touched, isValid, isSubmitting } = createForm<
@@ -199,12 +203,12 @@ SPDX-License-Identifier: MPL-2.0
 
 						<div
 							class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
-							class:ring-red-700={$errors.privacy_accept !== null}
-							class:ring-green-600={$touched.privacy_accept === true &&
-								$errors.privacy_accept === null}
+							class:ring-red-700={$errors.privacy_accept2 !== null}
+							class:ring-green-600={$touched.privacy_accept2 === true &&
+								$errors.privacy_accept2 === null}
 						>
 							<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
-							<input type="checkbox" name="privacy_accept" class="ml-3" />
+							<input type="checkbox" name="privacy_accept2" class="ml-3" />
 							<label class="text-sm text-gray-200">
 								Ik heb het <a href="https://footballislife.be/privacybeleid/" class="underline" target="_blank"
 									>Privacybeleid Deel 2</a
@@ -230,12 +234,12 @@ SPDX-License-Identifier: MPL-2.0
 
 						<div
 						class="ring-1 ring-gray-500 focus:outline-none rounded-lg m-4 py-2"
-						class:ring-red-700={$errors.tos_accept !== null}
-						class:ring-green-600={$touched.tos_accept === true &&
-							$errors.tos_accept === null}
+						class:ring-red-700={$errors.tos_accept2 !== null}
+						class:ring-green-600={$touched.tos_accept2 === true &&
+							$errors.tos_accept2 === null}
 					>
 						<!--						<div class='flex items-center justify-between mt-4 w-full'>-->
-						<input type="checkbox" name="tos_accept" class="ml-3" />
+						<input type="checkbox" name="tos_accept2" class="ml-3" />
 						<label class="text-sm text-gray-200">
 							Ik heb de <a href="https://footballislife.be/algemene-voorwaarden" class="underline" target="_blank"
 								>Algemene Voorwaarden Deel 2</a

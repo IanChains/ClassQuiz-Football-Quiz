@@ -66,7 +66,7 @@ router.include_router(oauth.router, tags=["users", "oauth"], prefix="/oauth")
 async def create_user(user: RouteUser, background_task: BackgroundTasks) -> User | JSONResponse:
     if settings.registration_disabled:
         raise HTTPException(status_code=423)
-    user = User(**user.dict(), id=uuid.uuid4(), avatar=bytes.fromhex('5c78'), created_at=datetime.now(), user_license_key=str(os.urandom(16).hex()))
+    user = User(**user.dict(), id=uuid.uuid4(), avatar=b'', created_at=datetime.now(), user_license_key=str(os.urandom(16).hex()))
     try:
         validate_email(user.email)
     except EmailNotValidError as e:

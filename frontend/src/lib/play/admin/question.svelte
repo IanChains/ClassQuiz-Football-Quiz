@@ -41,7 +41,7 @@ SPDX-License-Identifier: MPL-2.0
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
-	<div class="grid grid-cols-3 more-space-margin-quiz">
+	<div class="grid grid-cols-3">
 		<span />
 		<div class="m-auto" style="transform: scale(0.8);">
 			<CircularTimer

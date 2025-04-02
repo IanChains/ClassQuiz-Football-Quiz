@@ -32,6 +32,7 @@ async def get_meili_data(quiz: Quiz) -> dict:
         "user": (await User.objects.filter(id=quiz.user_id).first()).username,
         "created_at": int(quiz.created_at.timestamp()),
         "imported_from_kahoot": quiz.imported_from_kahoot,
+        "license_required": quiz.license_required,
     }
 
 

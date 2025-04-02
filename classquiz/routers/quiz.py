@@ -7,7 +7,7 @@ import json
 import random
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from random import randint
 
 import ormar.exceptions
@@ -87,6 +87,7 @@ class PublicInfoQuizResponse(Quiz.get_pydantic(exclude={"questions","background_
     views: int
     plays: int
     question_count: int
+    license_required: bool
     
 @router.get("/get/public/info/{quiz_id}",)
 async def get_public_info_quiz(quiz_id: uuid.UUID):
@@ -173,10 +174,10 @@ async def start_quiz(
             if quiz is None:
                 return JSONResponse(status_code=403, content={"detail": "Quiz niet gevonden."})
             elif not user.admin_user:
-                return JSONResponse(status_code=403, content={"detail": "De quiz is niet openbaar."})
+                return JSONResponse(status_code=403, content={"detail": "De quiz is nu niet openbaar beschikbaar."})
         
     #licentie check
-    if (not user.admin_user):
+    if ((not user.admin_user) and quiz.license_required):
         if not license: #lege string, geen license
             return JSONResponse(status_code=403, content={"detail": "Gelieve een licentie code in te vullen."})
         
@@ -186,7 +187,6 @@ async def start_quiz(
         except Exception as error:
             print("Error IP:", error)
 
-
         #api request license check L-100
         license_check = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/{license}',
             auth = HTTPBasicAuth(license_api_user, license_api_pass))
@@ -194,9 +194,14 @@ async def start_quiz(
         #data verzamelen uit request
         json_license_check = license_check.json()
         print("License Check:", json_license_check)
+
+        if (license_check.status_code != 200) and (license_check.status_code != 404):
+            return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het controleren van de licentie code. Error: L-101 Error Response API LMF"})
+
         license_status_code = json_license_check.get('data', {}).get('status')
         license_times_activated = json_license_check.get('data', {}).get('timesActivated')
         license_times_activated_max = json_license_check.get('data', {}).get('timesActivatedMax')
+        license_expires_at = json_license_check.get('data', {}).get('expiresAt')
 
         if license_times_activated == None:
             license_times_activated = 0
@@ -210,9 +215,16 @@ async def start_quiz(
             return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie. Error: L-1023 Wrong License Status"})
         elif license_times_activated_max <= license_times_activated:
             return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt. Error: L-104 Max Activation Reached"})
+        elif license_expires_at != None:
+            license_expires_at = datetime.strptime(license_expires_at, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+            current_utc_time = datetime.now(timezone.utc)
+            if license_expires_at < current_utc_time:
+                expired_time_str_date = license_expires_at.strftime("%d/%m/%Y")
+                expired_time_str_hour = license_expires_at.strftime("%H:%M")
+                return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {expired_time_str_date} om {expired_time_str_hour}. Error: L-105 License Expired"})
         
         if not json_license_check.get('success'):
-            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie. Error: L-105 No Success "})
+            return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de status controle van de licentie. Error: L-106 No Success "})
         
         #gelukt, license bestaat -> data verkrijgen
         license_id = json_license_check.get('data', {}).get('id')
@@ -227,6 +239,9 @@ async def start_quiz(
             #data verzamelen uit request
             json_quiz_check = quiz_check.json()
             print("Quiz Check:", json_quiz_check)
+
+            if (quiz_check.status_code != 200) and (quiz_check.status_code != 404):
+                return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het controleren van de licentie code. Error: L-200 Error Response API WC Product"})
 
             #als product niet gevonden is, error
             if "invalid_id" in json_quiz_check:
@@ -249,6 +264,11 @@ async def start_quiz(
             found_shop_item = None
             found_username = None
 
+            if (user_check.status_code == 404):
+                return JSONResponse(status_code=403, content={"detail": "De bestelling gekoppeld aan deze licentie code kon niet worden gevonden. Error: L-301 Order Not Found"})
+            elif (user_check.status_code != 200):
+                return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het controleren van de licentie code. Error: L-300 Error Response API WC Order"})
+
             for shop_item in json_user_check['line_items']: #voor elk shop item in order
                 if (shop_item['product_id'] == license_product_id) or (shop_item['variation_id'] == license_product_id): #als shop item id = shop item license
                     found_shop_item = shop_item
@@ -260,50 +280,24 @@ async def start_quiz(
                                 break
                                 
             if found_username == None:
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de gebruiker controle van de licentie. Error: L-301 No User in Order"})
+                return JSONResponse(status_code=403, content={"detail": "Er is een probleem opgetreden bij de gebruiker controle van de licentie. Error: L-302 No User in Order"})
             elif found_username != user.username:
-                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet aan uw account gekoppeld. Error: L-302 Wrong User"})
+                return JSONResponse(status_code=403, content={"detail": "De licentie code is niet aan uw account gekoppeld. Error: L-303 Wrong User"})
         
         #status aanpassen key naar active
         if license_status_code != 3:
             license_change_status = requests.put(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/{license}', json={'status':'ACTIVE'}, auth = HTTPBasicAuth(license_api_user, license_api_pass))
             json_change_status = license_change_status.json()
             print("Status Change:", json_change_status)
+
             license_status_code = json_change_status.get('data', {}).get('status')
 
             if not json_change_status.get('success'):
                 return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-401 No Success"})
             if license_status_code != 3:
                 return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-402 No Status Change"})
-
-        #license activeren - request
-        ip_headers = {
-           "X-Forwarded-For": f"IP:{user_ip_connecting}, User:{user.username}, Quiz: {quiz_id_str}" 
-        }
-
-        license_activate = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/activate/{license}', headers=ip_headers,
-            auth = HTTPBasicAuth(license_api_user, license_api_pass))
-        
-        #data verkrijgen
-        json_license_activate = license_activate.json()
-        print("Activate Check:", json_license_activate)
-        str_license_activate = str(json_license_activate)
-
-        #filteren
-        if "error" in str_license_activate:
-            if "expired" in str_license_activate:
-                license_expired_message = json_license_activate['data']['errors']['lmfwc_rest_license_expired'][0]
-                date_expired = re.search(r'(\d{4}-\d{2}-\d{2})', license_expired_message)
-                if date_expired:
-                    date_expired = date_expired.group(0).split("-")
-                    formatted_date = f"{date_expired[2]}/{date_expired[1]}/{date_expired[0]}"
-                    return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {formatted_date}. Error: L-501 License Expired"})
-                else:
-                    return JSONResponse(status_code=403, content={"detail": "De licentie is vervallen. Error: L-502 License Expired, Date Unknown"})
-            elif "maximum activation count" in str_license_activate:
-                return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt. Error: L-503 Max Activation Reached"})
-            else:
-                return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-504 Unknown Error in Activation"})
+            if (license_change_status.status_code != 200):
+                return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het activeren van de licentie code. Error: L-400 Error Response API LMF"})
 
         """
         old license code
@@ -318,53 +312,91 @@ async def start_quiz(
         except InvalidToken:
             return JSONResponse(status_code=403, content={"detail": "invalid license key"})
         """
-        
-    quiz.plays += 1
-    await quiz.update()
-    game_pin = randint(100000, 999999)
-    if custom_field == "":
-        custom_field = None
-    game = await redis.get(f"game:{game_pin}")
-    while game is not None:
+    try:
+        quiz.plays += 1
+        await quiz.update()
         game_pin = randint(100000, 999999)
+        if custom_field == "":
+            custom_field = None
         game = await redis.get(f"game:{game_pin}")
+        while game is not None:
+            game_pin = randint(100000, 999999)
+            game = await redis.get(f"game:{game_pin}")
 
-    if randomize_answers:
-        for question in quiz.questions:
-            if question["type"] == QuizQuestionType.RANGE:
-                continue
-            if question["type"] == QuizQuestionType.SLIDE:
-                continue
-            random.shuffle(question["answers"])
+        if randomize_answers:
+            for question in quiz.questions:
+                if question["type"] == QuizQuestionType.RANGE:
+                    continue
+                if question["type"] == QuizQuestionType.SLIDE:
+                    continue
+                random.shuffle(question["answers"])
 
-    game = PlayGame(
-        quiz_id=quiz_id,
-        game_pin=str(game_pin),
-        questions=quiz.questions,
-        game_id=uuid.uuid4(),
-        title=quiz.title,
-        description=quiz.description,
-        captcha_enabled=captcha_enabled,
-        cover_image=quiz.cover_image,
-        game_mode=game_mode,
-        user_id=user.id,
-        background_color=quiz.background_color,
-        custom_field=custom_field,
-        background_image=quiz.background_image,
-    )
-    code = None
-    if cqcs_enabled:
-        code = generate_code(6)
-        await redis.set(f"game:cqc:code:{code}", game_pin, ex=3600)
-    await redis.set(f"game:{str(game.game_pin)}", game.json(), ex=18000)
-    await redis.set(f"game_pin:{user.id}:{quiz_id}", game_pin, ex=18000)
+        game = PlayGame(
+            quiz_id=quiz_id,
+            game_pin=str(game_pin),
+            questions=quiz.questions,
+            game_id=uuid.uuid4(),
+            title=quiz.title,
+            description=quiz.description,
+            captcha_enabled=captcha_enabled,
+            cover_image=quiz.cover_image,
+            game_mode=game_mode,
+            user_id=user.id,
+            background_color=quiz.background_color,
+            custom_field=custom_field,
+            background_image=quiz.background_image,
+        )
+        code = None
+        if cqcs_enabled:
+            code = generate_code(6)
+            await redis.set(f"game:cqc:code:{code}", game_pin, ex=3600)
+        await redis.set(f"game:{str(game.game_pin)}", game.json(), ex=18000)
+        await redis.set(f"game_pin:{user.id}:{quiz_id}", game_pin, ex=18000)
 
-    await redis.set(
-        f"game_in_lobby:{user.id.hex}",
-        GameInLobby(game_id=game.game_id, game_pin=str(game_pin), quiz_title=quiz.title).json(),
-        ex=900,
-    )
-    return {**quiz.dict(exclude={"id"}), **game.dict(exclude={"questions"}), "cqc_code": code}
+        await redis.set(
+            f"game_in_lobby:{user.id.hex}",
+            GameInLobby(game_id=game.game_id, game_pin=str(game_pin), quiz_title=quiz.title).json(),
+            ex=900,
+        )
+    except Exception as error:
+        return JSONResponse(status_code=500, content={"detail": error})
+
+    try:
+        if ((not user.admin_user) and quiz.license_required):
+            #license activeren - request
+            ip_headers = {
+                "X-Forwarded-For": f"IP:{user_ip_connecting}, User:{user.username}, Quiz: {quiz_id_str}" 
+            }
+
+            license_activate = requests.get(f'https://footballislife.be/wp-json/lmfwc/v2/licenses/activate/{license}', headers=ip_headers,
+                auth = HTTPBasicAuth(license_api_user, license_api_pass))
+            
+            #data verkrijgen
+            json_license_activate = license_activate.json()
+            print("Activate Check:", json_license_activate)
+            str_license_activate = str(json_license_activate)
+
+            #filteren
+            if "error" in str_license_activate:
+                if "expired" in str_license_activate:
+                    license_expired_message = json_license_activate['data']['errors']['lmfwc_rest_license_expired'][0]
+                    date_expired = re.search(r'(\d{4}-\d{2}-\d{2})', license_expired_message)
+                    if date_expired:
+                        date_expired = date_expired.group(0).split("-")
+                        formatted_date = f"{date_expired[2]}/{date_expired[1]}/{date_expired[0]}"
+                        return JSONResponse(status_code=403, content={"detail": f"De licentie is vervallen op {formatted_date}. Error: L-501 License Expired"})
+                    else:
+                        return JSONResponse(status_code=403, content={"detail": "De licentie is vervallen. Error: L-502 License Expired, Date Unknown"})
+                elif "maximum activation count" in str_license_activate:
+                    return JSONResponse(status_code=403, content={"detail": "De licentie heeft de maximale aantal speelbeurten bereikt. Error: L-503 Max Activation Reached"})
+                else:
+                    return JSONResponse(status_code=403, content={"detail": "Er is een probleem met het activeren van de licentie. Error: L-504 Unknown Error in Activation"})
+            if (license_activate.status_code != 200):
+                    return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het activeren van de licentie code. Error: L-500 Error Response API LMF"})
+        
+            return {**quiz.dict(exclude={"id"}), **game.dict(exclude={"questions"}), "cqc_code": code}
+    except Exception as error:
+        return JSONResponse(status_code=500, content={"detail": error})
 
 
 class CheckIfCaptchaEnabledResponse(BaseModel):

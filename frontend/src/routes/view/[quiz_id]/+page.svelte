@@ -44,6 +44,8 @@ SPDX-License-Identifier: MPL-2.0
 		cover_image?: string,
 		kahoot_id?: string;
 		mod_rating?: number;
+		question_count?: number;
+		license_required: boolean;
 	}
 
 
@@ -63,7 +65,7 @@ SPDX-License-Identifier: MPL-2.0
 </svelte:head>
 
 <div class="flex flex-col w-full h-full">
-	<h1 class="text-4xl text-center mt-4">{@html quiz.title}</h1>
+	<h1 class="text-5xl text-center mt-4">{@html quiz.title}</h1>
 	<div class="text-center my-2">
 		<p>{@html quiz.description}</p>
 	</div>
@@ -78,6 +80,16 @@ SPDX-License-Identifier: MPL-2.0
 			</div>
 		</div>
 	{/if}
+
+	{#if !quiz.license_required}
+		<div class="text-center my-2 underline font-bold text-2xl" style="text-decoration-color: #F4B631;">
+			<p>GRATIS Quiz</p>
+		</div>
+	{/if}
+	
+	<div class="text-center my-2 font-bold text-2xl">
+		<p>{quiz.question_count} Quizvragen</p>
+	</div>
 	<div class="flex justify-center flex-row gap-2 my-4">
 		<RatingComponent bind:quiz />
 	</div>

@@ -92,6 +92,7 @@ export interface EditorData {
 	cover_image?: string;
 	background_color?: string;
 	background_image?: string;
+	license_required: boolean;
 }
 
 export interface PrivateImageData {

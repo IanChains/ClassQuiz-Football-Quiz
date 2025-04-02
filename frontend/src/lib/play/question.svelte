@@ -394,7 +394,7 @@ SPDX-License-Identifier: MPL-2.0
 	{:else}
 				
 		<div class="my-auto mx-auto flex flex-col">
-			<p class="text-white text-xl mb-6 mx-auto">Eventjes Wachten ...</p>
+			<p class="text-black text-xl mb-6 mx-auto">Eventjes Wachten ...</p>
 			<Spinner my_20={false} />
 		</div>
 
