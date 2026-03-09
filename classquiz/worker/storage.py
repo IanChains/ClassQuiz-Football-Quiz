@@ -42,7 +42,7 @@ async def calculate_hash(ctx, file_id_as_str: str):
     if file_data.storage_path is not None:
         file_path = file_data.storage_path
     file = SpooledTemporaryFile()
-    file_data.size = await storage.get_file_size(file_name=file_path)
+    file_data.size = 0
     if file_data.size is None:
         file_data.size = 0
     file_bytes = storage.download(file_path)

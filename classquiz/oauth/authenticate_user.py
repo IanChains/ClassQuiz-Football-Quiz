@@ -18,14 +18,14 @@ async def log_user_in(user: User, request: Request, response: Response):
     if user is None:
         raise HTTPException(status_code=401, detail="User not matched!")
     remote_ip = None
-    if request.headers.get("X-Forwarded-For") is None:
-        remote_ip = request.client.host
-
-    else:
-        if "," in request.headers.get("X-Forwarded-For"):
-            remote_ip = request.headers.get("X-Forwarded-For").split(", ")[0]
+    if request.headers.get("CF-Connecting-IP") is None:
+        if request.headers.get("X-Forwarded-For") is None:
+            remote_ip = request.client.host
         else:
-            remote_ip = request.headers.get("X-Forwarded-For")
+            remote_ip = request.headers.get("X-Forwarded-For", request.client.host)
+    else:
+        remote_ip = request.headers.get("CF-Connecting-IP", request.client.host)
+
     session_key = os.urandom(32).hex()
     user_session = UserSession(
         user=user,
@@ -44,7 +44,7 @@ async def log_user_in(user: User, request: Request, response: Response):
         value=f"Bearer {access_token}",
         httponly=True,
         samesite="lax",
-        max_age=60 * 60 * 24 * 365,
+        max_age=60 * 60 * 24 * 30,
     )
     response.set_cookie(
         key="rememberme_token", value=session_key, httponly=True, samesite="lax", max_age=60 * 60 * 24 * 30
@@ -65,7 +65,7 @@ async def rememberme_check(rememberme_token: str, response: Response):
         value=f"Bearer {access_token}",
         httponly=True,
         samesite="lax",
-        max_age=60 * 60 * 24 * 365,
+        max_age=60 * 60 * 24 * 30,
     )
     response.set_cookie(key="expiry", value="", max_age=settings.access_token_expire_minutes * 60)
     response.status_code = 200

@@ -27,6 +27,7 @@ from classquiz.auth import (
     verify_password,
     authenticate_user,
     get_current_user,
+    get_current_user_optional,
 )
 from classquiz.cache import clear_cache_for_account
 from classquiz.config import redis, settings, meilisearch
@@ -117,14 +118,19 @@ async def rememberme_token(request: Request, response: Response):
 
 
 @router.get("/logout")
-async def logout(request: Request, response: Response, user: User = Depends(get_current_user)):
-    remember_token = request.cookies.get("rememberme_token")
+async def logout(request: Request, response: Response, user: User = Depends(get_current_user_optional)):
+    try:
+        remember_token = request.cookies.get("rememberme_token")
+    except Exception as error:
+        pass
 
     response.delete_cookie("access_token")
     response.delete_cookie("expiry")
     response.delete_cookie("rememberme")
     response.delete_cookie("rememberme_token")
-    await clear_cache_for_account(user)
+
+    if user is not None:
+        await clear_cache_for_account(user)
 
     if remember_token is not None:
         await UserSession.objects.filter(session_key=remember_token).delete()

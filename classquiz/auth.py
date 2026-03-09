@@ -127,7 +127,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return user
 
-
 async def get_current_moderator(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[ALGORITHM])

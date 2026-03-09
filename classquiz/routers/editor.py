@@ -172,10 +172,13 @@ async def finish_edit(edit_id: str, quiz_input: QuizInput, user: User = Depends(
             except asyncpg.exceptions.UniqueViolationError:
                 raise HTTPException(status_code=400, detail="The quiz already exists")
             new_images = extract_image_ids_from_quiz(quiz)
+
+            """
             for image in new_images:
                 item = await StorageItem.objects.get_or_none(id=uuid.UUID(image))
                 if item is None:
                     continue
                 await quiz.storageitems.add(item)
+            """
     else:
         raise HTTPException(status_code=403, detail="Only admins are allowed to do this")

@@ -395,6 +395,8 @@ async def start_quiz(
                     return JSONResponse(status_code=403, content={"detail": "Er is iets fout gegaan met het activeren van de licentie code. Error: L-500 Error Response API LMF"})
         
             return {**quiz.dict(exclude={"id"}), **game.dict(exclude={"questions"}), "cqc_code": code}
+        else:
+            return {**quiz.dict(exclude={"id"}), **game.dict(exclude={"questions"}), "cqc_code": code}
     except Exception as error:
         return JSONResponse(status_code=500, content={"detail": error})
 

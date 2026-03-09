@@ -110,9 +110,11 @@ async def start_login(data: StartLoginInput):
     step_2: set[StartLoginResponseTypes] = set()
     webauthn_data = None
     webauthn_challenge = None
-    if user is None or not user.verified:
+    if user is None:
         step_1.add(StartLoginResponseTypes.PASSWORD)
         return StartLoginResponse(step_1=step_1, step_2=step_2, session_id=os.urandom(16).hex(), webauthn_data=None)
+    if not user.verified:
+        raise HTTPException(401, detail="not verified")
     if user.password is not None:
         step_1.add(StartLoginResponseTypes.PASSWORD)
     if len(user.fidocredentialss) > 0:
