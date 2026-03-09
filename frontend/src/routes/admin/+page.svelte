@@ -23,10 +23,6 @@ SPDX-License-Identifier: MPL-2.0
 
 	const { t } = getLocalization();
 
-	// let gameData = {
-	// 	game_id: 'a7ddb6af-79ab-45e0-b996-6254c1ad9818',
-	// 	game_pin: '66190765'
-	// };
 	export let data;
 	let game_mode;
 	let { auto_connect, game_token } = data;
@@ -38,8 +34,6 @@ SPDX-License-Identifier: MPL-2.0
 	let game_started = false;
 	let quiz_data: QuizData;
 	let control_visible = true;
-	//let question_number = '0';
-	// let question_results = null;
 	let final_results: Array<null> | Array<Array<PlayerAnswer>> = [null];
 	let success = false;
 	let dataexport_download_a;
@@ -86,15 +80,6 @@ SPDX-License-Identifier: MPL-2.0
 		control_visible = data.visible;
 	});
 
-	/*	socket.on('question_results', (int_data) => {
-        try {
-            int_data = JSON.parse(int_data);
-        } catch (e) {
-            console.error('Failed to parse question results');
-            return;
-        }
-        question_results = int_data;
-    });*/
 	socket.on('export_token', (int_data) => {
 		warnToLeave = false;
 		export_token = int_data;
@@ -131,6 +116,7 @@ SPDX-License-Identifier: MPL-2.0
 	$: bg_image = quiz_data ? quiz_data.background_image : undefined;
 	let show_final_results = false;
 	$: show_final_results = JSON.stringify(final_results) !== JSON.stringify([null]);
+	$: if (show_final_results && control_visible && !results_saved) {save_quiz();}
 </script>
 
 <svelte:window on:beforeunload={confirmUnload} />
@@ -161,29 +147,29 @@ SPDX-License-Identifier: MPL-2.0
 					{/if}
 				</div>
 			</div>
-			<div class="w-screen flex justify-center mt-2">
-				<div class="w-fit">
-					<GrayButton on:click={save_quiz} flex={true} disabled={results_saved}>
-						{#if results_saved}
-							<svg
-								class="w-4 h-4"
-								aria-hidden="true"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								viewBox="0 0 24 24"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									d="M5 13l4 4L19 7"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-						{:else}Resultaten Opslaan in Dashboard{/if}
-					</GrayButton>
-				</div>
-			</div>
+				<!-- <div class="w-screen flex justify-center mt-2">
+					<div class="w-fit">
+						<GrayButton on:click={save_quiz} flex={true} disabled={results_saved}>
+							{#if results_saved}
+								<svg
+									class="w-4 h-4"
+									aria-hidden="true"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M5 13l4 4L19 7"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							{:else}Resultaten Opslaan in Dashboard{/if}
+						</GrayButton>
+					</div>
+				</div> -->
 		{/if}
 		<FinalResults bind:data={player_scores} bind:show_final_results />
 	{/if}

@@ -33,8 +33,24 @@ SPDX-License-Identifier: MPL-2.0
 			},
 			body: JSON.stringify({ email: email })
 		});
-		session_data = await res.json();
-		step = 1;
+		if (res.status === 200 || res.status === 202) {
+			session_data = await res.json();
+			step = 1;
+		} else if (res.status === 401) {
+			let data;
+			try {
+				data = await res.json();
+			} catch {
+				alert("This shouldn't happen");
+				window.location.reload();
+			}
+
+			if (data.detail === 'wrong credentials') {
+				alert('Probeer het opnieuw. Je e-mailadres en/of wachtwoord zijn onjuist.');
+			} else if (data.detail === 'not verified') {
+				alert('Dit account is gedeactiveerd. Neem contact met ons op.');
+			}
+		}
 	};
 </script>
 

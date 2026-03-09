@@ -106,7 +106,7 @@ SPDX-License-Identifier: MPL-2.0
 				{#if showresults}
 					<div class="w-full" style="margin-top:175px;">
 						<div class="flex justify-center w-full">
-							<h2 class="font-bold mb-6" style="font-size:3rem">Totale Scores (Gekozen Quizzen):</h2>
+							<h2 class="font-bold mb-6" style="font-size:2rem">Totale Scores<br>(Gekozen Quizzen):</h2>
 							<table class="w-11/12 m-auto">
 								<tr class="border-b-2 border-gray-500 text-left">
 									<th class="border-r border-gray-500 p-1 mx-auto"

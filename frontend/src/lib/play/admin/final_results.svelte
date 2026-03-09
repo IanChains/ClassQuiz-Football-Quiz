@@ -33,7 +33,7 @@ SPDX-License-Identifier: MPL-2.0
 	});
 
 	let player_count_or_five;
-	$: player_count_or_five = player_names.length >= 5 ? 5 : player_names.length;
+	$: player_count_or_five = player_names.length >= 10 ? 10 : player_names.length;
 
 	let canvas;
 	onMount(() => {
@@ -54,7 +54,7 @@ SPDX-License-Identifier: MPL-2.0
 			{#if i <= player_count_or_five - 1}
 				<p
 					in:fly={{ y: -300, delay: player_count_or_five * 1200 - (i + 1) * 1000 }}
-					style="font-size: {player_count_or_five - i / 2}rem"
+					style="font-size: {(player_count_or_five/1.5) - i / 4}rem"
 					class="text-center"
 				>
 					{$t('play_page.final_result_rank', {

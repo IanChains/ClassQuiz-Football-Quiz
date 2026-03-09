@@ -75,7 +75,8 @@ SPDX-License-Identifier: MPL-2.0
 			const json = await res.json();
 			edit_id = json.token;
 		} else {
-			alert('Error!');
+			const errorData = await res.json();
+			alert(`Error! - ${errorData.detail || 'Unknown error'}`);
 		}
 	};
 
@@ -105,7 +106,8 @@ SPDX-License-Identifier: MPL-2.0
 			console.log(confirm_to_leave);
 			window.location.href = '/dashboard-admin';
 		} else {
-			alert('Error');
+			const errorData = await res.json();
+			alert(`Error! - ${errorData.detail || 'Unknown error'}`);
 		}
 	};
 </script>

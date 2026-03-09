@@ -52,7 +52,7 @@ SPDX-License-Identifier: MPL-2.0
 						question.type !== QuizQuestionType.VOTING}
 					class:opacity-70={!answer_correct[i] &&
 						question.type !== QuizQuestionType.VOTING}
-					style="height: {(sorted_data[answer] * 20) /
+					style="height: {(sorted_data[answer] * 15) /
 						data.length}rem; background-color: {quiz_colors[i]
 						? quiz_colors[i]
 						: 'black'}"
@@ -65,7 +65,7 @@ SPDX-License-Identifier: MPL-2.0
 					<p
 						class="-rotate-45 text-xl text-str"
 						class:line-through={!answer_correct[i] &&
-							question.type !== QuizQuestionType.VOTING}
+							question.type !== QuizQuestionType.VOTING && question.type !== QuizQuestionType.TEXT}
 					>
 						{@html answer}
 					</p>

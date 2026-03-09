@@ -47,6 +47,15 @@ SPDX-License-Identifier: MPL-2.0
 	};
 
 	do_sth();
+
+	const get_user_rank = (username: string, scores_obj) => {
+		const sortedScores = Object.entries(scores_obj);
+		const rank = sortedScores.findIndex(([user]) => user === username) + 1;
+    	return rank > 0 ? rank : null;
+	};
+
+	$: user_rank = get_user_rank(username, scores);
+	$: console.log(`Your place: ${user_rank}`);
 </script>
 
 <div>
@@ -55,7 +64,8 @@ SPDX-License-Identifier: MPL-2.0
 			<p class="p-4 bg-black bg-opacity-40 rounded-lg text-2xl">
 				+{score_by_username[username] ?? '0'}
 			</p>
-			<p>Total score: {scores[username] ?? '0'}</p>
+			<p>Totale Score: {scores[username] ?? '0'}</p>
+			<p>Jouw positie: {user_rank ?? 'Onbekend'}</p>
 		</div>
 	</div>
 </div>

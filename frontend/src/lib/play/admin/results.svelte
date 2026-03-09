@@ -111,15 +111,16 @@ SPDX-License-Identifier: MPL-2.0
 				</tr>
 				{#each player_names as player, i (player)}
 					<tr animate:flip>
-						<td class:hidden={i > 3} class="p-2 border-r border-r-black">{player}</td>
-						<td class:hidden={i > 3} class="p-2">{data[player]}</td>
+						<td class:hidden={i > 9} style="padding-top:0.25rem; padding-bottom:0.25rem" class="p-2 border-r border-r-black">{player}</td>
+						<td class:hidden={i > 9} style="padding-top:0.25rem; padding-bottom:0.25rem" class="p-2">{data[player]}</td>
 						{#if show_new_score_clicked}
 							<td
 								in:fly={{ x: 300 }}
-								class:hidden={i > 3}
+								class:hidden={i > 9}
 								class="p-2"
 								class:text-red-600={score_by_username[player] === 0 ||
 									score_by_username[player] === undefined}
+								style="padding-top:0.25rem; padding-bottom:0.25rem"
 							>
 								+{score_by_username[player] ?? '0'}
 							</td>
@@ -130,7 +131,7 @@ SPDX-License-Identifier: MPL-2.0
 		</div>
 	</div>
 	{#if [QuizQuestionType.ABCD, QuizQuestionType.VOTING, QuizQuestionType.TEXT].includes(question.type)}
-		<div class="mt-12">
+		<div class="mt-6">
 			<VotingResults data={new_data} {question} />
 		</div>
 	{/if}
