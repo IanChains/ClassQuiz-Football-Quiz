@@ -129,7 +129,9 @@ class QuizQuestion(BaseModel):
     @validator("answers")
     def answers_not_none_if_abcd_type(cls, v, values):
         if values.get("type") == QuizQuestionType.PAUSE:
-            return v  # PAUSE type allows None answers; no answer input from players
+            if v is not None:
+                raise ValueError("Answers must be None for PAUSE question type")
+            return None
         if v is None:
             raise ValueError("Answers cannot be None for this question type")
         if values["type"] == QuizQuestionType.ABCD and not isinstance(v[0], ABCDQuizAnswer):
