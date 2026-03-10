@@ -16,5 +16,3 @@ target/
 classquiz/config.py
 frontend/src/lib/analytics.svelte
 classquiz/config.py
-frontend/package-lock.json
-frontend/package-lock.json
