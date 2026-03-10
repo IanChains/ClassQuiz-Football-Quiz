@@ -168,7 +168,7 @@ SPDX-License-Identifier: MPL-2.0
 	{/if}
 	{#if question.type === QuizQuestionType.PAUSE}
 		<div class="my-auto mx-auto flex flex-col items-center gap-4 p-8">
-			<p class="text-black text-lg mx-auto">{$t('words.waiting_for_host')}</p>
+			<p class="text-black text-lg mx-auto">Wachten op quizmaster ...</p>
 			<Spinner my_20={false} />
 		</div>
 	{:else if timer_res !== '0'}
