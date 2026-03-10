@@ -77,6 +77,12 @@ SPDX-License-Identifier: MPL-2.0
 				min_correct: 3
 			},
 			type: QuizQuestionType.RANGE
+		},
+		{
+			name: "Interslide / Pause slide",
+			description: "Nieuwe tussen slide met een titel en afbeelding. Spelers moeten niet antwoorden en verdienen geen punten. Handig om extra uitleg te geven of een pauze in te lassen.",
+			answers: null,
+			type: QuizQuestionType.PAUSE
 		}
 	];
 

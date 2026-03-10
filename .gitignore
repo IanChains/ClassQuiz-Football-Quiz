@@ -15,4 +15,5 @@ export_deta.py
 target/
 classquiz/config.py
 frontend/src/lib/analytics.svelte
+frontend/package-lock.json
 classquiz/config.py

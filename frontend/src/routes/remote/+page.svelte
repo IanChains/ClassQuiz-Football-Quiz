@@ -178,7 +178,7 @@ SPDX-License-Identifier: MPL-2.0
 
 <svelte:window on:beforeunload={confirmUnload} />
 {#if game_started}
-	{#if selected_question + 1 === game_data.questions.length && ((timer_res === '0' && question_results !== null) || game_data?.questions?.[selected_question]?.type === QuizQuestionType.SLIDE)}
+	{#if selected_question + 1 === game_data.questions.length && ((timer_res === '0' && question_results !== null) || (game_data?.questions?.[selected_question]?.type === QuizQuestionType.SLIDE || game_data?.questions?.[selected_question]?.type === QuizQuestionType.PAUSE))}
 		{#if JSON.stringify(final_results) === JSON.stringify([null])}
 			<button on:click={get_final_results} class="admin-button">Get final results </button>
 		{:else}
@@ -199,7 +199,7 @@ SPDX-License-Identifier: MPL-2.0
 			</button>
 		{/if}
 		{#if question_results === null && selected_question !== -1}
-			{#if game_data.questions[selected_question].type === QuizQuestionType.SLIDE}
+			{#if game_data.questions[selected_question].type === QuizQuestionType.SLIDE || game_data.questions[selected_question].type === QuizQuestionType.PAUSE}
 				<button
 					on:click={() => {
 						set_question_number(selected_question + 1);
@@ -212,7 +212,7 @@ SPDX-License-Identifier: MPL-2.0
 			{/if}
 		{/if}
 	{:else if selected_question !== -1}
-		{#if game_data.questions[selected_question].type === QuizQuestionType.SLIDE}
+		{#if game_data.questions[selected_question].type === QuizQuestionType.SLIDE || game_data.questions[selected_question].type === QuizQuestionType.PAUSE}
 			<button
 				on:click={() => {
 					set_question_number(selected_question + 1);

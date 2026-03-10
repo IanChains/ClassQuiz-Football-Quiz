@@ -53,7 +53,7 @@ SPDX-License-Identifier: MPL-2.0
 		{selected_question === -1 ? '0' : selected_question + 1}/{quiz_data.questions.length}
 	</p>
 	<div class="justify-self-end ml-auto mr-0 col-start-3 col-end-3">
-		{#if selected_question + 1 === quiz_data.questions.length && ((timer_res === '0' && question_results !== null) || quiz_data?.questions?.[selected_question]?.type === QuizQuestionType.SLIDE)}
+		{#if selected_question + 1 === quiz_data.questions.length && ((timer_res === '0' && question_results !== null) || (quiz_data?.questions?.[selected_question]?.type === QuizQuestionType.SLIDE || quiz_data?.questions?.[selected_question]?.type === QuizQuestionType.PAUSE))}
 			{#if JSON.stringify(final_results) === JSON.stringify([null])}
 				<button on:click={get_final_results} class="admin-button"
 					>Toon Eind Resultaten
@@ -70,7 +70,7 @@ SPDX-License-Identifier: MPL-2.0
 				</button>
 			{/if}
 			{#if question_results === null && selected_question !== -1}
-				{#if quiz_data.questions[selected_question].type === QuizQuestionType.SLIDE}
+				{#if quiz_data.questions[selected_question].type === QuizQuestionType.SLIDE || quiz_data.questions[selected_question].type === QuizQuestionType.PAUSE}
 					<button
 						on:click={() => {
 							set_question_number(selected_question + 1);
@@ -96,7 +96,7 @@ SPDX-License-Identifier: MPL-2.0
 				{/if}
 			{/if}
 		{:else if selected_question !== -1}
-			{#if quiz_data.questions[selected_question].type === QuizQuestionType.SLIDE}
+			{#if quiz_data.questions[selected_question].type === QuizQuestionType.SLIDE || quiz_data.questions[selected_question].type === QuizQuestionType.PAUSE}
 				<button
 					on:click={() => {
 						set_question_number(selected_question + 1);
