@@ -77,6 +77,12 @@ SPDX-License-Identifier: MPL-2.0
 				min_correct: 3
 			},
 			type: QuizQuestionType.RANGE
+		},
+		{
+			name: $t('words.pause'),
+			description: $t('editor.pause_description'),
+			answers: null,
+			type: QuizQuestionType.PAUSE
 		}
 	];
 

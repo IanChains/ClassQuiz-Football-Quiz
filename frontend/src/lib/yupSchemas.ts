@@ -66,6 +66,9 @@ export const dataSchema = yup.object({
 				time: yup.number().required().positive('The time has to be positive'),
 				image: yup.string().nullable().lowercase(),
 				answers: yup.lazy((v) => {
+					if (v === null || v === undefined) {
+						return yup.mixed().nullable().optional();
+					}
 					if (Array.isArray(v)) {
 						if (typeof v[0].right === 'boolean') {
 							return ABCDQuestionSchema;
