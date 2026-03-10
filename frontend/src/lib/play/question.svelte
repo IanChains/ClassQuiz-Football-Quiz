@@ -166,7 +166,12 @@ SPDX-License-Identifier: MPL-2.0
 			{/if}
 		</div>
 	{/if}
-	{#if timer_res !== '0'}
+	{#if question.type === QuizQuestionType.PAUSE}
+		<div class="my-auto mx-auto flex flex-col items-center gap-4 p-8">
+			<p class="text-black text-lg mx-auto">{$t('words.waiting_for_host')}</p>
+			<Spinner my_20={false} />
+		</div>
+	{:else if timer_res !== '0'}
 		{#if question.type === QuizQuestionType.ABCD || question.type === QuizQuestionType.VOTING}
 			<div class="w-full relative h-full" style="height: {get_div_height()}%">
 				<div
@@ -382,15 +387,6 @@ SPDX-License-Identifier: MPL-2.0
 					</div>
 				</div>
 			{/await}
-		{:else if question.type === QuizQuestionType.PAUSE}
-			<div class="my-auto mx-auto flex flex-col items-center gap-4 p-8">
-				<p class="text-black text-xl text-center">{question.question}</p>
-				{#if question.image}
-					<MediaComponent src={question.image} css_classes="object-cover max-h-48 mx-auto rounded" />
-				{/if}
-				<p class="text-black text-lg mx-auto">{$t('words.waiting_for_host')}</p>
-				<Spinner my_20={false} />
-			</div>
 		{/if}
 
 			<!--{:else if question.type === QuizQuestionType.VOTING}
