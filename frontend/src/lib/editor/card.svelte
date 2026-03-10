@@ -74,7 +74,7 @@ SPDX-License-Identifier: MPL-2.0
 		TEXT: $t('words.text'),
 		ORDER: $t('words.order'),
 		CHECK: $t('words.check_choice'),
-		PAUSE: $t('words.pause')
+		PAUSE: "Interslide / Pause slide"
 	};
 
 	/*
@@ -261,8 +261,8 @@ SPDX-License-Identifier: MPL-2.0
 						{/await}
 					{:else if type === QuizQuestionType.PAUSE}
 						<div class="flex flex-col items-center gap-2 p-4 text-center text-gray-300">
-							<p class="text-lg font-semibold">{$t('words.pause')}</p>
-							<p class="text-sm">{$t('editor.pause_description')}</p>
+							<p class="text-lg font-semibold">Interslide / Pause slide</p>
+							<p class="text-sm">Nieuwe tussen slide met een titel en afbeelding. Spelers moeten niet antwoorden en verdienen geen punten. Handig om extra uitleg te geven of een pauze in te lassen.</p>
 						</div>
 					{/if}
 				</div>

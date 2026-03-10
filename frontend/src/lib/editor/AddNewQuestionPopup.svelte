@@ -79,8 +79,8 @@ SPDX-License-Identifier: MPL-2.0
 			type: QuizQuestionType.RANGE
 		},
 		{
-			name: $t('words.pause'),
-			description: $t('editor.pause_description'),
+			name: "Interslide / Pause slide",
+			description: "Nieuwe tussen slide met een titel en afbeelding. Spelers moeten niet antwoorden en verdienen geen punten. Handig om extra uitleg te geven of een pauze in te lassen.",
 			answers: null,
 			type: QuizQuestionType.PAUSE
 		}
