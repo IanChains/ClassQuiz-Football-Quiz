@@ -37,7 +37,7 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="flex flex-col justify-center w-full h-1/6">
-	<h1 class="text-5xl text-center">
+	<h1 class="text-5xl text-center mb-4">
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
@@ -66,7 +66,7 @@ SPDX-License-Identifier: MPL-2.0
 		<MediaComponent
 			src={quiz_data.questions[selected_question].image}
 			muted={false}
-			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-4 w-auto"
+			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-4 w-auto mt-4"
 		/>
 	</div>
 {/if}
