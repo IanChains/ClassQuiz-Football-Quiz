@@ -43,20 +43,22 @@ SPDX-License-Identifier: MPL-2.0
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
 	<div class="grid grid-cols-3">
 		<span />
-		<div class="m-auto" style="transform: scale(0.8);">
-			<CircularTimer
-				bind:text={timer_res}
-				bind:progress={circular_progress}
-				color="#ef4444"
-			/>
-		</div>
-		<p class="m-auto text-3xl">
-			{#if answer_count == 1}
-				<strong>{answer_count}</strong> Antwoord Verstuurd!
-			{:else}
-				<strong>{answer_count}</strong> Antwoorden Verstuurd!
-			{/if}
-		</p>
+		{#if quiz_data.questions[selected_question].type !== QuizQuestionType.PAUSE}
+			<div class="m-auto" style="transform: scale(0.8);">
+				<CircularTimer
+					bind:text={timer_res}
+					bind:progress={circular_progress}
+					color="#ef4444"
+				/>
+			</div>
+			<p class="m-auto text-3xl">
+				{#if answer_count == 1}
+					<strong>{answer_count}</strong> Antwoord Verstuurd!
+				{:else}
+					<strong>{answer_count}</strong> Antwoorden Verstuurd!
+				{/if}
+			</p>
+		{/if}
 	</div>
 </div>
 {#if quiz_data.questions[selected_question].image !== null}
