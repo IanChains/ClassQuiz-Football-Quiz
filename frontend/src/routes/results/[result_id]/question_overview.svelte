@@ -50,11 +50,15 @@ SPDX-License-Identifier: MPL-2.0
 		}
 	};
 	let question_open: number | boolean = false;
+
+	const non_pause_questions = questions
+		.map((question, original_index) => ({ question, original_index }))
+		.filter(({ question }) => question.type !== QuizQuestionType.PAUSE);
 </script>
 
 <div class="w-full flex justify-center">
 	<div class="w-11/12 flex flex-col w-full gap-4">
-		{#each questions as question, i}
+		{#each non_pause_questions as { question, original_index }, i}
 			<div class="transition-all">
 				<div
 					class="w-full p-2 rounded grid grid-cols-3 z-40 bg-gray-700 bg-opacity-80"
@@ -66,9 +70,9 @@ SPDX-License-Identifier: MPL-2.0
 						}}>{@html question.question}</button
 					>
 					{#if question.type !== QuizQuestionType.VOTING}
-						{@const correct_answers = get_number_of_correct_answers(i)}
+						{@const correct_answers = get_number_of_correct_answers(original_index)}
 						<p class="text-center text-sm my-auto">
-							Gemiddelde Score: {get_average_score(i)}
+							Gemiddelde Score: {get_average_score(original_index)}
 						</p>
 						<p class="text-center text-sm my-auto">
 							{correct_answers} juiste antwoorden
@@ -77,7 +81,7 @@ SPDX-License-Identifier: MPL-2.0
 				</div>
 				{#if question_open === i}
 					<div in:fly|local={{ y: -10 }}>
-						<QuestionTab {question} answers={answers[i]} />
+						<QuestionTab {question} answers={answers[original_index]} />
 					</div>
 				{/if}
 			</div>

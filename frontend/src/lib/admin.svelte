@@ -104,7 +104,7 @@ SPDX-License-Identifier: MPL-2.0
 		{shown_question_now}
 	/>
 {/if}
-{#if timer_res !== '0' && selected_question >= 0}
+{#if timer_res !== '0' && selected_question >= 0 && quiz_data.questions[selected_question].type !== QuizQuestionType.PAUSE}
 	<span
 		class="fixed top-0 bg-red-500 h-4 transition-all"
 		class:mt-10={control_visible}

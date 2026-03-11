@@ -37,26 +37,28 @@ SPDX-License-Identifier: MPL-2.0
 </script>
 
 <div class="flex flex-col justify-center w-full h-1/6">
-	<h1 class="text-5xl text-center">
+	<h1 class="text-5xl text-center mb-4">
 		{@html quiz_data.questions[selected_question].question}
 	</h1>
 	<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
 	<div class="grid grid-cols-3">
 		<span />
-		<div class="m-auto" style="transform: scale(0.8);">
-			<CircularTimer
-				bind:text={timer_res}
-				bind:progress={circular_progress}
-				color="#ef4444"
-			/>
-		</div>
-		<p class="m-auto text-3xl">
-			{#if answer_count == 1}
-				<strong>{answer_count}</strong> Antwoord Verstuurd!
-			{:else}
-				<strong>{answer_count}</strong> Antwoorden Verstuurd!
-			{/if}
-		</p>
+		{#if quiz_data.questions[selected_question].type !== QuizQuestionType.PAUSE}
+			<div class="m-auto" style="transform: scale(0.8);">
+				<CircularTimer
+					bind:text={timer_res}
+					bind:progress={circular_progress}
+					color="#ef4444"
+				/>
+			</div>
+			<p class="m-auto text-3xl">
+				{#if answer_count == 1}
+					<strong>{answer_count}</strong> Antwoord Verstuurd!
+				{:else}
+					<strong>{answer_count}</strong> Antwoorden Verstuurd!
+				{/if}
+			</p>
+		{/if}
 	</div>
 </div>
 {#if quiz_data.questions[selected_question].image !== null}
@@ -64,7 +66,7 @@ SPDX-License-Identifier: MPL-2.0
 		<MediaComponent
 			src={quiz_data.questions[selected_question].image}
 			muted={false}
-			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-4 w-auto"
+			css_classes="bigger-image-quiz rounded object-cover mx-auto mb-4 w-auto mt-4"
 		/>
 	</div>
 {/if}

@@ -110,6 +110,7 @@ class QuizQuestionType(str, Enum):
     TEXT = "TEXT"
     ORDER = "ORDER"
     CHECK = "CHECK"
+    PAUSE = "PAUSE"
 
 
 class TextQuizAnswer(BaseModel):
@@ -121,12 +122,18 @@ class QuizQuestion(BaseModel):
     question: str
     time: str  # in Secs
     type: None | QuizQuestionType = QuizQuestionType.ABCD
-    answers: list[ABCDQuizAnswer] | RangeQuizAnswer | list[TextQuizAnswer] | list[VotingQuizAnswer] | str
+    answers: list[ABCDQuizAnswer] | RangeQuizAnswer | list[TextQuizAnswer] | list[VotingQuizAnswer] | str | None = None
     image: str | None = None
     hide_results: bool | None = False
 
     @validator("answers")
     def answers_not_none_if_abcd_type(cls, v, values):
+        if values.get("type") == QuizQuestionType.PAUSE:
+            if v is not None:
+                raise ValueError("Answers must be None for PAUSE question type")
+            return None
+        if v is None:
+            raise ValueError("Answers cannot be None for this question type")
         if values["type"] == QuizQuestionType.ABCD and not isinstance(v[0], ABCDQuizAnswer):
             raise ValueError("Answers can't be none if type is ABCD")
         if values["type"] == QuizQuestionType.RANGE and not isinstance(v, RangeQuizAnswer):

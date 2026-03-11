@@ -73,7 +73,8 @@ SPDX-License-Identifier: MPL-2.0
 		VOTING: $t('words.voting'),
 		TEXT: $t('words.text'),
 		ORDER: $t('words.order'),
-		CHECK: $t('words.check_choice')
+		CHECK: $t('words.check_choice'),
+		PAUSE: "Interslide / Pause slide"
 	};
 
 	/*
@@ -258,6 +259,11 @@ SPDX-License-Identifier: MPL-2.0
 						{:then c}
 							<svelte:component this={c.default} bind:data bind:selected_question />
 						{/await}
+					{:else if type === QuizQuestionType.PAUSE}
+						<div class="flex flex-col items-center gap-2 p-4 text-center text-gray-300">
+							<p class="text-lg font-semibold">Interslide / Pause slide</p>
+							<p class="text-sm">Nieuwe tussen slide met een titel en afbeelding. Spelers moeten niet antwoorden en verdienen geen punten. Handig om extra uitleg te geven of een pauze in te lassen.</p>
+						</div>
 					{/if}
 				</div>
 			</div>

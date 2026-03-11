@@ -356,6 +356,23 @@ async def set_question_number(sid, data: str):
             room=sid,
         )
         return
+    if game_data.questions[int(float(data))].type == QuizQuestionType.PAUSE:
+        await sio.emit(
+            "set_question_number",
+            {
+                "question_index": int(float(data)),
+                "question": {
+                    "question": temp_return["question"],
+                    "image": temp_return.get("image"),
+                    "type": "PAUSE",
+                    "time": temp_return["time"],
+                    "answers": None,
+                    "hide_results": False,
+                },
+            },
+            room=game_pin,
+        )
+        return
     if game_data.questions[int(float(data))].type == QuizQuestionType.VOTING:
         for i in range(len(temp_return["answers"])):
             temp_return["answers"][i] = VotingQuizAnswer(**temp_return["answers"][i])
@@ -440,6 +457,8 @@ async def submit_answer(sid: str, data: dict):
             if a.right:
                 correct_string += str(i)
         answer_right = bool(correct_string == data.answer)
+    elif game_data.questions[int(float(data.question_index))].type == QuizQuestionType.PAUSE:
+        return  # PAUSE type has no answers; players cannot submit anything
     else:
         raise NotImplementedError
     latency = int(float((await get_session(sid, sio))["ping"]))
