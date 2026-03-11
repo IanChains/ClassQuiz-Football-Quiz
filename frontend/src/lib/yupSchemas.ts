@@ -4,6 +4,7 @@
 
 // skipcq: JS-C1003
 import * as yup from 'yup';
+import { QuizQuestionType } from '$lib/quiz_types';
 
 export const ABCDQuestionSchema = yup
 	.array()
@@ -65,25 +66,30 @@ export const dataSchema = yup.object({
 				question: yup.string().required('A question-title is required').max(299),
 				time: yup.number().required().positive('The time has to be positive'),
 				image: yup.string().nullable().lowercase(),
-				answers: yup.lazy((v) => {
-					if (v === null || v === undefined) {
+				answers: yup.mixed().when('type', ([type], schema) => {
+					if (type === QuizQuestionType.PAUSE) {
 						return yup.mixed().nullable().optional();
 					}
-					if (Array.isArray(v)) {
-						if (typeof v[0].right === 'boolean') {
-							return ABCDQuestionSchema;
-						} else if (typeof v[0].case_sensitive === 'boolean') {
-							return TextQuestionSchema;
-						} else if (v[0].id !== undefined) {
-							return VotingQuestionSchema;
-						} else if (v[0].answer !== undefined) {
-							return VotingQuestionSchema;
+					return yup.lazy((v) => {
+						if (v === null || v === undefined) {
+							return yup.mixed().required('Answers are required for this question type');
 						}
-					} else if (typeof v === 'string' || v instanceof String) {
-						return yup.string().required("The slide mustn't be empty").nullable();
-					} else {
-						return RangeQuestionSchema;
-					}
+						if (Array.isArray(v) && v.length > 0) {
+							if (typeof v[0].right === 'boolean') {
+								return ABCDQuestionSchema;
+							} else if (typeof v[0].case_sensitive === 'boolean') {
+								return TextQuestionSchema;
+							} else if (v[0].id !== undefined) {
+								return VotingQuestionSchema;
+							} else if (v[0].answer !== undefined) {
+								return VotingQuestionSchema;
+							}
+						} else if (typeof v === 'string' || v instanceof String) {
+							return yup.string().required("The slide mustn't be empty").nullable();
+						} else {
+							return RangeQuestionSchema;
+						}
+					});
 				})
 			})
 		)
