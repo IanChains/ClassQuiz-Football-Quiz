@@ -15,7 +15,7 @@ SPDX-License-Identifier: MPL-2.0
 			<br>
 			<br>Modified with LOVE ♥ by <a href="https://ian-chains.it" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">Ian-Chains IT</a>!
 			<br>
-			<br>Source Code: <a href="https://github.com/IanChains/ClassQuiz-Football-Quiz" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">GitHub</a>
+			<br>Source Code: <a href="https://github.com/ian-chainsss/ClassQuiz-Football-Quiz" target="_blank" class="underline text-blue-300 hover:text-blue-500 transition">GitHub</a>
 		</p>
 	</div>
 </footer>
