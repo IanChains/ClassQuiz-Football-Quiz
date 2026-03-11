@@ -244,13 +244,15 @@ SPDX-License-Identifier: MPL-2.0
 				{@html game_data.questions[selected_question].question}
 			</h1>
 			<!--			<span class='text-center py-2 text-lg'>{$t('admin_page.time_left')}: {timer_res}</span>-->
-			<div class="mx-auto my-2">
-				<CircularTimer
-					bind:text={timer_res}
-					bind:progress={circular_progress}
-					color="#ef4444"
-				/>
-			</div>
+			{#if game_data.questions[selected_question].type !== QuizQuestionType.PAUSE}
+				<div class="mx-auto my-2">
+					<CircularTimer
+						bind:text={timer_res}
+						bind:progress={circular_progress}
+						color="#ef4444"
+					/>
+				</div>
+			{/if}
 			{#if game_data.questions[selected_question].image !== null}
 				<div>
 					<img
